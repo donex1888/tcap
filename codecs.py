@@ -1,10 +1,6 @@
 
-# *--------------------------------------------------------
 # * File Name : pycrate_asn1rt/codecs.py
-# * Created : 2017-01-31
-# * Authors : Benoit Michau 
-# *--------------------------------------------------------
-#*/
+
 
 from .utils import *
 from .err   import *
@@ -26,18 +22,14 @@ class ASN1CodecASN(ASN1Codec):
 class ASN1CodecPER(ASN1Codec):
     
     ALIGNED = False # True: aligned PER (APER), False: unaligned PER (UPER)
-    
-    # canonicity is used to decide wether to encode default values or not in 
-    # constructed object
+
     CANONICAL = True
     
-    # this is used to return default values, even when absent from the transfer syntax
     GET_DEFVAL = True
     
-    # maximum length (or number of objects) allowed when decoding a fragmented stream
     DEC_MAXL = 1 * 1024 * 1024 # 1M
     
-    _off = [] # stack of offsets in bits, only used with APER
+    _off = [] 
     
     _CntUndef_LUT = {1:16384, 2:32768, 3:49152, 4:65536,
                      16384:1, 32768:2, 49152:3, 65536:4}
@@ -1977,7 +1969,7 @@ class ASN1CodecOER(ASN1Codec):
                         val = Uint('V', bl=ubl*8)
                         val._from_char(char)
                         return val.get_val(), (val,)
-                # No other conditions are fulfilled
+
                 return cls.decode_intunconst_ws(char, signed=False)
             else:
                 # 10.4 a ~ d
