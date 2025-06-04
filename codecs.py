@@ -398,8 +398,7 @@ class ASN1CodecPER(ASN1Codec):
                     GEN.extend( cla.encode_pad_ws() )
             cla._off[-1] += bl
         else:
-            # 3) fully constrained value, unaligned variant
-            # decoding the value offset in the minimum number of bits
+
             bl = const_val.rdyn
         GEN.append( Uint(name, val=val, bl=bl) )
         return GEN
@@ -436,8 +435,7 @@ class ASN1CodecPER(ASN1Codec):
                     GEN.extend( cla.encode_pad() )
             cla._off[-1] += bl
         else:
-            # 3) fully constrained value, unaligned variant
-            # decoding the value offset in the minimum number of bits
+
             bl = const_val.rdyn
         GEN.append( (T_UINT, val, bl) )
         return GEN
@@ -549,7 +547,7 @@ class ASN1CodecPER(ASN1Codec):
         GEN, off = [], 0
         if cla.ALIGNED and cla._off[-1] % 8:
             GEN.extend( cla.encode_pad() )
-        # encode all fragments
+
         for (fs, fn) in frags:
             for i in range(fn):
                 GEN.extend( cla.encode_count(fs) )
@@ -657,8 +655,7 @@ class ASN1CodecPER(ASN1Codec):
             GEN.extend( cla.encode_pad_ws() )
         # encode all fragments
         for (fs, fn) in frags:
-            # going from the largest fragments (64k) to the shortest ones (16k)
-            # fs: frag sz, fn: frag number
+
             if not fn:
                 continue
             for i in range(fn):
@@ -1079,12 +1076,6 @@ class ASN1CodecBER(ASN1Codec):
     # integers for tag prefixes, when tag >= 31
     ENC_TAG_LEXT = 0
     
-    # force the encoder to use the constructed form enabling the fragmentation
-    # of the bit string / octet (or character) string 
-    # every ENC_BSTR_FRAG / ENC_OSTR_FRAG bytes
-    # ENC_[BO]STR_FRAG = 0 disables the fragmentation
-    # DER requires ENC_[BO]STR_FRAG = 0
-    # CER requires ENC_[B0]STR_FRAG = 1000
     ENC_BSTR_FRAG = 0
     ENC_OSTR_FRAG = 0
     
