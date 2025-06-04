@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Enhanced MAP-ATI Scanner v5.2 - Professional Edition - Fixed Transmission
+Enhanced MAP-ATI Scanner v8.2 - Professional Edition - Fixed Transmission
 =======================================================================
 
 Fixed MAP Any Time Interrogation scanner with proper data transmission
