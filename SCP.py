@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-MAP-ATI Scanner Professional v8.0 - Advanced Analysis Engine
+MAP-ATI Scanner Professional v5.0 - Advanced Analysis Engine
 ===========================================================
 Author: donex1888
 Date: 2025-06-05 03:59:04 UTC
@@ -396,7 +396,7 @@ def print_professional_banner():
 ║     • Operator Intelligence Database       • Real-time Location Services           ║
 ║     • Advanced Error Analysis             • Comprehensive HTML Reports              ║
 ╠═══════════════════════════════════════════════════════════════════════════════════════╣
-║                     Professional Cellular Analysis Tool    
+║  ⚠️  License: Educational/Research Use Only - Professional Cellular Analysis Tool    ║
 ╚═══════════════════════════════════════════════════════════════════════════════════════╝
         """
         
